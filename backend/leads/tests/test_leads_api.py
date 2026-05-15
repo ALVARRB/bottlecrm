@@ -260,6 +260,84 @@ class TestLeadListView:
         response = admin_client.get(LEADS_LIST_URL, {"email": "specific@company"})
         assert response.status_code == 200
 
+    def test_list_leads_with_tags_filter(self, admin_client, admin_user, org_a):
+        """?tags=<uuid> returns only leads carrying that tag.
+
+        Regression: previously this filter used `tags__in=params.get("tags")`,
+        which iterates the UUID string char-by-char and silently matched
+        nothing (or every row, depending on DB). Now uses
+        `tags__id__in=params.getlist("tags")`.
+        """
+        tag_vip = Tags.objects.create(name="VIP", org=org_a)
+        tag_cold = Tags.objects.create(name="Cold", org=org_a)
+        tagged = Lead.objects.create(
+            first_name="Tagged",
+            last_name="Lead",
+            email="tagged-vip@example.com",
+            created_by=admin_user,
+            org=org_a,
+        )
+        tagged.tags.add(tag_vip)
+        other = Lead.objects.create(
+            first_name="Other",
+            last_name="Lead",
+            email="tagged-cold@example.com",
+            created_by=admin_user,
+            org=org_a,
+        )
+        other.tags.add(tag_cold)
+        Lead.objects.create(
+            first_name="None",
+            last_name="Lead",
+            email="untagged@example.com",
+            created_by=admin_user,
+            org=org_a,
+        )
+
+        response = admin_client.get(LEADS_LIST_URL, {"tags": str(tag_vip.id)})
+        assert response.status_code == 200
+        emails = {
+            lead["email"]
+            for lead in response.json()["open_leads"]["open_leads"]
+        }
+        assert emails == {"tagged-vip@example.com"}
+
+    def test_list_leads_with_assigned_to_filter(
+        self, admin_client, admin_user, admin_profile, user_profile, org_a
+    ):
+        """?assigned_to=<profile-id> filters by the named assignee.
+
+        Regression: the filter used `params.get` (single string) with
+        `assigned_to__id__in`, which iterated the UUID string and matched
+        nothing. Now uses `params.getlist`.
+        """
+        admin_assigned = Lead.objects.create(
+            first_name="Admin",
+            last_name="Assignee",
+            email="adminassigned@example.com",
+            created_by=admin_user,
+            org=org_a,
+        )
+        admin_assigned.assigned_to.add(admin_profile)
+        user_assigned = Lead.objects.create(
+            first_name="User",
+            last_name="Assignee",
+            email="userassigned@example.com",
+            created_by=admin_user,
+            org=org_a,
+        )
+        user_assigned.assigned_to.add(user_profile)
+
+        response = admin_client.get(
+            LEADS_LIST_URL, {"assigned_to": str(admin_profile.id)}
+        )
+        assert response.status_code == 200
+        emails = {
+            lead["email"]
+            for lead in response.json()["open_leads"]["open_leads"]
+        }
+        assert emails == {"adminassigned@example.com"}
+
     def test_list_leads_regular_user_sees_assigned(
         self, user_client, admin_user, org_a, user_profile
     ):
@@ -995,12 +1073,7 @@ class TestLeadListViewFilters:
         assert response.status_code == 200
 
     def test_filter_by_assigned_to(self, admin_client, admin_user, admin_profile, org_a):
-        """Filter by assigned_to (lines 69-72).
-        Note: The view uses params.get (returns string) with __in (iterates chars),
-        which causes a ValidationError for UUID fields. We verify the branch is entered.
-        """
-        from django.core.exceptions import ValidationError
-
+        """Filter by assigned_to returns only leads assigned to the given profile."""
         lead = Lead.objects.create(
             first_name="AssignFilter",
             last_name="Test",
@@ -1009,18 +1082,18 @@ class TestLeadListViewFilters:
             org=org_a,
         )
         lead.assigned_to.add(admin_profile)
-        with pytest.raises(ValidationError):
-            admin_client.get(
-                LEADS_LIST_URL, {"assigned_to": str(admin_profile.id)}
-            )
+        response = admin_client.get(
+            LEADS_LIST_URL, {"assigned_to": str(admin_profile.id)}
+        )
+        assert response.status_code == 200
+        emails = {
+            lead["email"]
+            for lead in response.json()["open_leads"]["open_leads"]
+        }
+        assert "assignfilter@example.com" in emails
 
     def test_filter_by_tags(self, admin_client, admin_user, org_a):
-        """Filter by tags (lines 75-76).
-        Note: The view uses params.get (returns string) with __in (iterates chars),
-        which causes a ValidationError for UUID fields. We verify the branch is entered.
-        """
-        from django.core.exceptions import ValidationError
-
+        """Filter by tags returns only leads carrying that tag."""
         _set_rls(org_a)
         tag = Tags.objects.create(name="FilterTag", org=org_a)
         lead = Lead.objects.create(
@@ -1031,8 +1104,13 @@ class TestLeadListViewFilters:
             org=org_a,
         )
         lead.tags.add(tag)
-        with pytest.raises(ValidationError):
-            admin_client.get(LEADS_LIST_URL, {"tags": str(tag.id)})
+        response = admin_client.get(LEADS_LIST_URL, {"tags": str(tag.id)})
+        assert response.status_code == 200
+        emails = {
+            lead["email"]
+            for lead in response.json()["open_leads"]["open_leads"]
+        }
+        assert "tagfilter@example.com" in emails
 
     def test_filter_by_rating(self, admin_client, admin_user, org_a):
         """Filter by rating (lines 81-82)."""

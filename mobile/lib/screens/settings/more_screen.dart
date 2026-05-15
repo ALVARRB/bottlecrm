@@ -3,8 +3,6 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
 import 'package:lucide_icons/lucide_icons.dart';
 import '../../core/theme/theme.dart';
-import '../../data/models/models.dart';
-import '../../data/mock/mock_data.dart';
 import '../../providers/auth_provider.dart';
 import '../../routes/app_router.dart';
 import '../../widgets/common/common.dart';
@@ -20,8 +18,6 @@ class MoreScreen extends ConsumerStatefulWidget {
 
 class _MoreScreenState extends ConsumerState<MoreScreen> {
   bool _darkMode = false;
-
-  User get _currentUser => MockData.currentUser;
 
   @override
   Widget build(BuildContext context) {
@@ -40,12 +36,21 @@ class _MoreScreenState extends ConsumerState<MoreScreen> {
             // Profile Section
             _buildProfileSection(),
 
+            // Workspace Section — destinations that aren't on the bottom nav.
+            _buildSectionHeader('Workspace'),
+            _MenuItem(
+              icon: LucideIcons.checkSquare,
+              label: 'Tasks',
+              description: 'Your to-dos across leads, deals and tickets',
+              onTap: () => context.go(AppRoutes.tasks),
+            ),
+
             // Account Section
             _buildSectionHeader('Account'),
             _MenuItem(
               icon: LucideIcons.user,
               label: 'Profile Settings',
-              onTap: () => _showComingSoon('Profile Settings'),
+              onTap: () => context.push(AppRoutes.profile),
             ),
 
             // Team Section
@@ -123,8 +128,15 @@ class _MoreScreenState extends ConsumerState<MoreScreen> {
   }
 
   Widget _buildProfileSection() {
+    final authState = ref.watch(authProvider);
+    final user = authState.user;
+    final org = authState.selectedOrganization;
+    final displayName = user?.displayName ?? 'Signed-in user';
+    final email = user?.email ?? '';
+    final role = org?.role ?? org?.name;
+
     return GestureDetector(
-      onTap: () => _showComingSoon('Profile'),
+      onTap: () => context.push(AppRoutes.profile),
       child: Container(
         width: double.infinity,
         padding: const EdgeInsets.all(24),
@@ -140,45 +152,52 @@ class _MoreScreenState extends ConsumerState<MoreScreen> {
         ),
         child: Row(
           children: [
-            // Avatar
             UserAvatar(
-              name: _currentUser.name,
-              imageUrl: _currentUser.avatar,
+              name: displayName,
+              imageUrl: user?.profilePic,
               size: AvatarSize.xl,
             ),
 
             const SizedBox(width: 16),
 
-            // User Info
             Expanded(
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
                   Text(
-                    _currentUser.name,
+                    displayName,
                     style: AppTypography.h2.copyWith(
                       color: AppColors.textPrimary,
                     ),
+                    maxLines: 1,
+                    overflow: TextOverflow.ellipsis,
                   ),
-                  const SizedBox(height: 4),
-                  Text(
-                    _currentUser.role,
-                    style: AppTypography.body.copyWith(
-                      color: AppColors.textSecondary,
+                  if (role != null) ...[
+                    const SizedBox(height: 4),
+                    Text(
+                      role,
+                      style: AppTypography.body.copyWith(
+                        color: AppColors.textSecondary,
+                      ),
+                      maxLines: 1,
+                      overflow: TextOverflow.ellipsis,
                     ),
-                  ),
-                  const SizedBox(height: 2),
-                  Text(
-                    _currentUser.email,
-                    style: AppTypography.caption.copyWith(
-                      color: AppColors.textSecondary,
+                  ],
+                  if (email.isNotEmpty) ...[
+                    const SizedBox(height: 2),
+                    Text(
+                      email,
+                      style: AppTypography.caption.copyWith(
+                        color: AppColors.textSecondary,
+                      ),
+                      maxLines: 1,
+                      overflow: TextOverflow.ellipsis,
                     ),
-                  ),
+                  ],
                 ],
               ),
             ),
 
-            // Chevron
             Icon(
               LucideIcons.chevronRight,
               size: 22,

@@ -1201,6 +1201,44 @@ class TestOpportunityListFilters:
         names = [o["name"] for o in response.data["opportunities"]]
         assert "Small Deal" in names
 
+    def test_filter_by_tags(self, admin_client, admin_user, org_a):
+        """?tags=<uuid> returns only opportunities carrying that tag.
+
+        Regression: previously the filter used `tags__in=params.get("tags")`,
+        iterating the UUID string char-by-char. Now uses
+        `tags__id__in=params.getlist("tags")`.
+        """
+        _set_rls(org_a)
+        tag_vip = Tags.objects.create(name="VIP", org=org_a)
+        tag_cold = Tags.objects.create(name="Cold", org=org_a)
+        tagged = Opportunity.objects.create(
+            name="Tagged Deal",
+            stage="QUALIFICATION",
+            org=org_a,
+            created_by=admin_user,
+        )
+        tagged.tags.add(tag_vip)
+        other = Opportunity.objects.create(
+            name="Other Tagged Deal",
+            stage="QUALIFICATION",
+            org=org_a,
+            created_by=admin_user,
+        )
+        other.tags.add(tag_cold)
+        Opportunity.objects.create(
+            name="Untagged Deal",
+            stage="QUALIFICATION",
+            org=org_a,
+            created_by=admin_user,
+        )
+
+        response = admin_client.get(
+            OPPORTUNITIES_LIST_URL, {"tags": str(tag_vip.id)}
+        )
+        assert response.status_code == status.HTTP_200_OK
+        names = {o["name"] for o in response.data["opportunities"]}
+        assert names == {"Tagged Deal"}
+
 
 @pytest.mark.django_db
 class TestOpportunityDetailUsersMention:

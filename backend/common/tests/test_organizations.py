@@ -167,6 +167,43 @@ class TestProfileView:
         admin_profile.refresh_from_db()
         assert admin_profile.phone == "+9876543210"
 
+    def test_patch_profile_name(self, admin_client, admin_profile):
+        """Update name on User via PATCH /api/profile/."""
+        response = admin_client.patch(
+            self.url,
+            {"name": "Alex Carter"},
+            format="json",
+        )
+        assert response.status_code == status.HTTP_200_OK
+        admin_profile.user.refresh_from_db()
+        assert admin_profile.user.name == "Alex Carter"
+
+    def test_patch_profile_name_trims_whitespace(self, admin_client, admin_profile):
+        """Name input is trimmed before save."""
+        response = admin_client.patch(
+            self.url,
+            {"name": "  Alex Carter  "},
+            format="json",
+        )
+        assert response.status_code == status.HTTP_200_OK
+        admin_profile.user.refresh_from_db()
+        assert admin_profile.user.name == "Alex Carter"
+
+    def test_patch_profile_name_and_phone_together(
+        self, admin_client, admin_profile
+    ):
+        """Both fields update in a single PATCH."""
+        response = admin_client.patch(
+            self.url,
+            {"name": "Alex Carter", "phone": "+1234567890"},
+            format="json",
+        )
+        assert response.status_code == status.HTTP_200_OK
+        admin_profile.refresh_from_db()
+        admin_profile.user.refresh_from_db()
+        assert admin_profile.user.name == "Alex Carter"
+        assert admin_profile.phone == "+1234567890"
+
 
 @pytest.mark.django_db
 class TestOrgSettingsView:

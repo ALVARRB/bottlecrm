@@ -137,6 +137,13 @@ class AuthNotifier extends Notifier<AuthState> {
     }
   }
 
+  /// Sync the cached user's name after a successful profile PATCH so the
+  /// greeting/profile header updates without a re-login.
+  Future<void> updateUserName(String name) async {
+    await _authService.updateCachedUserName(name);
+    state = state.copyWith(user: _authService.currentUser);
+  }
+
   /// Request a 6-digit sign-in code by email (mobile OTP flow).
   Future<bool> requestMagicCode(String email) async {
     state = state.copyWith(isLoading: true, clearError: true);

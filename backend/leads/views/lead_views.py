@@ -78,12 +78,14 @@ class LeadListView(APIView, LimitOffsetPagination):
                 queryset = queryset.filter(source=params.get("source"))
             if params.getlist("assigned_to"):
                 queryset = queryset.filter(
-                    assigned_to__id__in=params.get("assigned_to")
+                    assigned_to__id__in=params.getlist("assigned_to")
                 )
             if params.get("status"):
                 queryset = queryset.filter(status=params.get("status"))
-            if params.get("tags"):
-                queryset = queryset.filter(tags__in=params.get("tags"))
+            if params.getlist("tags"):
+                queryset = queryset.filter(
+                    tags__id__in=params.getlist("tags")
+                )
             if params.get("city"):
                 queryset = queryset.filter(city__icontains=params.get("city"))
             if params.get("email"):

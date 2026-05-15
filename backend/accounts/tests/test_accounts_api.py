@@ -685,6 +685,28 @@ class TestAccountListFilters:
         names = [a["name"] for a in response.json()["active_accounts"]["open_accounts"]]
         assert "Assigned Acct" in names
 
+    def test_filter_by_tags(self, admin_client, org_a):
+        """?tags=<uuid> returns only accounts carrying that tag.
+
+        Regression: previously the filter used `tags__in=params.get("tags")`,
+        iterating the UUID string char-by-char. Now uses
+        `tags__id__in=params.getlist("tags")`.
+        """
+        tag_vip = Tags.objects.create(name="VIP", org=org_a)
+        tag_cold = Tags.objects.create(name="Cold", org=org_a)
+        tagged = Account.objects.create(name="Tagged Acct", org=org_a)
+        tagged.tags.add(tag_vip)
+        other = Account.objects.create(name="Other Acct", org=org_a)
+        other.tags.add(tag_cold)
+        Account.objects.create(name="Untagged Acct", org=org_a)
+
+        response = admin_client.get(f"/api/accounts/?tags={tag_vip.id}")
+        assert response.status_code == 200
+        names = {
+            a["name"] for a in response.json()["active_accounts"]["open_accounts"]
+        }
+        assert names == {"Tagged Acct"}
+
     def test_filter_by_created_at_range(self, admin_client, org_a):
         """Filter accounts by created_at date range."""
         Account.objects.create(name="Date Range Acct", org=org_a)

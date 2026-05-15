@@ -345,6 +345,21 @@ class AuthService {
     }
   }
 
+  /// Update the cached user's name after a successful profile PATCH so the
+  /// rest of the app (greeting, More sheet header) reflects the new value
+  /// without forcing a sign-out / sign-in.
+  Future<void> updateCachedUserName(String name) async {
+    final u = _currentUser;
+    if (u == null) return;
+    _currentUser = AuthUser(
+      id: u.id,
+      email: u.email,
+      name: name,
+      profilePic: u.profilePic,
+    );
+    await _saveToStorage();
+  }
+
   /// Sign out and clear all stored data
   Future<void> signOut() async {
     debugPrint('AuthService: Signing out...');

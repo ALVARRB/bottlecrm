@@ -33,6 +33,7 @@ class User(AbstractBaseUser, PermissionsMixin):
         default=uuid.uuid4, unique=True, editable=False, db_index=True, primary_key=True
     )
     email = models.EmailField(_("email address"), blank=True, unique=True)
+    name = models.CharField(_("name"), max_length=255, blank=True, default="")
     profile_pic = models.CharField(max_length=1000, null=True, blank=True)
     activation_key = models.CharField(max_length=150, null=True, blank=True)
     key_expires = models.DateTimeField(null=True, blank=True)
@@ -49,6 +50,14 @@ class User(AbstractBaseUser, PermissionsMixin):
         verbose_name_plural = "Users"
         db_table = "users"
         ordering = ("-is_active",)
+
+    def save(self, *args, **kwargs):
+        # On first save only, fall back to the email local-part when no name
+        # was supplied — keeps `name` non-empty without overwriting later
+        # edits (PATCHing name to "" leaves it empty by user intent).
+        if self._state.adding and not self.name and self.email:
+            self.name = self.email.split("@", 1)[0][:255]
+        super().save(*args, **kwargs)
 
     def __str__(self):
         return self.email
@@ -224,6 +233,7 @@ class Profile(BaseModel):
         return {
             "email": self.user.email,
             "id": self.user.id,
+            "name": self.user.name,
             "is_active": self.user.is_active,
             "profile_pic": self.user.profile_pic,
             "last_login": self.user.last_login,

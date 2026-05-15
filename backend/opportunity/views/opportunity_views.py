@@ -73,8 +73,10 @@ class OpportunityListView(APIView, LimitOffsetPagination):
                 queryset = queryset.filter(
                     lead_source__contains=params.get("lead_source")
                 )
-            if params.get("tags"):
-                queryset = queryset.filter(tags__in=params.get("tags")).distinct()
+            if params.getlist("tags"):
+                queryset = queryset.filter(
+                    tags__id__in=params.getlist("tags")
+                ).distinct()
             if params.getlist("assigned_to"):
                 queryset = queryset.filter(
                     assigned_to__id__in=params.getlist("assigned_to")

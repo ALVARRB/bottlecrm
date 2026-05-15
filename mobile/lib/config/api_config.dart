@@ -40,8 +40,12 @@ class ApiConfig {
   /// Get current user info
   static String get me => '$apiBaseUrl/auth/me/';
 
-  /// Get user profile with org details
+  /// Get user profile with org details (read; ProfileDetailView)
   static String get profile => '$apiBaseUrl/auth/profile/';
+
+  /// Update user profile — only `phone` is editable per backend contract.
+  /// Distinct endpoint from `profile` above (ProfileView vs ProfileDetailView).
+  static String get profileUpdate => '$apiBaseUrl/profile/';
 
   /// Switch organization context
   static String get switchOrg => '$apiBaseUrl/auth/switch-org/';

@@ -109,6 +109,7 @@ class GoogleOAuthCallbackView(APIView):
             payload = json.loads(base64.urlsafe_b64decode(payload_part))
             email = payload.get("email")
             picture = payload.get("picture", "")
+            google_name = (payload.get("name") or "").strip()[:255]
         except (IndexError, ValueError, json.JSONDecodeError):
             return Response(
                 {"error": "Invalid ID token format"},
@@ -128,10 +129,16 @@ class GoogleOAuthCallbackView(APIView):
         except User.DoesNotExist:
             user = User.objects.create(
                 email=email,
+                name=google_name,
                 profile_pic=picture,
                 password=make_password(secrets.token_urlsafe(32)),
             )
             created = True
+
+        # Backfill name from Google when the user hasn't set one yet.
+        if not user.name and google_name:
+            user.name = google_name
+            user.save(update_fields=["name"])
 
         user.last_login = timezone.now()
         user.save(update_fields=["last_login"])
@@ -201,6 +208,7 @@ class GoogleIdTokenView(APIView):
             )
             email = idinfo.get("email")
             picture = idinfo.get("picture", "")
+            google_name = (idinfo.get("name") or "").strip()[:255]
         except ValueError:
             logger.warning("Google OAuth token validation failed", exc_info=True)
             return Response(
@@ -218,10 +226,16 @@ class GoogleIdTokenView(APIView):
         user, _created = User.objects.get_or_create(
             email=email,
             defaults={
+                "name": google_name,
                 "profile_pic": picture,
                 "password": make_password(secrets.token_urlsafe(32)),
             },
         )
+        # Backfill name from Google for existing users who don't have one.
+        if not user.name and google_name:
+            user.name = google_name
+            user.save(update_fields=["name"])
+
         user.last_login = timezone.now()
         user.save(update_fields=["last_login"])
 

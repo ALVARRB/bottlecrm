@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import '../../core/theme/app_colors.dart';
+import 'attachment.dart';
 import 'comment.dart';
 
 /// Lead status enumeration matching backend LEAD_STATUS
@@ -162,6 +163,8 @@ class Lead {
   final List<Map<String, dynamic>>? assignedTo;
   final List<String> assignedToIds;
   final List<Comment> comments;
+  final List<Attachment> attachments;
+  final Map<String, dynamic> customFieldValues;
   final DateTime createdAt;
   final DateTime? updatedAt;
   final bool isActive;
@@ -199,6 +202,8 @@ class Lead {
     this.assignedTo,
     this.assignedToIds = const [],
     this.comments = const [],
+    this.attachments = const [],
+    this.customFieldValues = const {},
     required this.createdAt,
     this.updatedAt,
     this.isActive = true,
@@ -216,12 +221,37 @@ class Lead {
   /// Priority based on rating
   Priority get priority => Priority.fromRating(rating);
 
-  /// Get assigned user name (first one if multiple)
+  /// Get assigned user name (first one if multiple).
+  ///
+  /// Backend shape (ProfileSerializer): `{id, user_details: {name, email,
+  /// profile_pic, ...}, role, ...}`. We prefer the display name, fall back
+  /// to the email-local-part, and finally to "Unknown" so the avatar never
+  /// shows just "?".
   String get assignedToName {
     if (assignedTo == null || assignedTo!.isEmpty) return 'Unassigned';
     final first = assignedTo!.first;
-    final email = first['user__email'] as String? ?? '';
-    return email.split('@').first;
+    final details = first['user_details'];
+    if (details is Map<String, dynamic>) {
+      final name = (details['name'] as String?)?.trim() ?? '';
+      if (name.isNotEmpty) return name;
+      final email = (details['email'] as String?)?.trim() ?? '';
+      if (email.isNotEmpty) return email.split('@').first;
+    }
+    // Legacy / flat shapes some endpoints used to return.
+    final flatEmail = (first['user__email'] as String?)?.trim() ?? '';
+    if (flatEmail.isNotEmpty) return flatEmail.split('@').first;
+    return 'Unknown';
+  }
+
+  /// Profile picture URL of the first assignee, if any.
+  String? get assignedToProfilePic {
+    if (assignedTo == null || assignedTo!.isEmpty) return null;
+    final details = assignedTo!.first['user_details'];
+    if (details is Map<String, dynamic>) {
+      final pic = (details['profile_pic'] as String?)?.trim();
+      if (pic != null && pic.isNotEmpty) return pic;
+    }
+    return null;
   }
 
   /// Get lead initials for avatar fallback
@@ -281,6 +311,26 @@ class Lead {
           .toList();
     }
 
+    // Parse attachments — list backend uses `lead_attachment` inside the
+    // serialized lead object; the detail endpoint also returns a separate
+    // top-level `attachments` key, which is merged in by the provider.
+    List<Attachment> parsedAttachments = [];
+    final rawAttachments = json['lead_attachment'] ?? json['attachments'];
+    if (rawAttachments is List) {
+      parsedAttachments = rawAttachments
+          .whereType<Map<String, dynamic>>()
+          .map(Attachment.fromJson)
+          .toList();
+    }
+
+    // Custom fields — backend stores them as a single JSON dict on the
+    // lead row, keyed by the CustomFieldDefinition.key.
+    Map<String, dynamic> parsedCustomFields = const {};
+    final cf = json['custom_fields'];
+    if (cf is Map<String, dynamic>) {
+      parsedCustomFields = Map<String, dynamic>.from(cf);
+    }
+
     return Lead(
       id: json['id']?.toString() ?? '',
       title: json['title'] as String?,
@@ -322,6 +372,8 @@ class Lead {
       assignedTo: parsedAssignedTo,
       assignedToIds: parsedAssignedToIds,
       comments: parsedComments,
+      attachments: parsedAttachments,
+      customFieldValues: parsedCustomFields,
       createdAt: json['created_at'] != null
           ? DateTime.tryParse(json['created_at'] as String) ?? DateTime.now()
           : DateTime.now(),
@@ -399,6 +451,8 @@ class Lead {
     List<Map<String, dynamic>>? assignedTo,
     List<String>? assignedToIds,
     List<Comment>? comments,
+    List<Attachment>? attachments,
+    Map<String, dynamic>? customFieldValues,
     DateTime? createdAt,
     DateTime? updatedAt,
     bool? isActive,
@@ -436,6 +490,8 @@ class Lead {
       assignedTo: assignedTo ?? this.assignedTo,
       assignedToIds: assignedToIds ?? this.assignedToIds,
       comments: comments ?? this.comments,
+      attachments: attachments ?? this.attachments,
+      customFieldValues: customFieldValues ?? this.customFieldValues,
       createdAt: createdAt ?? this.createdAt,
       updatedAt: updatedAt ?? this.updatedAt,
       isActive: isActive ?? this.isActive,

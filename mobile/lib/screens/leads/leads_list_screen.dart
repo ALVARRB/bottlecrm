@@ -1,3 +1,5 @@
+import 'dart:async';
+
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
@@ -5,12 +7,12 @@ import 'package:lucide_icons/lucide_icons.dart';
 import '../../core/theme/theme.dart';
 import '../../data/models/models.dart';
 import '../../providers/leads_provider.dart';
+import '../../providers/profile_provider.dart';
 import '../../routes/app_router.dart';
 import '../../widgets/cards/lead_card.dart';
 import '../../widgets/common/common.dart';
 
-/// Leads List Screen
-/// Searchable, filterable list of all leads
+/// Leads list screen — searchable, filterable, paginated against the server.
 class LeadsListScreen extends ConsumerStatefulWidget {
   const LeadsListScreen({super.key});
 
@@ -22,10 +24,10 @@ class _LeadsListScreenState extends ConsumerState<LeadsListScreen> {
   final TextEditingController _searchController = TextEditingController();
   final ScrollController _scrollController = ScrollController();
 
-  String _searchQuery = '';
-  LeadStatus? _statusFilter;
-  LeadSource? _sourceFilter;
-  String _sortBy = 'newest';
+  LeadFilters _filters = const LeadFilters();
+  Timer? _searchDebounce;
+
+  static const _searchDebounceMs = 350;
 
   @override
   void initState() {
@@ -42,85 +44,40 @@ class _LeadsListScreenState extends ConsumerState<LeadsListScreen> {
 
   @override
   void dispose() {
+    _searchDebounce?.cancel();
     _searchController.dispose();
     _scrollController.dispose();
     super.dispose();
   }
 
-  List<Lead> _filterAndSortLeads(List<Lead> leads) {
-    var result = List<Lead>.from(leads);
-
-    // Search filter (client-side for already loaded leads)
-    if (_searchQuery.isNotEmpty) {
-      final query = _searchQuery.toLowerCase();
-      result = result.where((lead) {
-        return lead.name.toLowerCase().contains(query) ||
-            lead.company.toLowerCase().contains(query) ||
-            lead.email.toLowerCase().contains(query);
-      }).toList();
-    }
-
-    // Status filter
-    if (_statusFilter != null) {
-      result = result.where((lead) => lead.status == _statusFilter).toList();
-    }
-
-    // Source filter
-    if (_sourceFilter != null) {
-      result = result.where((lead) => lead.source == _sourceFilter).toList();
-    }
-
-    // Sorting
-    switch (_sortBy) {
-      case 'newest':
-        result.sort((a, b) => b.createdAt.compareTo(a.createdAt));
-        break;
-      case 'oldest':
-        result.sort((a, b) => a.createdAt.compareTo(b.createdAt));
-        break;
-      case 'name-asc':
-        result.sort((a, b) => a.name.compareTo(b.name));
-        break;
-      case 'name-desc':
-        result.sort((a, b) => b.name.compareTo(a.name));
-        break;
-      case 'hot':
-        result.sort((a, b) {
-          if (a.rating == LeadRating.hot && b.rating != LeadRating.hot) {
-            return -1;
-          }
-          if (b.rating == LeadRating.hot && a.rating != LeadRating.hot) {
-            return 1;
-          }
-          return 0;
-        });
-        break;
-    }
-
-    return result;
+  void _applyFilters(LeadFilters next) {
+    setState(() => _filters = next);
+    ref.read(leadsProvider.notifier).setFilters(next);
   }
 
-  void _clearFilters() {
-    setState(() {
-      _searchQuery = '';
-      _searchController.clear();
-      _statusFilter = null;
-      _sourceFilter = null;
-      _sortBy = 'newest';
-    });
+  void _onSearchChanged(String value) {
+    setState(() {}); // refresh clear-button visibility
+    _searchDebounce?.cancel();
+    _searchDebounce = Timer(
+      const Duration(milliseconds: _searchDebounceMs),
+      () => _applyFilters(_filters.withSearch(value.trim())),
+    );
   }
 
-  bool get _hasActiveFilters {
-    return _statusFilter != null ||
-        _sourceFilter != null ||
-        _sortBy != 'newest';
+  void _clearAll() {
+    _searchController.clear();
+    _applyFilters(const LeadFilters());
   }
 
   @override
   Widget build(BuildContext context) {
     final leadsAsync = ref.watch(leadsProvider);
+    // Eagerly subscribe so the profile is fetched before the user opens the
+    // Owner filter sheet — otherwise the "My leads" option wouldn't render
+    // until the profile call completes.
+    ref.watch(profileProvider);
     final data = leadsAsync.value;
-    final filteredLeads = _filterAndSortLeads(data?.leads ?? const []);
+    final leads = data?.leads ?? const <Lead>[];
 
     return Scaffold(
       backgroundColor: AppColors.surfaceDim,
@@ -138,17 +95,10 @@ class _LeadsListScreenState extends ConsumerState<LeadsListScreen> {
       ),
       body: Column(
         children: [
-          // Search Bar
           _buildSearchBar(),
-
-          // Filter Bar
           _buildFilterBar(),
-
-          // Results Count
-          _buildResultsCount(filteredLeads.length, data?.totalCount ?? 0),
-
-          // Leads List
-          Expanded(child: _buildLeadsList(leadsAsync, filteredLeads)),
+          _buildResultsCount(leads.length, data?.totalCount ?? 0),
+          Expanded(child: _buildLeadsList(leadsAsync, leads)),
         ],
       ),
     );
@@ -156,16 +106,14 @@ class _LeadsListScreenState extends ConsumerState<LeadsListScreen> {
 
   Widget _buildLeadsList(
     AsyncValue<LeadsListData> async,
-    List<Lead> filteredLeads,
+    List<Lead> leads,
   ) {
     final data = async.value;
 
-    // Initial loading
     if (async.isLoading && (data == null || data.leads.isEmpty)) {
       return const Center(child: CircularProgressIndicator());
     }
 
-    // Error state
     if (async.hasError && (data == null || data.leads.isEmpty)) {
       return Center(
         child: Column(
@@ -193,33 +141,29 @@ class _LeadsListScreenState extends ConsumerState<LeadsListScreen> {
       );
     }
 
-    // Empty state
-    if (filteredLeads.isEmpty) {
-      return _buildEmptyState();
-    }
+    if (leads.isEmpty) return _buildEmptyState();
 
     final hasMore = data?.hasMore ?? false;
 
-    // Leads list
     return RefreshIndicator(
       onRefresh: () => ref.read(leadsProvider.notifier).refresh(),
       child: ListView.builder(
         controller: _scrollController,
         padding: const EdgeInsets.fromLTRB(12, 0, 12, 80),
-        itemCount:
-            filteredLeads.length + (hasMore && !_hasActiveFilters ? 1 : 0),
+        itemCount: leads.length + (hasMore ? 1 : 0),
         itemBuilder: (context, index) {
-          if (index == filteredLeads.length) {
+          if (index == leads.length) {
             return const Padding(
               padding: EdgeInsets.all(12),
               child: Center(child: CircularProgressIndicator()),
             );
           }
-
-          final lead = filteredLeads[index];
+          final lead = leads[index];
           return LeadCard(
             lead: lead,
             onTap: () => context.push('/leads/${lead.id}'),
+            onTagTap: (tagId, tagLabel) =>
+                _applyFilters(_filters.withTag(id: tagId, label: tagLabel)),
           );
         },
       ),
@@ -227,22 +171,24 @@ class _LeadsListScreenState extends ConsumerState<LeadsListScreen> {
   }
 
   Widget _buildSearchBar() {
+    final hasQuery = _searchController.text.isNotEmpty;
     return Container(
       color: AppColors.surfaceDim,
       padding: const EdgeInsets.fromLTRB(12, 6, 12, 6),
       child: TextField(
         controller: _searchController,
-        onChanged: (value) => setState(() => _searchQuery = value),
+        onChanged: _onSearchChanged,
         style: AppTypography.body,
+        textInputAction: TextInputAction.search,
         decoration: InputDecoration(
-          hintText: 'Search leads...',
+          hintText: 'Search name, company, or email',
           hintStyle: AppTypography.body.copyWith(color: AppColors.textTertiary),
           prefixIcon: Icon(
             LucideIcons.search,
             color: AppColors.textTertiary,
             size: 18,
           ),
-          suffixIcon: _searchQuery.isNotEmpty
+          suffixIcon: hasQuery
               ? IconButton(
                   icon: Icon(
                     LucideIcons.x,
@@ -251,7 +197,8 @@ class _LeadsListScreenState extends ConsumerState<LeadsListScreen> {
                   ),
                   onPressed: () {
                     _searchController.clear();
-                    setState(() => _searchQuery = '');
+                    _searchDebounce?.cancel();
+                    _applyFilters(_filters.withSearch(null));
                   },
                 )
               : null,
@@ -286,36 +233,47 @@ class _LeadsListScreenState extends ConsumerState<LeadsListScreen> {
         padding: const EdgeInsets.fromLTRB(12, 6, 12, 8),
         child: Row(
           children: [
-            // Status Filter
             _FilterChip(
-              label: _statusFilter?.displayName ?? 'Status',
-              isActive: _statusFilter != null,
-              onTap: () => _showStatusFilter(),
+              label: _filters.assignedToLabel ?? 'Owner',
+              isActive: _filters.assignedToId != null,
+              icon: LucideIcons.user,
+              onTap: _showAssigneeFilter,
             ),
-
             const SizedBox(width: 6),
-
-            // Source Filter
             _FilterChip(
-              label: _sourceFilter?.displayName ?? 'Source',
-              isActive: _sourceFilter != null,
-              onTap: () => _showSourceFilter(),
+              label: _filters.status?.displayName ?? 'Status',
+              isActive: _filters.status != null,
+              onTap: _showStatusFilter,
             ),
-
             const SizedBox(width: 6),
-
-            // Sort
             _FilterChip(
-              label: 'Sort: ${_getSortLabel()}',
-              isActive: _sortBy != 'newest',
-              icon: LucideIcons.arrowUpDown,
-              onTap: () => _showSortOptions(),
+              label: _filters.rating?.displayName ?? 'Rating',
+              isActive: _filters.rating != null,
+              icon: _filters.rating == LeadRating.hot
+                  ? LucideIcons.flame
+                  : null,
+              onTap: _showRatingFilter,
             ),
-
-            if (_hasActiveFilters) ...[
+            const SizedBox(width: 6),
+            _FilterChip(
+              label: _filters.source?.displayName ?? 'Source',
+              isActive: _filters.source != null,
+              onTap: _showSourceFilter,
+            ),
+            if (_filters.tagId != null) ...[
+              const SizedBox(width: 6),
+              _FilterChip(
+                label: 'Tag: ${_filters.tagLabel ?? ''}',
+                isActive: true,
+                icon: LucideIcons.tag,
+                onClear: () => _applyFilters(_filters.cleared(tag: true)),
+                onTap: () => _applyFilters(_filters.cleared(tag: true)),
+              ),
+            ],
+            if (_filters.isActive) ...[
               const SizedBox(width: 6),
               GestureDetector(
-                onTap: _clearFilters,
+                onTap: _clearAll,
                 child: Container(
                   padding: const EdgeInsets.symmetric(
                     horizontal: 8,
@@ -348,49 +306,74 @@ class _LeadsListScreenState extends ConsumerState<LeadsListScreen> {
     );
   }
 
-  Widget _buildResultsCount(int filteredCount, int totalCount) {
+  Widget _buildResultsCount(int loadedCount, int totalCount) {
+    final isFiltered = _filters.isActive;
+    final label = isFiltered
+        ? '$loadedCount of $totalCount lead${totalCount == 1 ? '' : 's'} (filtered)'
+        : '$totalCount lead${totalCount == 1 ? '' : 's'}';
     return Container(
       width: double.infinity,
       color: AppColors.surfaceDim,
       padding: const EdgeInsets.fromLTRB(12, 6, 12, 8),
       child: Text(
-        '$filteredCount lead${filteredCount == 1 ? '' : 's'}${_hasActiveFilters || _searchQuery.isNotEmpty ? ' (filtered)' : ''}',
+        label,
         style: AppTypography.caption.copyWith(color: AppColors.textSecondary),
       ),
     );
   }
 
   Widget _buildEmptyState() {
-    final hasSearchOrFilters = _searchQuery.isNotEmpty || _hasActiveFilters;
-
+    final isFiltered = _filters.isActive;
     return EmptyState(
-      icon: hasSearchOrFilters ? LucideIcons.search : LucideIcons.users,
-      title: hasSearchOrFilters ? 'No results found' : 'No leads yet',
-      description: hasSearchOrFilters
+      icon: isFiltered ? LucideIcons.search : LucideIcons.users,
+      title: isFiltered ? 'No leads match' : 'No leads yet',
+      description: isFiltered
           ? 'Try adjusting your search or filters'
           : 'Start by adding your first lead',
-      actionLabel: hasSearchOrFilters ? 'Clear filters' : 'Add Lead',
-      onAction: hasSearchOrFilters
-          ? _clearFilters
+      actionLabel: isFiltered ? 'Clear filters' : 'Add Lead',
+      onAction: isFiltered
+          ? _clearAll
           : () => context.push(AppRoutes.leadCreate),
     );
   }
 
-  String _getSortLabel() {
-    switch (_sortBy) {
-      case 'newest':
-        return 'Newest';
-      case 'oldest':
-        return 'Oldest';
-      case 'name-asc':
-        return 'A-Z';
-      case 'name-desc':
-        return 'Z-A';
-      case 'hot':
-        return 'Hot';
-      default:
-        return 'Newest';
-    }
+  // ─── Filter sheets ────────────────────────────────────────────────────────
+
+  void _showAssigneeFilter() {
+    final profileId = ref.read(profileProvider).value?.id;
+    showModalBottomSheet(
+      context: context,
+      backgroundColor: AppColors.surface,
+      shape: const RoundedRectangleBorder(
+        borderRadius: BorderRadius.vertical(top: Radius.circular(20)),
+      ),
+      builder: (context) => _FilterBottomSheet(
+        title: 'Filter by Owner',
+        options: [
+          _FilterOption(
+            label: 'Anyone',
+            isSelected: _filters.assignedToId == null,
+            onTap: () {
+              _applyFilters(_filters.cleared(assignedTo: true));
+              Navigator.pop(context);
+            },
+          ),
+          if (profileId != null && profileId.isNotEmpty)
+            _FilterOption(
+              label: 'My leads',
+              icon: LucideIcons.user,
+              iconColor: AppColors.primary600,
+              isSelected: _filters.assignedToId == profileId,
+              onTap: () {
+                _applyFilters(
+                  _filters.withAssignee(id: profileId, label: 'Me'),
+                );
+                Navigator.pop(context);
+              },
+            ),
+        ],
+      ),
+    );
   }
 
   void _showStatusFilter() {
@@ -404,20 +387,56 @@ class _LeadsListScreenState extends ConsumerState<LeadsListScreen> {
         title: 'Filter by Status',
         options: [
           _FilterOption(
-            label: 'All Statuses',
-            isSelected: _statusFilter == null,
+            label: 'All statuses',
+            isSelected: _filters.status == null,
             onTap: () {
-              setState(() => _statusFilter = null);
+              _applyFilters(_filters.cleared(status: true));
               Navigator.pop(context);
             },
           ),
           ...LeadStatus.values.map(
             (status) => _FilterOption(
               label: status.displayName,
-              isSelected: _statusFilter == status,
+              isSelected: _filters.status == status,
               color: status.color,
               onTap: () {
-                setState(() => _statusFilter = status);
+                _applyFilters(_filters.withStatus(status));
+                Navigator.pop(context);
+              },
+            ),
+          ),
+        ],
+      ),
+    );
+  }
+
+  void _showRatingFilter() {
+    showModalBottomSheet(
+      context: context,
+      backgroundColor: AppColors.surface,
+      shape: const RoundedRectangleBorder(
+        borderRadius: BorderRadius.vertical(top: Radius.circular(20)),
+      ),
+      builder: (context) => _FilterBottomSheet(
+        title: 'Filter by Rating',
+        options: [
+          _FilterOption(
+            label: 'Any rating',
+            isSelected: _filters.rating == null,
+            onTap: () {
+              _applyFilters(_filters.cleared(rating: true));
+              Navigator.pop(context);
+            },
+          ),
+          ...LeadRating.values.map(
+            (rating) => _FilterOption(
+              label: rating.displayName,
+              icon: rating == LeadRating.hot ? LucideIcons.flame : null,
+              iconColor: rating.color,
+              color: rating == LeadRating.hot ? null : rating.color,
+              isSelected: _filters.rating == rating,
+              onTap: () {
+                _applyFilters(_filters.withRating(rating));
                 Navigator.pop(context);
               },
             ),
@@ -438,21 +457,19 @@ class _LeadsListScreenState extends ConsumerState<LeadsListScreen> {
         title: 'Filter by Source',
         options: [
           _FilterOption(
-            label: 'All Sources',
-            isSelected: _sourceFilter == null,
+            label: 'All sources',
+            isSelected: _filters.source == null,
             onTap: () {
-              setState(() => _sourceFilter = null);
+              _applyFilters(_filters.cleared(source: true));
               Navigator.pop(context);
             },
           ),
-          ...LeadSource.values
-              .where((s) => s != LeadSource.none)
-              .map(
+          ...LeadSource.values.where((s) => s != LeadSource.none).map(
                 (source) => _FilterOption(
                   label: source.displayName,
-                  isSelected: _sourceFilter == source,
+                  isSelected: _filters.source == source,
                   onTap: () {
-                    setState(() => _sourceFilter = source);
+                    _applyFilters(_filters.withSource(source));
                     Navigator.pop(context);
                   },
                 ),
@@ -461,77 +478,23 @@ class _LeadsListScreenState extends ConsumerState<LeadsListScreen> {
       ),
     );
   }
-
-  void _showSortOptions() {
-    showModalBottomSheet(
-      context: context,
-      backgroundColor: AppColors.surface,
-      shape: const RoundedRectangleBorder(
-        borderRadius: BorderRadius.vertical(top: Radius.circular(20)),
-      ),
-      builder: (context) => _FilterBottomSheet(
-        title: 'Sort by',
-        options: [
-          _FilterOption(
-            label: 'Newest First',
-            isSelected: _sortBy == 'newest',
-            onTap: () {
-              setState(() => _sortBy = 'newest');
-              Navigator.pop(context);
-            },
-          ),
-          _FilterOption(
-            label: 'Oldest First',
-            isSelected: _sortBy == 'oldest',
-            onTap: () {
-              setState(() => _sortBy = 'oldest');
-              Navigator.pop(context);
-            },
-          ),
-          _FilterOption(
-            label: 'Name (A-Z)',
-            isSelected: _sortBy == 'name-asc',
-            onTap: () {
-              setState(() => _sortBy = 'name-asc');
-              Navigator.pop(context);
-            },
-          ),
-          _FilterOption(
-            label: 'Name (Z-A)',
-            isSelected: _sortBy == 'name-desc',
-            onTap: () {
-              setState(() => _sortBy = 'name-desc');
-              Navigator.pop(context);
-            },
-          ),
-          _FilterOption(
-            label: 'Hot Leads First',
-            isSelected: _sortBy == 'hot',
-            icon: LucideIcons.flame,
-            iconColor: AppColors.danger500,
-            onTap: () {
-              setState(() => _sortBy = 'hot');
-              Navigator.pop(context);
-            },
-          ),
-        ],
-      ),
-    );
-  }
 }
 
-/// Filter chip widget
+/// Filter chip widget. If [onClear] is provided, the chevron is replaced with
+/// an X and tapping clears the filter; otherwise tapping opens the picker.
 class _FilterChip extends StatelessWidget {
   final String label;
   final bool isActive;
   final IconData? icon;
   final VoidCallback onTap;
+  final VoidCallback? onClear;
 
   const _FilterChip({
     required this.label,
     required this.isActive,
     this.icon,
     required this.onTap,
+    this.onClear,
   });
 
   @override
@@ -568,7 +531,7 @@ class _FilterChip extends StatelessWidget {
             ),
             const SizedBox(width: 3),
             Icon(
-              LucideIcons.chevronDown,
+              onClear != null ? LucideIcons.x : LucideIcons.chevronDown,
               size: 12,
               color: isActive ? AppColors.primary700 : AppColors.gray600,
             ),
@@ -579,7 +542,6 @@ class _FilterChip extends StatelessWidget {
   }
 }
 
-/// Filter bottom sheet
 class _FilterBottomSheet extends StatelessWidget {
   final String title;
   final List<_FilterOption> options;
@@ -592,7 +554,6 @@ class _FilterBottomSheet extends StatelessWidget {
       child: Column(
         mainAxisSize: MainAxisSize.min,
         children: [
-          // Handle
           Container(
             margin: const EdgeInsets.only(top: 8),
             width: 32,
@@ -602,16 +563,11 @@ class _FilterBottomSheet extends StatelessWidget {
               borderRadius: BorderRadius.circular(2),
             ),
           ),
-
-          // Title
           Padding(
             padding: const EdgeInsets.all(12),
             child: Text(title, style: AppTypography.label),
           ),
-
-          // Options
-          ...options.map((option) => option),
-
+          ...options,
           const SizedBox(height: 12),
         ],
       ),
@@ -619,7 +575,6 @@ class _FilterBottomSheet extends StatelessWidget {
   }
 }
 
-/// Filter option item
 class _FilterOption extends StatelessWidget {
   final String label;
   final bool isSelected;

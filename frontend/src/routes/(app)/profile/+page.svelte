@@ -22,6 +22,7 @@
 
   // Form data state - initialized by $effect below
   let formData = $state({
+    name: '',
     phone: ''
   });
 
@@ -29,6 +30,7 @@
   $effect(() => {
     if (!isEditing) {
       formData = {
+        name: data.user.name || '',
         phone: data.user.phone || ''
       };
       phoneError = '';
@@ -64,6 +66,7 @@
     if (!isEditing) {
       // Reset form data when canceling edit
       formData = {
+        name: data.user.name || '',
         phone: data.user.phone || ''
       };
       phoneError = '';
@@ -202,13 +205,12 @@
                 <Input
                   type="text"
                   id="name"
-                  value={data.user.name || data.user.email}
-                  disabled
-                  class="bg-muted mt-1.5"
+                  name="name"
+                  bind:value={formData.name}
+                  placeholder="Enter your full name"
+                  maxlength={255}
+                  class="mt-1.5"
                 />
-                <p class="text-muted-foreground mt-1 text-xs">
-                  Name changes are not supported yet on this account.
-                </p>
               </div>
 
               <!-- Email (read-only) -->

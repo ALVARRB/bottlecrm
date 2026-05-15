@@ -23,7 +23,8 @@ class _DashboardScreenState extends ConsumerState<DashboardScreen> {
   Widget build(BuildContext context) {
     final dashboardAsync = ref.watch(dashboardProvider);
     final authState = ref.watch(authProvider);
-    final userName = authState.user?.displayName ?? 'User';
+    final user = authState.user;
+    final greetingName = _friendlyFirstName(user?.name, user?.email);
     final currencySymbol =
         authState.selectedOrganization?.currencySymbol ?? '\$';
     final currencyFormat = NumberFormat.currency(
@@ -43,26 +44,31 @@ class _DashboardScreenState extends ConsumerState<DashboardScreen> {
           slivers: [
             // App Bar
             SliverAppBar(
-              expandedHeight: 100,
+              toolbarHeight: 52,
               floating: false,
               pinned: true,
               backgroundColor: AppColors.surface,
-              flexibleSpace: FlexibleSpaceBar(
-                titlePadding: const EdgeInsets.only(left: 16, bottom: 16),
-                title: Column(
+              titleSpacing: 16,
+              title: Padding(
+                padding: const EdgeInsets.symmetric(vertical: 4),
+                child: Column(
                   mainAxisSize: MainAxisSize.min,
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
                     Text(
-                      'Good ${_getGreeting()},',
+                      '${_getGreeting()}  ·  ${DateFormat('EEE, MMM d').format(DateTime.now())}',
                       style: AppTypography.caption.copyWith(
                         color: AppColors.textSecondary,
                         fontSize: 11,
+                        height: 1.1,
                       ),
                     ),
                     Text(
-                      userName.split(' ').first,
-                      style: AppTypography.h3.copyWith(fontSize: 18),
+                      greetingName,
+                      style: AppTypography.h3.copyWith(
+                        fontSize: 18,
+                        height: 1.2,
+                      ),
                     ),
                   ],
                 ),
@@ -135,8 +141,6 @@ class _DashboardScreenState extends ConsumerState<DashboardScreen> {
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
-        const SizedBox(height: 12),
-
         // KPI Cards
         _buildKpiSection(data, compactCurrencyFormat),
 
@@ -150,7 +154,7 @@ class _DashboardScreenState extends ConsumerState<DashboardScreen> {
 
         // Pipeline Overview
         if (data.pipelineByStage.isNotEmpty) ...[
-          _buildPipelineSection(data.pipelineByStage, currencyFormat),
+          _buildPipelineSection(data.pipelineByStage, compactCurrencyFormat),
           const SizedBox(height: 16),
         ],
 
@@ -163,7 +167,8 @@ class _DashboardScreenState extends ConsumerState<DashboardScreen> {
         // Today's Tasks
         _buildTasksSection(data.tasks),
 
-        const SizedBox(height: 80),
+        // Bottom spacer so the floating action button doesn't cover content.
+        const SizedBox(height: 96),
       ],
     );
   }
@@ -177,46 +182,73 @@ class _DashboardScreenState extends ConsumerState<DashboardScreen> {
 
   String _getGreeting() {
     final hour = DateTime.now().hour;
-    if (hour < 12) return 'morning';
-    if (hour < 17) return 'afternoon';
-    return 'evening';
+    if (hour < 5) return 'Working late';
+    if (hour < 12) return 'Good morning';
+    if (hour < 17) return 'Good afternoon';
+    if (hour < 22) return 'Good evening';
+    return 'Working late';
+  }
+
+  /// Derive a friendly first name. Backends often default `name` to the email
+  /// local-part ("aswin.1231"), so we prettify any value that looks like a
+  /// username (contains dots, underscores, or digits, and no spaces).
+  String _friendlyFirstName(String? name, String? email) {
+    final raw = (name != null && name.trim().isNotEmpty)
+        ? name.trim()
+        : (email?.split('@').first ?? '');
+    if (raw.isEmpty) return 'there';
+
+    final looksLikeUsername =
+        !raw.contains(' ') && RegExp(r'[._\-\d]').hasMatch(raw);
+    final source = looksLikeUsername ? raw : raw.split(' ').first;
+
+    final segments = source
+        .split(RegExp(r'[._\-+]'))
+        .map((s) => s.replaceAll(RegExp(r'\d+'), ''))
+        .where((s) => s.isNotEmpty);
+    if (segments.isEmpty) return raw.split(' ').first;
+    final first = segments.first;
+    return first[0].toUpperCase() + first.substring(1).toLowerCase();
   }
 
   Widget _buildKpiSection(DashboardData data, NumberFormat currencyFormat) {
-    final textScale = MediaQuery.textScalerOf(context).scale(1.0);
-    final kpiHeight = 70 + (30 * textScale); // Base 70 + scaled text area
+    final cards = [
+      _KpiCard(
+        title: 'Pipeline',
+        value: currencyFormat.format(data.revenueMetrics.pipelineValue),
+        icon: LucideIcons.dollarSign,
+        color: AppColors.success500,
+      ),
+      _KpiCard(
+        title: 'Open Deals',
+        value: data.opportunitiesCount.toString(),
+        icon: LucideIcons.briefcase,
+        color: AppColors.primary500,
+      ),
+      _KpiCard(
+        title: 'Leads',
+        value: data.leadsCount.toString(),
+        icon: LucideIcons.users,
+        color: AppColors.warning500,
+      ),
+      _KpiCard(
+        title: 'Conversion',
+        value: '${data.revenueMetrics.conversionRate.toStringAsFixed(0)}%',
+        icon: LucideIcons.target,
+        color: AppColors.purple500,
+      ),
+    ];
 
-    return SizedBox(
-      height: kpiHeight,
-      child: ListView(
-        scrollDirection: Axis.horizontal,
-        padding: const EdgeInsets.symmetric(horizontal: 12),
-        children: [
-          _KpiCard(
-            title: 'Pipeline',
-            value: currencyFormat.format(data.revenueMetrics.pipelineValue),
-            icon: LucideIcons.dollarSign,
-            color: AppColors.success500,
-          ),
-          _KpiCard(
-            title: 'Open Deals',
-            value: data.opportunitiesCount.toString(),
-            icon: LucideIcons.briefcase,
-            color: AppColors.primary500,
-          ),
-          _KpiCard(
-            title: 'Leads',
-            value: data.leadsCount.toString(),
-            icon: LucideIcons.users,
-            color: AppColors.warning500,
-          ),
-          _KpiCard(
-            title: 'Conversion',
-            value: '${data.revenueMetrics.conversionRate.toStringAsFixed(0)}%',
-            icon: LucideIcons.target,
-            color: AppColors.purple500,
-          ),
-        ],
+    return Padding(
+      padding: const EdgeInsets.symmetric(horizontal: 12),
+      child: GridView.count(
+        crossAxisCount: 2,
+        shrinkWrap: true,
+        physics: const NeverScrollableScrollPhysics(),
+        mainAxisSpacing: 8,
+        crossAxisSpacing: 8,
+        childAspectRatio: 2.2,
+        children: cards,
       ),
     );
   }
@@ -420,22 +452,24 @@ class _DashboardScreenState extends ConsumerState<DashboardScreen> {
         ),
         const SizedBox(height: 8),
         SizedBox(
-          height: 76,
+          height: 100,
           child: ListView.builder(
             scrollDirection: Axis.horizontal,
             padding: const EdgeInsets.symmetric(horizontal: 12),
             itemCount: leads.take(5).length,
             itemBuilder: (context, index) {
               final lead = leads[index];
+              final initials = _initialsFor(lead.firstName, lead.lastName);
+              final avatarColor = AppColors.getAvatarColor(lead.fullName);
               return GestureDetector(
                 onTap: () => context.push('/leads/${lead.id}'),
                 child: Container(
-                  width: 160,
+                  width: 200,
                   margin: const EdgeInsets.only(right: 8),
                   padding: const EdgeInsets.all(10),
                   decoration: BoxDecoration(
                     color: AppColors.surface,
-                    borderRadius: AppLayout.borderRadiusSm,
+                    borderRadius: AppLayout.borderRadiusMd,
                     border: Border.all(color: AppColors.border),
                   ),
                   child: Column(
@@ -443,54 +477,90 @@ class _DashboardScreenState extends ConsumerState<DashboardScreen> {
                     children: [
                       Row(
                         children: [
-                          Expanded(
+                          Container(
+                            width: 28,
+                            height: 28,
+                            decoration: BoxDecoration(
+                              color: avatarColor.withValues(alpha: 0.12),
+                              shape: BoxShape.circle,
+                            ),
+                            alignment: Alignment.center,
                             child: Text(
-                              lead.fullName,
-                              style: AppTypography.labelSmall,
-                              maxLines: 1,
-                              overflow: TextOverflow.ellipsis,
+                              initials,
+                              style: TextStyle(
+                                fontSize: 11,
+                                fontWeight: FontWeight.w700,
+                                color: avatarColor,
+                              ),
+                            ),
+                          ),
+                          const SizedBox(width: 8),
+                          Expanded(
+                            child: Column(
+                              crossAxisAlignment: CrossAxisAlignment.start,
+                              children: [
+                                Text(
+                                  lead.fullName,
+                                  style: AppTypography.labelSmall,
+                                  maxLines: 1,
+                                  overflow: TextOverflow.ellipsis,
+                                ),
+                                if (lead.company != null)
+                                  Text(
+                                    lead.company!,
+                                    style: AppTypography.bodySmall.copyWith(
+                                      color: AppColors.textSecondary,
+                                      fontSize: 11,
+                                    ),
+                                    maxLines: 1,
+                                    overflow: TextOverflow.ellipsis,
+                                  ),
+                              ],
                             ),
                           ),
                           Container(
                             padding: const EdgeInsets.symmetric(
-                              horizontal: 4,
-                              vertical: 1,
+                              horizontal: 5,
+                              vertical: 2,
                             ),
                             decoration: BoxDecoration(
                               color: AppColors.danger100,
-                              borderRadius: BorderRadius.circular(3),
+                              borderRadius: BorderRadius.circular(4),
                             ),
                             child: Text(
                               'HOT',
                               style: TextStyle(
-                                fontSize: 8,
-                                fontWeight: FontWeight.w600,
+                                fontSize: 9,
+                                fontWeight: FontWeight.w700,
                                 color: AppColors.danger600,
+                                letterSpacing: 0.5,
                               ),
                             ),
                           ),
                         ],
                       ),
-                      const SizedBox(height: 2),
-                      if (lead.company != null)
-                        Text(
-                          lead.company!,
-                          style: AppTypography.bodySmall.copyWith(
-                            color: AppColors.textSecondary,
-                            fontSize: 11,
-                          ),
-                          maxLines: 1,
-                          overflow: TextOverflow.ellipsis,
-                        ),
                       const Spacer(),
-                      if (lead.nextFollowUp != null)
-                        Text(
-                          'Follow-up: ${DateFormat.MMMd().format(lead.nextFollowUp!)}',
-                          style: AppTypography.bodySmall.copyWith(
-                            color: AppColors.warning600,
-                            fontSize: 10,
+                      Row(
+                        children: [
+                          Icon(
+                            LucideIcons.clock,
+                            size: 11,
+                            color: AppColors.textTertiary,
                           ),
-                        ),
+                          const SizedBox(width: 4),
+                          Expanded(
+                            child: Text(
+                              _lastContactedLabel(lead.lastContacted),
+                              style: AppTypography.bodySmall.copyWith(
+                                color: AppColors.textTertiary,
+                                fontSize: 11,
+                              ),
+                              maxLines: 1,
+                              overflow: TextOverflow.ellipsis,
+                            ),
+                          ),
+                        ],
+                      ),
                     ],
                   ),
                 ),
@@ -500,6 +570,27 @@ class _DashboardScreenState extends ConsumerState<DashboardScreen> {
         ),
       ],
     );
+  }
+
+  String _initialsFor(String first, String last) {
+    final f = first.isNotEmpty ? first[0] : '';
+    final l = last.isNotEmpty ? last[0] : '';
+    final combined = '$f$l'.toUpperCase();
+    return combined.isEmpty ? '?' : combined;
+  }
+
+  String _lastContactedLabel(DateTime? when) {
+    if (when == null) return 'Not contacted yet';
+    final diff = DateTime.now().difference(when);
+    if (diff.inMinutes < 1) return 'Contacted just now';
+    if (diff.inHours < 1) return 'Contacted ${diff.inMinutes}m ago';
+    if (diff.inDays < 1) return 'Contacted ${diff.inHours}h ago';
+    if (diff.inDays < 7) return 'Contacted ${diff.inDays}d ago';
+    if (diff.inDays < 30) {
+      final weeks = (diff.inDays / 7).floor();
+      return 'Contacted ${weeks}w ago';
+    }
+    return 'Contacted ${DateFormat.MMMd().format(when)}';
   }
 
   Widget _buildTasksSection(List<DashboardTask> tasks) {
@@ -674,46 +765,50 @@ class _KpiCard extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final textScale = MediaQuery.textScalerOf(context).scale(1.0);
-    final cardWidth = 100 + (25 * textScale); // Base 100 + scaled text area
-
     return Container(
-      width: cardWidth,
-      margin: const EdgeInsets.only(right: 8),
-      padding: const EdgeInsets.all(10),
+      padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 10),
       decoration: BoxDecoration(
         color: AppColors.surface,
-        borderRadius: AppLayout.borderRadiusSm,
+        borderRadius: AppLayout.borderRadiusMd,
         border: Border.all(color: AppColors.border),
       ),
-      child: Column(
-        crossAxisAlignment: CrossAxisAlignment.start,
-        mainAxisSize: MainAxisSize.min,
+      child: Row(
         children: [
           Container(
-            width: 24,
-            height: 24,
+            width: 32,
+            height: 32,
             decoration: BoxDecoration(
-              color: color.withValues(alpha: 0.1),
-              borderRadius: BorderRadius.circular(4),
+              color: color.withValues(alpha: 0.12),
+              borderRadius: BorderRadius.circular(8),
             ),
-            child: Icon(icon, size: 14, color: color),
+            child: Icon(icon, size: 16, color: color),
           ),
-          const SizedBox(height: 6),
-          Text(
-            value,
-            style: AppTypography.label.copyWith(
-              fontWeight: FontWeight.w700,
-              fontSize: 15,
-            ),
-            maxLines: 1,
-            overflow: TextOverflow.ellipsis,
-          ),
-          Text(
-            title,
-            style: AppTypography.bodySmall.copyWith(
-              color: AppColors.textSecondary,
-              fontSize: 11,
+          const SizedBox(width: 10),
+          Expanded(
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              mainAxisAlignment: MainAxisAlignment.center,
+              children: [
+                Text(
+                  value,
+                  style: AppTypography.label.copyWith(
+                    fontWeight: FontWeight.w700,
+                    fontSize: 16,
+                    letterSpacing: -0.3,
+                  ),
+                  maxLines: 1,
+                  overflow: TextOverflow.ellipsis,
+                ),
+                Text(
+                  title,
+                  style: AppTypography.bodySmall.copyWith(
+                    color: AppColors.textSecondary,
+                    fontSize: 11,
+                  ),
+                  maxLines: 1,
+                  overflow: TextOverflow.ellipsis,
+                ),
+              ],
             ),
           ),
         ],

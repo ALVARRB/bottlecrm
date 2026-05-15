@@ -16,3 +16,4 @@ export 'email_message.dart';
 export 'time_entry.dart';
 export 'solution.dart';
 export 'approval.dart';
+export 'attachment.dart';

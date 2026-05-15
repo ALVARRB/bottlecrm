@@ -64,6 +64,7 @@ export const actions = {
     const org = locals.org;
     const formData = await request.formData();
     const phone = formData.get('phone')?.toString();
+    const name = formData.get('name')?.toString() ?? '';
 
     // Validation
     const errors = {};
@@ -82,12 +83,13 @@ export const actions = {
     if (Object.keys(errors).length > 0) {
       return fail(400, {
         errors,
-        data: { phone }
+        data: { name, phone }
       });
     }
 
     try {
       const djangoData = {
+        name: name.trim().slice(0, 255),
         phone: formattedPhone
       };
 
@@ -110,7 +112,7 @@ export const actions = {
       return fail(500, {
         error:
           'Failed to update profile: ' + (err instanceof Error ? err.message : 'Unknown error'),
-        data: { phone }
+        data: { name, phone }
       });
     }
   }

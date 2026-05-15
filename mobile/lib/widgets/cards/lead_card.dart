@@ -1,56 +1,59 @@
 import 'package:flutter/material.dart';
 import 'package:lucide_icons/lucide_icons.dart';
+import 'package:url_launcher/url_launcher.dart';
 import '../../core/theme/theme.dart';
 import '../../data/models/models.dart';
 import '../common/common.dart';
 
+/// Callback fired when a tag pill is tapped, used to set a tag filter.
+typedef LeadTagTap = void Function(String tagId, String tagLabel);
+
 /// Lead Card Widget
-/// Displays lead summary in list view with avatar, status, priority, and tags
+/// Displays lead summary in list view with avatar, status, priority, tags,
+/// assignee, opportunity value, and tap-to-call/email actions.
 class LeadCard extends StatelessWidget {
   final Lead lead;
   final VoidCallback? onTap;
   final VoidCallback? onLongPress;
+  final LeadTagTap? onTagTap;
 
-  const LeadCard({super.key, required this.lead, this.onTap, this.onLongPress});
+  const LeadCard({
+    super.key,
+    required this.lead,
+    this.onTap,
+    this.onLongPress,
+    this.onTagTap,
+  });
 
   @override
   Widget build(BuildContext context) {
-    return GestureDetector(
-      onTap: onTap,
-      onLongPress: onLongPress,
-      child: Container(
-        margin: const EdgeInsets.only(bottom: 8),
-        decoration: BoxDecoration(
-          color: AppColors.surface,
+    return Container(
+      margin: const EdgeInsets.only(bottom: 8),
+      decoration: BoxDecoration(
+        color: AppColors.surface,
+        borderRadius: AppLayout.borderRadiusMd,
+        border: Border.all(color: AppColors.border),
+      ),
+      child: Material(
+        color: Colors.transparent,
+        borderRadius: AppLayout.borderRadiusMd,
+        child: InkWell(
+          onTap: onTap,
+          onLongPress: onLongPress,
           borderRadius: AppLayout.borderRadiusMd,
-          border: Border.all(color: AppColors.border),
-        ),
-        child: Material(
-          color: Colors.transparent,
-          borderRadius: AppLayout.borderRadiusMd,
-          child: InkWell(
-            onTap: onTap,
-            onLongPress: onLongPress,
-            borderRadius: AppLayout.borderRadiusMd,
-            child: Padding(
-              padding: const EdgeInsets.all(12),
-              child: Column(
-                crossAxisAlignment: CrossAxisAlignment.start,
-                children: [
-                  // Row 1: Avatar + Info + Priority/Time
-                  _buildHeader(),
-
-                  // Row 2: Tags
-                  if (lead.tags.isNotEmpty) ...[
-                    const SizedBox(height: 8),
-                    _buildTags(),
-                  ],
-
-                  // Row 3: Status + Assignment
+          child: Padding(
+            padding: const EdgeInsets.all(12),
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                _buildHeader(),
+                if (lead.tags.isNotEmpty) ...[
                   const SizedBox(height: 8),
-                  _buildFooter(),
+                  _buildTags(),
                 ],
-              ),
+                const SizedBox(height: 8),
+                _buildFooter(context),
+              ],
             ),
           ),
         ),
@@ -62,12 +65,8 @@ class LeadCard extends StatelessWidget {
     return Row(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
-        // Avatar
         UserAvatar(name: lead.name, size: AvatarSize.sm),
-
         const SizedBox(width: 10),
-
-        // Name + Company
         Expanded(
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.start,
@@ -91,10 +90,7 @@ class LeadCard extends StatelessWidget {
             ],
           ),
         ),
-
         const SizedBox(width: 8),
-
-        // Right side: Priority badge + time
         Column(
           crossAxisAlignment: CrossAxisAlignment.end,
           children: [
@@ -139,68 +135,113 @@ class LeadCard extends StatelessWidget {
   }
 
   Widget _buildTags() {
-    final displayTags = lead.tags.take(2).toList();
-    final remainingCount = lead.tags.length - 2;
+    final displayCount = lead.tags.length > 2 ? 2 : lead.tags.length;
+    final remainingCount = lead.tags.length - displayCount;
 
-    return Row(
+    return Wrap(
+      spacing: 4,
+      runSpacing: 4,
       children: [
-        ...displayTags.map(
-          (tag) => Padding(
-            padding: const EdgeInsets.only(right: 4),
-            child: LabelPill(label: tag),
+        for (var i = 0; i < displayCount; i++)
+          _TappableTag(
+            label: lead.tags[i],
+            // Tags and tagIds may not match length if backend returned mixed
+            // shapes; fall back to the name if id is missing.
+            onTap: onTagTap == null
+                ? null
+                : () {
+                    final id = (i < lead.tagIds.length)
+                        ? lead.tagIds[i]
+                        : lead.tags[i];
+                    onTagTap!(id, lead.tags[i]);
+                  },
           ),
-        ),
         if (remainingCount > 0)
-          Text(
-            '+$remainingCount',
-            style: AppTypography.caption.copyWith(
-              color: AppColors.textTertiary,
+          Padding(
+            padding: const EdgeInsets.symmetric(vertical: 2),
+            child: Text(
+              '+$remainingCount',
+              style: AppTypography.caption.copyWith(
+                color: AppColors.textTertiary,
+              ),
             ),
           ),
       ],
     );
   }
 
-  Widget _buildFooter() {
+  Widget _buildFooter(BuildContext context) {
+    final hasValue =
+        lead.opportunityAmount != null && lead.opportunityAmount! > 0;
+    final hasAssignee =
+        lead.assignedTo != null && lead.assignedTo!.isNotEmpty;
+    final hasPhone = lead.phone != null && lead.phone!.trim().isNotEmpty;
+    final hasEmail = lead.email.trim().isNotEmpty;
+
     return Row(
       children: [
-        // Status Badge
         StatusBadge.fromLeadStatus(lead.status),
-
+        const SizedBox(width: 6),
+        if (hasValue) _ValuePill(amount: lead.opportunityAmount!, currency: lead.currency),
         const Spacer(),
-
-        // Source indicator
-        Container(
-          padding: const EdgeInsets.symmetric(horizontal: 6, vertical: 2),
-          decoration: BoxDecoration(
-            color: AppColors.gray100,
-            borderRadius: BorderRadius.circular(4),
+        if (hasAssignee) ...[
+          Tooltip(
+            message: 'Assigned to ${lead.assignedToName}',
+            child: UserAvatar(
+              name: lead.assignedToName,
+              imageUrl: lead.assignedToProfilePic,
+              size: AvatarSize.xs,
+            ),
           ),
-          child: Row(
-            mainAxisSize: MainAxisSize.min,
-            children: [
-              Icon(
-                _getSourceIcon(lead.source),
-                size: 11,
-                color: AppColors.textSecondary,
-              ),
-              const SizedBox(width: 3),
-              Text(
-                lead.source.displayName,
-                style: AppTypography.caption.copyWith(
-                  color: AppColors.textSecondary,
+          const SizedBox(width: 6),
+        ],
+        if (hasPhone)
+          _CardActionIcon(
+            icon: LucideIcons.phone,
+            tooltip: 'Call ${lead.phone}',
+            onTap: () => _launch(context, Uri(scheme: 'tel', path: lead.phone!)),
+          ),
+        if (hasPhone && hasEmail) const SizedBox(width: 2),
+        if (hasEmail)
+          _CardActionIcon(
+            icon: LucideIcons.mail,
+            tooltip: 'Email ${lead.email}',
+            onTap: () => _launch(context, Uri(scheme: 'mailto', path: lead.email)),
+          ),
+        if (!hasPhone && !hasEmail) ...[
+          // Fall back to the source pill when no actions are available.
+          Container(
+            padding: const EdgeInsets.symmetric(horizontal: 6, vertical: 2),
+            decoration: BoxDecoration(
+              color: AppColors.gray100,
+              borderRadius: BorderRadius.circular(4),
+            ),
+            child: Row(
+              mainAxisSize: MainAxisSize.min,
+              children: [
+                Icon(lead.source.icon, size: 11, color: AppColors.textSecondary),
+                const SizedBox(width: 3),
+                Text(
+                  lead.source.displayName,
+                  style: AppTypography.caption.copyWith(
+                    color: AppColors.textSecondary,
+                  ),
                 ),
-              ),
-            ],
+              ],
+            ),
           ),
-        ),
+        ],
       ],
     );
   }
 
-  IconData _getSourceIcon(LeadSource source) {
-    // Use the icon defined in the enum
-    return source.icon;
+  Future<void> _launch(BuildContext context, Uri uri) async {
+    final ok = await launchUrl(uri);
+    if (!ok && context.mounted) {
+      ScaffoldMessenger.of(context).showSnackBar(
+        SnackBar(content: Text('Could not open ${uri.scheme}')),
+      );
+    }
   }
 
   String _formatTimeAgo(DateTime dateTime) {
@@ -218,6 +259,90 @@ class LeadCard extends StatelessWidget {
     } else {
       return 'Just now';
     }
+  }
+}
+
+class _TappableTag extends StatelessWidget {
+  final String label;
+  final VoidCallback? onTap;
+
+  const _TappableTag({required this.label, this.onTap});
+
+  @override
+  Widget build(BuildContext context) {
+    final pill = LabelPill(label: label);
+    if (onTap == null) return pill;
+    return InkWell(
+      onTap: onTap,
+      borderRadius: BorderRadius.circular(4),
+      child: pill,
+    );
+  }
+}
+
+class _ValuePill extends StatelessWidget {
+  final double amount;
+  final String? currency;
+
+  const _ValuePill({required this.amount, this.currency});
+
+  @override
+  Widget build(BuildContext context) {
+    return Container(
+      padding: const EdgeInsets.symmetric(horizontal: 6, vertical: 2),
+      decoration: BoxDecoration(
+        color: AppColors.success50,
+        borderRadius: BorderRadius.circular(4),
+      ),
+      child: Row(
+        mainAxisSize: MainAxisSize.min,
+        children: [
+          Icon(LucideIcons.dollarSign, size: 11, color: AppColors.success700),
+          const SizedBox(width: 2),
+          Text(
+            _format(amount),
+            style: AppTypography.caption.copyWith(
+              color: AppColors.success700,
+              fontWeight: FontWeight.w600,
+              fontSize: 11,
+            ),
+          ),
+        ],
+      ),
+    );
+  }
+
+  String _format(double v) {
+    if (v >= 1000000) return '${(v / 1000000).toStringAsFixed(1)}M';
+    if (v >= 1000) return '${(v / 1000).toStringAsFixed(v >= 10000 ? 0 : 1)}K';
+    return v.toStringAsFixed(0);
+  }
+}
+
+class _CardActionIcon extends StatelessWidget {
+  final IconData icon;
+  final String tooltip;
+  final VoidCallback onTap;
+
+  const _CardActionIcon({
+    required this.icon,
+    required this.tooltip,
+    required this.onTap,
+  });
+
+  @override
+  Widget build(BuildContext context) {
+    return Tooltip(
+      message: tooltip,
+      child: InkResponse(
+        onTap: onTap,
+        radius: 18,
+        child: Padding(
+          padding: const EdgeInsets.all(6),
+          child: Icon(icon, size: 16, color: AppColors.primary600),
+        ),
+      ),
+    );
   }
 }
 

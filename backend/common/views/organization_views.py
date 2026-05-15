@@ -264,7 +264,10 @@ class ProfileView(APIView):
         parameters=swagger_params.organization_params,
         request=inline_serializer(
             name="ProfilePatchRequest",
-            fields={"phone": serializers.CharField(required=False)},
+            fields={
+                "phone": serializers.CharField(required=False, allow_blank=True),
+                "name": serializers.CharField(required=False, allow_blank=True),
+            },
         ),
         responses={
             200: inline_serializer(
@@ -282,11 +285,15 @@ class ProfileView(APIView):
 
         # Update phone on Profile if provided
         if "phone" in data:
-            profile.phone = data.get("phone")
-            profile.save()
+            profile.phone = data.get("phone") or ""
+            profile.save(update_fields=["phone"])
 
-        # Note: name field is not available on User model
-        # If name updates are needed, the User model would need to be extended
+        # Update name on User if provided. Name lives on User (not Profile) so
+        # it's shared across all org memberships for the same user.
+        if "name" in data:
+            user = request.user
+            user.name = (data.get("name") or "").strip()[:255]
+            user.save(update_fields=["name"])
 
         return Response(
             {
