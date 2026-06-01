@@ -31,6 +31,10 @@ from common.views.organization_views import (
 )
 from common.views.settings_views import DomainDetailView, DomainList
 from common.views.org_settings_views import OrgSettingsView
+from common.views.pat_views import (
+    PersonalAccessTokenDetailView,
+    PersonalAccessTokenListCreateView,
+)
 from common.views.tags_views import TagsDetailView, TagsListView, TagsRestoreView
 from common.views.team_views import TeamsDetailView, TeamsListView
 from common.views.user_views import (
@@ -67,6 +71,17 @@ urlpatterns = [
     path("org/settings/", OrgSettingsView.as_view(), name="org_settings"),
     path("org/<str:pk>/", OrgUpdateView.as_view()),
     path("profile/", ProfileView.as_view()),
+    # Personal Access Tokens (MCP server) — a user manages ONLY their own
+    path(
+        "profile/tokens/",
+        PersonalAccessTokenListCreateView.as_view(),
+        name="pat_list_create",
+    ),
+    path(
+        "profile/tokens/<uuid:pk>/",
+        PersonalAccessTokenDetailView.as_view(),
+        name="pat_detail",
+    ),
     # User management
     path("users/get-teams-and-users/", GetTeamsAndUsersView.as_view()),
     path("users/", UsersListView.as_view()),

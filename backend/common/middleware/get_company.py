@@ -42,6 +42,15 @@ class GetProfileAndOrg:
         request.profile = None
         request.org = None
 
+        # Personal Access Token (agent / MCP) — resolve here so org context is
+        # set before RequireOrgContext runs (DRF auth runs too late for that).
+        # MUST come before the JWT branch so a PAT bearer is never handed to
+        # the JWT decoder.
+        raw_pat = self._extract_pat(request)
+        if raw_pat:
+            self._process_pat_auth(request, raw_pat)
+            return
+
         # Try JWT token first (primary authentication)
         if request.headers.get("Authorization"):
             self._process_jwt_auth(request)
@@ -52,6 +61,42 @@ class GetProfileAndOrg:
         if api_key:
             self._process_api_key_auth(request, api_key)
             return
+
+    def _extract_pat(self, request):
+        """Return a bcrm_pat_-prefixed token from the request, else None.
+
+        Reuses the same extractor as the DRF auth class so the detection logic
+        (Authorization: Bearer … or the Token header) lives in one place.
+        """
+        from common.pat_auth import _extract_raw
+
+        return _extract_raw(request)
+
+    def _process_pat_auth(self, request, raw):
+        """Resolve a PAT and set org context, mirroring the JWT/org-key paths.
+
+        On an invalid/revoked/expired PAT we leave request.org unset so that
+        RequireOrgContext returns a clean 403 (the same denial the org-key path
+        produces for an unknown key once that exception surfaces). We swallow
+        AuthenticationFailed here rather than re-raising so the request is
+        denied cleanly downstream instead of 500-ing inside middleware.
+        """
+        from rest_framework.exceptions import AuthenticationFailed
+
+        from common.pat_auth import resolve_valid_pat
+
+        try:
+            pat = resolve_valid_pat(raw)
+        except AuthenticationFailed:
+            # Leave org unset → RequireOrgContext denies with 403. The DRF
+            # PATAuthentication class will also raise on this token, but the
+            # middleware-level denial happens first.
+            return
+        request.profile = pat.profile
+        request.org = pat.org
+        request.META["org"] = str(pat.org.id)
+        request.META["mcp_token_id"] = str(pat.id)
+        request._pat = pat
 
     def _process_jwt_auth(self, request):
         """

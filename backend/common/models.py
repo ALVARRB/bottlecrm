@@ -1,5 +1,7 @@
 import binascii
+import hashlib
 import os
+import secrets
 import time
 import uuid
 
@@ -7,10 +9,11 @@ from django.contrib.auth.models import AbstractBaseUser, PermissionsMixin
 from django.contrib.contenttypes.fields import GenericForeignKey
 from django.contrib.contenttypes.models import ContentType
 from django.db import models
+from django.utils import timezone
 from django.utils.text import slugify
 from django.utils.timesince import timesince
 from django.utils.translation import gettext_lazy as _
-from common.base import BaseModel
+from common.base import BaseModel, BaseOrgModel
 from common.utils import (
     COUNTRIES,
     CURRENCY_CODES,
@@ -879,6 +882,67 @@ class CustomFieldDefinition(BaseModel):
 
     def __str__(self):
         return f"{self.target_model}.{self.key} ({self.label})"
+
+
+def generate_pat_raw():
+    """Return a new raw personal access token string."""
+    return f"bcrm_pat_{secrets.token_urlsafe(32)}"
+
+
+class PersonalAccessToken(BaseOrgModel):
+    """
+    Per-user token for programmatic/agent (MCP) access.
+
+    The agent authenticates AS `profile` and inherits that user's role,
+    org and RLS scope. The raw token is shown ONCE at creation and only
+    its SHA-256 hash is stored.
+    """
+
+    profile = models.ForeignKey(
+        "common.Profile",
+        on_delete=models.CASCADE,
+        related_name="access_tokens",
+    )
+    name = models.CharField(max_length=255)
+    token_hash = models.CharField(max_length=64, unique=True, db_index=True)
+    token_prefix = models.CharField(max_length=20)
+    # NOTE: scopes are stored for forward-compatibility but are NOT enforced in
+    # Phase 1 — a token always inherits the owning profile's full role/permissions.
+    # Do not treat `scopes` as a trust boundary until enforcement lands.
+    scopes = models.JSONField(default=list, blank=True)
+    expires_at = models.DateTimeField(null=True, blank=True)
+    last_used_at = models.DateTimeField(null=True, blank=True)
+    revoked_at = models.DateTimeField(null=True, blank=True)
+
+    class Meta:
+        db_table = "personal_access_token"
+        indexes = [models.Index(fields=["org", "-created_at"])]
+
+    @staticmethod
+    def hash_token(raw):
+        return hashlib.sha256(raw.encode()).hexdigest()
+
+    @classmethod
+    def generate(cls, profile, name, scopes=None, expires_at=None):
+        raw = generate_pat_raw()
+        pat = cls.objects.create(
+            org=profile.org,
+            profile=profile,
+            name=name,
+            token_hash=cls.hash_token(raw),
+            token_prefix=raw[:13],
+            scopes=scopes or [],
+            expires_at=expires_at,
+            created_by=profile.user,
+        )
+        return raw, pat
+
+    def is_valid(self):
+        if self.revoked_at is not None:
+            return False
+        if self.expires_at is not None and self.expires_at <= timezone.now():
+            return False
+        return True
 
 
 # Import SecurityAuditLog so Django discovers it for migrations

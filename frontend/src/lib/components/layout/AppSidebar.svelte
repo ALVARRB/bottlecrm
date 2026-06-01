@@ -49,7 +49,8 @@
     ShieldCheck,
     BookOpen,
     Activity,
-    Smartphone
+    Smartphone,
+    KeyRound
   } from '@lucide/svelte';
   import { Bell } from '$lib/components/notifications/index.js';
 
@@ -1215,6 +1216,14 @@
               >
                 <MessageSquareQuote class="size-4" />
                 <span>Macros</span>
+              </DropdownMenu.Item>
+              <DropdownMenu.Item
+                inset={false}
+                onclick={() => navigateTo('/settings/api-tokens')}
+                class="gap-2.5"
+              >
+                <KeyRound class="size-4" />
+                <span>API Tokens</span>
               </DropdownMenu.Item>
             </DropdownMenu.Group>
             <DropdownMenu.Separator />

@@ -100,6 +100,11 @@ ORG_SCOPED_TABLES = [
     # Approval workflows (Tier 3 approvals).
     "approval_rule",
     "approval",
+    # MCP / programmatic access
+    # NOTE: personal_access_token is intentionally NOT RLS-protected — it is an
+    # auth-bootstrap table (looked up by token_hash before any tenant context
+    # exists), mirroring the Org table. Isolation for token management is enforced
+    # by explicit org+profile filters in common/views/pat_views.py.
 ]
 
 # Centralized RLS configuration

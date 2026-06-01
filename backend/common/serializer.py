@@ -21,6 +21,7 @@ from common.models import (
     Document,
     Notification,
     Org,
+    PersonalAccessToken,
     Profile,
     Tags,
     Teams,
@@ -890,3 +891,49 @@ class TeamswaggerCreateSerializer(serializers.ModelSerializer):
             "description",
             "users",
         )
+
+
+class PersonalAccessTokenListSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = PersonalAccessToken
+        fields = (
+            "id",
+            "name",
+            "token_prefix",
+            "scopes",
+            "expires_at",
+            "last_used_at",
+            "created_at",
+            "revoked_at",
+        )
+        read_only_fields = fields
+
+
+class PersonalAccessTokenCreateSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = PersonalAccessToken
+        fields = ("name", "scopes", "expires_at")
+
+    def validate_name(self, value):
+        value = (value or "").strip()
+        if not value:
+            raise serializers.ValidationError("Name is required.")
+        if len(value) > 255:
+            raise serializers.ValidationError("Name too long (max 255).")
+        return value
+
+    def validate_scopes(self, value):
+        if value in (None, ""):
+            return []
+        if not isinstance(value, list) or not all(isinstance(s, str) for s in value):
+            raise serializers.ValidationError("scopes must be a list of strings.")
+        if len(value) > 32:
+            raise serializers.ValidationError("Too many scopes (max 32).")
+        return value
+
+    def validate_expires_at(self, value):
+        from django.utils import timezone
+
+        if value is not None and value <= timezone.now():
+            raise serializers.ValidationError("expires_at must be in the future.")
+        return value
