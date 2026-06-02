@@ -12,9 +12,19 @@ user's role and org. All Row-Level Security, permission checks, and field
 validation are enforced by the backend — the MCP server never bypasses tenant
 isolation and adds no privileges of its own.
 
-> **Phase 1 (this release): stdio transport only.** The agent launches
-> `bcrm-mcp` as a local subprocess and talks to it over stdin/stdout. Remote
-> HTTP transport and OAuth-based auth are planned for later phases.
+> **Transports.** `bcrm-mcp` runs in two modes, selected by `BCRM_TRANSPORT`:
+>
+> - **`stdio`** (default) — the agent launches `bcrm-mcp` as a local subprocess
+>   and talks over stdin/stdout. The process acts as a single user, whose token
+>   is `BCRM_TOKEN`.
+> - **`http`** — a hosted, multi-user server (e.g. mounted in the Django app at
+>   `/mcp`). It holds **no** server-side token; instead **every request
+>   authenticates with its own `Authorization: Bearer <pat>` header**, so each
+>   caller acts strictly as their own CRM identity. See
+>   [HTTP transport](#http-transport-hosted-multi-user) below.
+>
+> OAuth-based connect is planned for a later phase; today http mode uses a
+> personal access token in the request header.
 
 ## Requirements
 
@@ -37,12 +47,79 @@ stdin — that is expected; normally your MCP client launches it for you).
 
 ### Configuration (environment variables)
 
-| Variable        | Required | Description                                                                                          |
-| --------------- | -------- | ---------------------------------------------------------------------------------------------------- |
-| `BCRM_BASE_URL` | yes      | Root URL of the CRM (the host, **not** an `/api/...` path), e.g. `http://localhost:8000`.             |
-| `BCRM_TOKEN`    | yes      | A Personal Access Token, format `bcrm_pat_…`. Sent as `Authorization: Bearer <token>` on every call. |
+| Variable         | Required            | Description                                                                                           |
+| ---------------- | ------------------- | ---------------------------------------------------------------------------------------------------- |
+| `BCRM_BASE_URL`  | yes                 | Root URL of the CRM (the host, **not** an `/api/...` path), e.g. `http://localhost:8000`.             |
+| `BCRM_TRANSPORT` | no (default `stdio`)| `stdio` or `http`. See [HTTP transport](#http-transport-hosted-multi-user).                           |
+| `BCRM_TOKEN`     | stdio only          | A Personal Access Token, `bcrm_pat_…`, sent as `Authorization: Bearer <token>`. **Required for stdio; must be unset for http** (where the token comes per-request from each caller's header). |
+| `BCRM_HOST`      | no (default `127.0.0.1`) | http only — bind address when serving standalone.                                                |
+| `BCRM_PORT`      | no (default `8900`) | http only — bind port when serving standalone.                                                       |
+| `BCRM_PATH`      | no (default `/mcp`) | http only — route the streamable endpoint is served at when serving standalone.                      |
 
-If either is missing the server exits immediately with an error.
+In stdio mode, a missing `BCRM_BASE_URL` or `BCRM_TOKEN` exits immediately. In
+http mode, a server-side `BCRM_TOKEN` is rejected (it would make every caller
+share one identity).
+
+## HTTP transport (hosted, multi-user)
+
+In http mode the server is long-lived and serves many users at once. There is
+no server-side token: **each request must carry its own
+`Authorization: Bearer <bcrm_pat_…>` header**, and the server builds a fresh,
+per-request client from that token — so every caller acts strictly as their own
+CRM identity, with their own role and org. A request with no/invalid bearer
+token is rejected before any API call is made.
+
+There are two ways to run http mode:
+
+**1. Mounted in the Django app (recommended).** The community backend mounts
+this server at `/mcp` from `crm/asgi.py` when the optional `mcp` extra is
+installed and the app is served under ASGI (uvicorn). Clients then connect to
+`https://<your-api-host>/mcp` — see the hosted client config below.
+
+```bash
+# from Django-CRM/backend
+uv sync --extra mcp                      # installs fastmcp + this package (editable)
+BCRM_BASE_URL=http://127.0.0.1:8000 \
+  uv run uvicorn crm.asgi:application --host 0.0.0.0 --port 8000
+# MCP is now at http://<host>:8000/mcp
+```
+
+Notes:
+
+- The mount is **inactive under `runserver`/WSGI** — it only activates when you
+  serve `crm.asgi:application` under an ASGI server (uvicorn).
+- `BCRM_BASE_URL` is the loopback the in-process tools call (defaults to
+  `http://127.0.0.1:8000`). Leave `BCRM_TOKEN` **unset** — http mode takes the
+  token from each request. Set `BCRM_MCP_ENABLED=false` to disable the mount.
+- **Edge auth:** any `/mcp` request without a well-formed `Authorization: Bearer`
+  header gets a `401` before reaching the MCP layer — even `initialize` and
+  tool listing require a token (the token's validity is then checked by the
+  backend on each API call).
+
+**2. Standalone.** Run the server on its own port:
+
+```bash
+BCRM_TRANSPORT=http BCRM_BASE_URL=http://localhost:8000 \
+  BCRM_HOST=0.0.0.0 BCRM_PORT=8900 uv run bcrm-mcp
+# streamable endpoint at http://localhost:8900/mcp
+```
+
+### Hosted client config (no install)
+
+For clients that support remote MCP servers, point them at the URL and send the
+token in a header — nothing to install:
+
+```json
+{
+  "mcpServers": {
+    "bottlecrm": {
+      "type": "http",
+      "url": "https://api.bottlecrm.io/mcp",
+      "headers": { "Authorization": "Bearer bcrm_pat_…" }
+    }
+  }
+}
+```
 
 ## Getting a Personal Access Token
 
@@ -246,10 +323,11 @@ Layout:
 ```
 mcp_server/
 ├── src/bcrm_mcp/
-│   ├── server.py     # FastMCP server + `bcrm-mcp` entry point (stdio)
+│   ├── server.py     # FastMCP server, ClientResolver, `bcrm-mcp` entry + build_http_app
 │   ├── tools.py      # the 8 tool implementations + OpenAPI describe heuristic
 │   ├── client.py     # async httpx wrapper (CrmClient)
 │   ├── entities.py   # entity → path / allowed-action registry
-│   └── config.py     # env-var settings (BCRM_BASE_URL, BCRM_TOKEN)
+│   ├── auth.py       # per-request bearer-token extraction (http transport)
+│   └── config.py     # env-var settings (transport, BCRM_BASE_URL, BCRM_TOKEN, …)
 └── tests/
 ```
