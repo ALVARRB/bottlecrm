@@ -27,7 +27,13 @@ RUN uv sync --frozen --no-install-project
 # Copy backend source
 COPY backend/ .
 
+# Copy entrypoint for Render
+COPY render/entrypoint.sh /entrypoint.sh
+RUN chmod +x /entrypoint.sh
+
 # Put the venv's binaries on PATH so `python`, `gunicorn`, `celery` etc. resolve.
 ENV PATH="/app/.venv/bin:$PATH"
 
 EXPOSE 8000
+
+CMD ["/bin/bash", "/entrypoint.sh"]

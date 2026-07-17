@@ -1,0 +1,67 @@
+# BottleCRM — Render Blueprint
+# Deploy com: conectar repositório GitHub no Render
+
+databases:
+  - name: bottlecrm-db
+    region: ohio
+    plan: free
+    databaseName: crm_db
+    user: crm_user
+    ipAllowList: [] # permitir apenas conexões internas
+
+services:
+  - type: web
+    name: bottlecrm
+    region: ohio
+    env: docker
+    plan: free
+    branch: master
+    repo: https://github.com/ALVARRB/bottlecrm
+    dockerfilePath: ./Dockerfile
+    envVars:
+      - key: DBNAME
+        fromDatabase:
+          name: bottlecrm-db
+          property: database
+      - key: DBUSER
+        fromDatabase:
+          name: bottlecrm-db
+          property: user
+      - key: DBPASSWORD
+        fromDatabase:
+          name: bottlecrm-db
+          property: password
+      - key: DBHOST
+        fromDatabase:
+          name: bottlecrm-db
+          property: host
+      - key: DBPORT
+        fromDatabase:
+          name: bottlecrm-db
+          property: port
+      - key: SECRET_KEY
+        generateValue: true
+      - key: DEBUG
+        value: "True"
+      - key: ALLOWED_HOSTS
+        value: ".onrender.com,localhost,127.0.0.1"
+      - key: DOMAIN_NAME
+        value: "https://bottlecrm.onrender.com"
+      - key: CORS_ALLOW_ALL
+        value: "True"
+      - key: ENV_TYPE
+        value: "render"
+      - key: CELERY_BROKER_URL
+        value: ""  # sem Redis por enquanto
+      - key: CELERY_RESULT_BACKEND
+        value: ""
+      - key: DJANGO_CELERY_BROKER_URL
+        value: ""
+      - key: DEFAULT_FROM_EMAIL
+        value: "noreply@bottlecrm.com"
+      - key: ADMIN_EMAIL
+        value: "admin@bottlecrm.com"
+      - key: ADMIN_PASSWORD
+        value: "admin"
+      - key: PUBLIC_DJANGO_API_URL
+        value: "https://bottlecrm.onrender.com"
