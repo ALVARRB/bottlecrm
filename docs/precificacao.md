@@ -8,7 +8,7 @@ Serviço de implementação + suporte mensal (não SaaS).
 ### Plano Básico
 | Item | Valor |
 |------|-------|
-| **Implementação** (setup + configuração + treinamento) | **R$ 1.500** (one-time) |
+| **Implementação** (setup + configuração + treinamento) | **R$ 1.497** (one-time) |
 | **Mensalidade** (hospedagem + suporte + atualizações) | **R$ 97/mês** |
 | Usuários | Até 5 |
 | Suporte | E-mail, resposta em 24h úteis |
@@ -16,7 +16,7 @@ Serviço de implementação + suporte mensal (não SaaS).
 ### Plano Profissional
 | Item | Valor |
 |------|-------|
-| **Implementação** (setup + customização + migração + treinamento) | **R$ 3.000** (one-time) |
+| **Implementação** (setup + customização + migração + treinamento) | **R$ 3.749** (one-time) |
 | **Mensalidade** (hospedagem + suporte prioritário + backup) | **R$ 197/mês** |
 | Usuários | Até 15 |
 | Suporte | E-mail + WhatsApp, resposta em 4h úteis |
