@@ -13,6 +13,11 @@ from drf_spectacular.views import (
 app_name = "crm"
 
 urlpatterns = [
+    path(
+        "",
+        TemplateView.as_view(template_name="healthz.html"),
+        name="root",
+    ),
     url(
         r"^healthz/$",
         TemplateView.as_view(template_name="healthz.html"),
