@@ -1,6 +1,6 @@
 from django.contrib import admin
 
-from common.models import Address, Comment, CommentFiles, SessionToken, User
+from common.models import Address, Comment, CommentFiles, Org, PersonalAccessToken, Profile, SessionToken, User
 
 # Register your models here.
 
@@ -8,6 +8,9 @@ admin.site.register(User)
 admin.site.register(Address)
 admin.site.register(Comment)
 admin.site.register(CommentFiles)
+admin.site.register(Org)
+admin.site.register(Profile)
+admin.site.register(PersonalAccessToken)
 
 
 @admin.register(SessionToken)
