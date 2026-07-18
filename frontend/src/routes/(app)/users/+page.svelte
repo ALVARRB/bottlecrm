@@ -220,7 +220,7 @@
 </script>
 
 <svelte:head>
-  <title>Users & Teams - BottleCRM</title>
+  <title>Users & Teams - AllShopTotal CRM</title>
 </svelte:head>
 
 <PageHeader title="Users & Teams" subtitle="Manage users and teams in your organization">

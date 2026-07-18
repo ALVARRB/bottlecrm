@@ -1,8 +1,8 @@
-# BottleCRM — Deployment Architecture Summary
+# AllShopTotal CRM — Deployment Architecture Summary
 
 ## Overview
 
-BottleCRM is a full-stack CRM platform with Django REST Framework (backend) and SvelteKit (frontend), using PostgreSQL Row-Level Security (RLS) for multi-tenant data isolation. It runs entirely via Docker Compose for local development and can be adapted for production deployment.
+AllShopTotal CRM is a full-stack CRM platform with Django REST Framework (backend) and SvelteKit (frontend), using PostgreSQL Row-Level Security (RLS) for multi-tenant data isolation. It runs entirely via Docker Compose for local development and can be adapted for production deployment.
 
 ---
 
@@ -171,4 +171,4 @@ The current setup is designed for **development** — notable gaps for productio
 
 ## Summary
 
-BottleCRM is a **6-service Docker Compose application** built on **Django 5 + SvelteKit 2**, requiring **PostgreSQL 16** and **Redis 7**. Docker is the primary development path (`docker compose up --build`), with a manual uv/pnpm alternative available. The setup is dev-oriented out of the box — moving to production requires adding gunicorn, a reverse proxy with TLS, S3 for media/static files, disabling debug mode, and rotating the secret key.
+AllShopTotal CRM is a **6-service Docker Compose application** built on **Django 5 + SvelteKit 2**, requiring **PostgreSQL 16** and **Redis 7**. Docker is the primary development path (`docker compose up --build`), with a manual uv/pnpm alternative available. The setup is dev-oriented out of the box — moving to production requires adding gunicorn, a reverse proxy with TLS, S3 for media/static files, disabling debug mode, and rotating the secret key.

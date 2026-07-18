@@ -1,8 +1,8 @@
-# BottleCRM — Render Blueprint
+# AllShopTotal CRM — Render Blueprint
 # Deploy: connect GitHub repo to Render
 
 databases:
-  - name: bottlecrm-db
+  - name: allshoptotal-db
     region: ohio
     plan: free
     databaseName: crm_db
@@ -12,33 +12,33 @@ databases:
 services:
   # ── Backend: Django REST API ──
   - type: web
-    name: bottlecrm
+    name: allshoptotal
     region: ohio
     env: docker
     plan: free
     branch: master
-    repo: https://github.com/ALVARRB/bottlecrm
+    repo: https://github.com/ALVARRB/allshoptotal
     dockerfilePath: ./Dockerfile
     envVars:
       - key: DBNAME
         fromDatabase:
-          name: bottlecrm-db
+          name: allshoptotal-db
           property: database
       - key: DBUSER
         fromDatabase:
-          name: bottlecrm-db
+          name: allshoptotal-db
           property: user
       - key: DBPASSWORD
         fromDatabase:
-          name: bottlecrm-db
+          name: allshoptotal-db
           property: password
       - key: DBHOST
         fromDatabase:
-          name: bottlecrm-db
+          name: allshoptotal-db
           property: host
       - key: DBPORT
         fromDatabase:
-          name: bottlecrm-db
+          name: allshoptotal-db
           property: port
       - key: SECRET_KEY
         generateValue: true
@@ -47,7 +47,7 @@ services:
       - key: ALLOWED_HOSTS
         value: ".onrender.com,localhost,127.0.0.1"
       - key: DOMAIN_NAME
-        value: "https://bottlecrm.onrender.com"
+        value: "https://allshoptotal.onrender.com"
       - key: CORS_ALLOW_ALL
         value: "True"
       - key: ENV_TYPE
@@ -59,30 +59,30 @@ services:
       - key: DJANGO_CELERY_BROKER_URL
         value: ""
       - key: DEFAULT_FROM_EMAIL
-        value: "noreply@bottlecrm.com"
+        value: "noreply@allshoptotal.com"
       - key: ADMIN_EMAIL
-        value: "admin@bottlecrm.com"
+        value: "admin@allshoptotal.com.br"
       - key: ADMIN_PASSWORD
         value: "admin"
       - key: PUBLIC_DJANGO_API_URL
-        value: "https://bottlecrm.onrender.com"
+        value: "https://allshoptotal.onrender.com"
 
   # ── Frontend: SvelteKit SPA ──
   - type: web
-    name: bottlecrm-frontend
+    name: allshoptotal-frontend
     region: ohio
     env: docker
     plan: free
     branch: master
-    repo: https://github.com/ALVARRB/bottlecrm
+    repo: https://github.com/ALVARRB/allshoptotal
     dockerfilePath: ./frontend/Dockerfile
     dockerContext: ./frontend
     envVars:
       - key: PUBLIC_DJANGO_API_URL
-        value: "https://bottlecrm.onrender.com"
+        value: "https://allshoptotal.onrender.com"
       - key: NODE_ENV
         value: "production"
       - key: GOOGLE_CLIENT_ID
         value: ""
       - key: GOOGLE_LOGIN_DOMAIN
-        value: "https://bottlecrm-frontend.onrender.com"
+        value: "https://allshoptotal-frontend.onrender.com"

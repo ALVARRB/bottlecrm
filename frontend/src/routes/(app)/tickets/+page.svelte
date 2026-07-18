@@ -723,7 +723,7 @@
 </script>
 
 <svelte:head>
-  <title>Tickets - BottleCRM</title>
+  <title>Tickets - AllShopTotal CRM</title>
 </svelte:head>
 
 <div class="flex flex-col">

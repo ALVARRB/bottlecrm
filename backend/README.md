@@ -1,6 +1,6 @@
-# BottleCRM Backend - Django REST API
+# AllShopTotal CRM Backend - Django REST API
 
-The backend for BottleCRM, a multi-tenant CRM platform built with Django REST Framework.
+The backend for AllShopTotal CRM, a multi-tenant CRM platform built with Django REST Framework.
 
 ## Tech Stack
 
@@ -107,15 +107,15 @@ SECRET_KEY=your-secret-key-here
 ENV_TYPE=dev
 
 # Database
-DBNAME=bottlecrm
+DBNAME=allshoptotal
 DBUSER=postgres
 DBPASSWORD=root
 DBHOST=localhost
 DBPORT=5432
 
 # Email
-DEFAULT_FROM_EMAIL=noreply@bottlecrm.com
-ADMIN_EMAIL=admin@bottlecrm.com
+DEFAULT_FROM_EMAIL=noreply@allshoptotal.com
+ADMIN_EMAIL=admin@allshoptotal.com.br
 
 # Celery
 CELERY_BROKER_URL=redis://localhost:6379/0
@@ -131,7 +131,7 @@ SWAGGER_ROOT_URL=http://localhost:8000
 ```bash
 # Create PostgreSQL database
 sudo -u postgres psql
-CREATE DATABASE bottlecrm WITH OWNER = postgres;
+CREATE DATABASE allshoptotal WITH OWNER = postgres;
 ALTER USER postgres WITH PASSWORD 'root';
 \q
 
@@ -269,7 +269,7 @@ python manage.py manage_rls --disable
 CREATE USER crm_app WITH PASSWORD 'your_secure_password';
 
 -- Grant permissions
-GRANT CONNECT ON DATABASE bottlecrm TO crm_app;
+GRANT CONNECT ON DATABASE allshoptotal TO crm_app;
 GRANT USAGE ON SCHEMA public TO crm_app;
 GRANT SELECT, INSERT, UPDATE, DELETE ON ALL TABLES IN SCHEMA public TO crm_app;
 GRANT USAGE, SELECT ON ALL SEQUENCES IN SCHEMA public TO crm_app;

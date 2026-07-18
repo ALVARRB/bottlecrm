@@ -28,7 +28,7 @@
 </script>
 
 <svelte:head>
-  <title>New Solution - BottleCRM</title>
+  <title>New Solution - AllShopTotal CRM</title>
 </svelte:head>
 
 <PageHeader

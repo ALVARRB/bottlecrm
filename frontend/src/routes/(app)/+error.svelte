@@ -4,7 +4,7 @@
 </script>
 
 <svelte:head>
-  <title>{$page.status} {$page.status === 404 ? 'Not Found' : 'Error'} | BottleCRM</title>
+  <title>{$page.status} {$page.status === 404 ? 'Not Found' : 'Error'} | AllShopTotal CRM</title>
 </svelte:head>
 
 <ErrorPage status={$page.status} message={$page.error?.message ?? ''} />

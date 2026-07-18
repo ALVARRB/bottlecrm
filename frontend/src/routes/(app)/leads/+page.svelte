@@ -1490,7 +1490,7 @@
 </script>
 
 <svelte:head>
-  <title>Leads - BottleCRM</title>
+  <title>Leads - AllShopTotal CRM</title>
 </svelte:head>
 
 <div

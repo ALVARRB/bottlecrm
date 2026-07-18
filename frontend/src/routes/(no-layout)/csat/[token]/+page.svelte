@@ -126,7 +126,7 @@
       </button>
 
       <p class="text-center text-[10px] text-[var(--text-secondary)]">
-        Powered by BottleCRM. Your response is shared only with the support team.
+        Powered by AllShopTotal CRM. Your response is shared only with the support team.
       </p>
     </form>
   {/if}

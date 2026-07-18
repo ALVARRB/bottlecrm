@@ -47,7 +47,7 @@
 </script>
 
 <svelte:head>
-  <title>Salesforce Integration - BottleCRM</title>
+  <title>Salesforce Integration - AllShopTotal CRM</title>
 </svelte:head>
 
 <PageHeader title="Salesforce Integration" subtitle="Connect and import data from Salesforce" />

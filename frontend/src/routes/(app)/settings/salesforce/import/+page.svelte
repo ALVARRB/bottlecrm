@@ -166,7 +166,7 @@
 </script>
 
 <svelte:head>
-  <title>Salesforce Import - BottleCRM</title>
+  <title>Salesforce Import - AllShopTotal CRM</title>
 </svelte:head>
 
 <PageHeader title="Import from Salesforce" subtitle="Select data to import">

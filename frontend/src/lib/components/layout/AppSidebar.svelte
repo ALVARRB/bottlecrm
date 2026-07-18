@@ -62,7 +62,7 @@
    */
 
   /** @type {Props} */
-  let { user = {}, org_name = 'BottleCRM', org_settings = {} } = $props();
+  let { user = {}, org_name = 'AllShopTotal CRM', org_settings = {} } = $props();
 
   // Tier badge — hidden when JWT doesn't carry one (spec §8 "No tier in JWT")
   const tier = $derived(org_settings?.tier ?? null);
@@ -1022,7 +1022,7 @@
           {#snippet child({ props })}
             <a
               {...props}
-              href="https://play.google.com/store/apps/details?id=io.bottlecrm&hl=en"
+              href="https://play.google.com/store/apps/details?id=io.allshoptotal&hl=en"
               target="_blank"
               rel="noopener noreferrer"
             >

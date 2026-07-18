@@ -750,7 +750,7 @@
 </script>
 
 <svelte:head>
-  <title>Accounts - BottleCRM</title>
+  <title>Accounts - AllShopTotal CRM</title>
 </svelte:head>
 
 <div class="flex flex-col">

@@ -23,9 +23,9 @@
   let { data, form } = $props();
 
   const tokens = $derived(data.tokens || []);
-  // Real, ready-to-paste API host (e.g. https://api.bottlecrm.io). The MCP
+  // Real, ready-to-paste API host (e.g. https://api.allshoptotal.com.br). The MCP
   // client appends /api/... itself, so this is exactly BCRM_BASE_URL.
-  const baseUrl = $derived(data.baseUrl || 'https://api.bottlecrm.io');
+  const baseUrl = $derived(data.baseUrl || 'https://api.allshoptotal.com.br');
 
   let formName = $state('');
   let formExpiresAt = $state('');
@@ -59,7 +59,7 @@
   function jsonConfig(base, token) {
     return `{
   "mcpServers": {
-    "bottlecrm": {
+    "allshoptotal": {
       "command": "uvx",
       "args": ["bcrm-mcp"],
       "env": {
@@ -73,11 +73,11 @@
 
   /** @param {string} base @param {string} token */
   function tomlConfig(base, token) {
-    return `[mcp_servers.bottlecrm]
+    return `[mcp_servers.allshoptotal]
 command = "uvx"
 args = ["bcrm-mcp"]
 
-[mcp_servers.bottlecrm.env]
+[mcp_servers.allshoptotal.env]
 BCRM_BASE_URL = "${base}"
 BCRM_TOKEN = "${token}"`;
   }
@@ -152,12 +152,12 @@ BCRM_TOKEN = "${token}"`;
 </script>
 
 <svelte:head>
-  <title>API Tokens - Settings - BottleCRM</title>
+  <title>API Tokens - Settings - AllShopTotal CRM</title>
 </svelte:head>
 
 <PageHeader
   title="API Tokens"
-  subtitle="Connect your AI agent to BottleCRM. Tokens act as you and inherit your role."
+  subtitle="Connect your AI agent to AllShopTotal CRM. Tokens act as you and inherit your role."
 />
 
 <div class="flex-1 p-4 md:p-6 lg:p-8">

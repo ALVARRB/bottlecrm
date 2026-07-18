@@ -1,4 +1,4 @@
-# BottleCRM Data Model Analysis
+# AllShopTotal CRM Data Model Analysis
 
 ## Sources
 - **schema.yml**: OpenAPI spec (~69KB, 3107 lines) — describes API endpoints, request/response shapes

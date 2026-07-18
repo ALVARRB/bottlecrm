@@ -21,7 +21,7 @@
 </script>
 
 <svelte:head>
-  <title>Create Organization | BottleCRM</title>
+  <title>Create Organization | AllShopTotal CRM</title>
 </svelte:head>
 
 <div class="flex min-h-screen flex-col bg-[var(--surface-sunken)]">
@@ -29,8 +29,8 @@
   <header class="border-b border-[var(--border-default)] bg-[var(--surface-default)]">
     <div class="mx-auto flex max-w-5xl items-center justify-between px-6 py-4">
       <div class="flex items-center gap-3">
-        <img src={imgLogo} alt="BottleCRM" class="h-8 w-auto" />
-        <span class="text-lg font-semibold text-[var(--text-primary)]">BottleCRM</span>
+        <img src={imgLogo} alt="AllShopTotal CRM" class="h-8 w-auto" />
+        <span class="text-lg font-semibold text-[var(--text-primary)]">AllShopTotal CRM</span>
       </div>
       <a
         href="/org"
@@ -87,7 +87,7 @@
               placeholder="e.g. Acme Inc."
             />
             <p class="text-xs text-[var(--text-secondary)]">
-              This will be your workspace name in BottleCRM
+              This will be your workspace name in AllShopTotal CRM
             </p>
           </div>
 

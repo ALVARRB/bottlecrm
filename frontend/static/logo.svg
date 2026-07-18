@@ -1,0 +1,14 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 200 60" width="200" height="60">
+  <defs>
+    <linearGradient id="a" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" style="stop-color:#2563eb"/>
+      <stop offset="100%" style="stop-color:#7c3aed"/>
+    </linearGradient>
+  </defs>
+  <!-- Icon: abstract A + S monogram -->
+  <rect x="4" y="4" width="48" height="48" rx="10" fill="url(#a)"/>
+  <text x="28" y="38" font-family="Arial,sans-serif" font-weight="bold" font-size="28" fill="white" text-anchor="middle">AS</text>
+  <!-- Brand name -->
+  <text x="60" y="30" font-family="Arial,sans-serif" font-weight="800" font-size="18" fill="#1e293b">AllShop</text>
+  <text x="60" y="48" font-family="Arial,sans-serif" font-weight="600" font-size="14" fill="#64748b">Total</text>
+</svg>

@@ -30,7 +30,7 @@ org, created = Org.objects.get_or_create(
 print(f"Org: {org.name} (id={org.id}, created={created})")
 
 # Get admin user
-user = User.objects.get(email="admin@bottlecrm.com")
+user = User.objects.get(email="admin@allshoptotal.com.br")
 
 # Create profile
 profile, p_created = Profile.objects.get_or_create(

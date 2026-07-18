@@ -60,7 +60,7 @@
 </script>
 
 <svelte:head>
-  <title>Inbound Email - Settings - BottleCRM</title>
+  <title>Inbound Email - Settings - AllShopTotal CRM</title>
 </svelte:head>
 
 <PageHeader

@@ -1,10 +1,10 @@
-# BottleCRM MCP Server — Phase 1 Implementation Plan
+# AllShopTotal CRM MCP Server — Phase 1 Implementation Plan
 
 > **For Claude:** REQUIRED SUB-SKILL: Use superpowers:executing-plans to implement this plan task-by-task.
 
 > **⚠️ PROJECT POLICY — NEVER COMMIT.** This repo's `CLAUDE.md` forbids Claude from running `git commit`/`git push`. The **Commit** steps below are written for the human engineer to run. When Claude executes this plan it must STOP at each commit step, summarize what changed, and let the user commit. Do not run any git history-mutating command.
 
-**Goal:** Ship a Personal Access Token (PAT) auth layer in the Django backend and a standalone Python FastMCP server (stdio) that lets a user connect their AI agent to BottleCRM with full CRUD over the existing REST API, acting as the token's owning user.
+**Goal:** Ship a Personal Access Token (PAT) auth layer in the Django backend and a standalone Python FastMCP server (stdio) that lets a user connect their AI agent to AllShopTotal CRM with full CRUD over the existing REST API, acting as the token's owning user.
 
 **Architecture:** The MCP server is a *thin REST client* — it never touches the DB. A new `PersonalAccessToken` model + `PATAuthentication` DRF class let an agent authenticate as a real user (inheriting their role + org + RLS). Six generic, entity-parameterized FastMCP tools (`crm_search/get/create/update/delete/action`) plus `crm_describe` call the DRF API over HTTP. All authorization stays in DRF.
 
@@ -689,7 +689,7 @@ path("profile/tokens/<uuid:pk>/", PersonalAccessTokenDetailView.as_view(), name=
 [project]
 name = "bcrm-mcp"
 version = "0.1.0"
-description = "BottleCRM MCP server — connect your AI agent to BottleCRM"
+description = "AllShopTotal CRM MCP server — connect your AI agent to AllShopTotal CRM"
 requires-python = ">=3.11"
 dependencies = ["fastmcp>=2.0", "httpx>=0.27", "pydantic>=2.7"]
 
@@ -1007,7 +1007,7 @@ from bcrm_mcp.config import Settings
 
 
 def build_server(client=None):
-    mcp = FastMCP("BottleCRM")
+    mcp = FastMCP("AllShopTotal CRM")
     _client = client  # injected in tests; lazily built at runtime otherwise
 
     def get_client():
@@ -1091,7 +1091,7 @@ Then connect from Claude Desktop using the config snippet in the README:
 ```json
 {
   "mcpServers": {
-    "bottlecrm": {
+    "allshoptotal": {
       "command": "uvx",
       "args": ["bcrm-mcp"],
       "env": { "BCRM_BASE_URL": "http://localhost:8000", "BCRM_TOKEN": "bcrm_pat_…" }
@@ -1210,7 +1210,7 @@ Before declaring done, confirm:
 ---
 
 ## Out of scope (Phase 2+, do NOT build now)
-- Streamable HTTP transport / hosted `mcp.bottlecrm.io`
+- Streamable HTTP transport / hosted `mcp.allshoptotal.com.br`
 - OAuth 2.1 flow
 - Per-token throttling + scope enforcement (model field exists; enforcement deferred)
 - Named semantic action tools beyond the generic `crm_action`

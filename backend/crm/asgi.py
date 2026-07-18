@@ -4,7 +4,7 @@ Mirror of `wsgi.py` for ASGI servers (uvicorn, hypercorn, daphne). Required
 for the in-app notifications SSE stream — async views serving long-lived
 connections will hold a worker hostage when run under WSGI.
 
-It also optionally mounts the BottleCRM **MCP server** at ``/mcp`` so AI agents
+It also optionally mounts the AllShopTotal CRM **MCP server** at ``/mcp`` so AI agents
 can connect over HTTP with no local install (each request authenticates with
 its own ``Authorization: Bearer <pat>`` header). The mount is best-effort: if
 the optional ``bcrm-mcp`` dependency is not installed, or ``BCRM_MCP_ENABLED``

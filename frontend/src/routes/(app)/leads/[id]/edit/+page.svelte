@@ -62,7 +62,7 @@
 </script>
 
 <svelte:head>
-  <title>Edit {displayName} - BottleCRM</title>
+  <title>Edit {displayName} - AllShopTotal CRM</title>
 </svelte:head>
 
 <PageHeader

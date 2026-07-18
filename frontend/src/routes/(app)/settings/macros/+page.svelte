@@ -98,7 +98,7 @@
 </script>
 
 <svelte:head>
-  <title>Macros - Settings - BottleCRM</title>
+  <title>Macros - Settings - AllShopTotal CRM</title>
 </svelte:head>
 
 <PageHeader

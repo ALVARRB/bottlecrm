@@ -1,4 +1,4 @@
-# BottleCRM
+# AllShopTotal CRM
 
 A modern, open-source CRM platform built with Django REST Framework and SvelteKit.
 
@@ -13,9 +13,9 @@ https://github.com/user-attachments/assets/f384f25e-ab52-4069-afaf-f8e2f1f3f0e7
 
 ## Overview
 
-BottleCRM is a full-featured Customer Relationship Management system designed for startups and small businesses. It combines a powerful Django REST API backend with a modern SvelteKit frontend, featuring multi-tenant architecture with PostgreSQL Row-Level Security (RLS) for enterprise-grade data isolation.
+AllShopTotal CRM is a full-featured Customer Relationship Management system designed for startups and small businesses. It combines a powerful Django REST API backend with a modern SvelteKit frontend, featuring multi-tenant architecture with PostgreSQL Row-Level Security (RLS) for enterprise-grade data isolation.
 
-**Try it free**: [bottlecrm.io](https://bottlecrm.io/)
+**Try it free**: [allshoptotal.com.br](https://allshoptotal.com.br/)
 
 ## Features
 
@@ -229,7 +229,7 @@ Django-CRM/
 
 ## Multi-Tenancy & Security
 
-BottleCRM uses PostgreSQL Row-Level Security (RLS) to ensure complete data isolation between organizations. Every database query is automatically filtered by organization context, providing enterprise-grade security.
+AllShopTotal CRM uses PostgreSQL Row-Level Security (RLS) to ensure complete data isolation between organizations. Every database query is automatically filtered by organization context, providing enterprise-grade security.
 
 ```bash
 # Check RLS status

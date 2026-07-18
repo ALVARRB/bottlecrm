@@ -1,6 +1,6 @@
-# BottleCRM Mobile Design System
+# AllShopTotal CRM Mobile Design System
 
-A comprehensive design guide for the BottleCRM mobile app, inspired by modern CRM apps like HubSpot.
+A comprehensive design guide for the AllShopTotal CRM mobile app, inspired by modern CRM apps like HubSpot.
 
 ---
 

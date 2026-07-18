@@ -1,6 +1,6 @@
 openapi: 3.0.3
 info:
-  title: BottleCRM API
+  title: AllShopTotal CRM API
   version: 1.0.0
   description: Open source CRM application
 paths:

@@ -163,7 +163,7 @@
 </script>
 
 <svelte:head>
-  <title>{fullName} · BottleCRM</title>
+  <title>{fullName} · AllShopTotal CRM</title>
 </svelte:head>
 
 <PageHeader

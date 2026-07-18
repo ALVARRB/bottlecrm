@@ -1,4 +1,4 @@
-"""FastMCP server entry point for BottleCRM (stdio or http transport).
+"""FastMCP server entry point for AllShopTotal CRM (stdio or http transport).
 
 Wraps the plain async tool functions in ``bcrm_mcp.tools`` as FastMCP tools and
 exposes a ``build_server(client=None)`` factory plus a ``main()`` console entry
@@ -96,7 +96,7 @@ def build_server(client=None, settings_loader=None):
     loader that returns explicit http-mode settings so it never depends on
     ``BCRM_TRANSPORT`` being set in the Django process env.
     """
-    mcp = FastMCP("BottleCRM")
+    mcp = FastMCP("AllShopTotal CRM")
     kwargs = {} if settings_loader is None else {"settings_loader": settings_loader}
     resolver = ClientResolver(injected=client, **kwargs)
 

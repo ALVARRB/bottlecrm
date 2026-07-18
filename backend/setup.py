@@ -1,7 +1,7 @@
 """Create Org, Profile, and PAT via session auth (SessionAuthentication now enabled)."""
 import urllib.request, urllib.parse, http.cookiejar, re, json, sys
 
-base = 'https://bottlecrm.onrender.com'
+base = 'https://allshoptotal.onrender.com'
 
 cj = http.cookiejar.CookieJar()
 opener = urllib.request.build_opener(
@@ -21,7 +21,7 @@ html = resp.read().decode()
 csrf_html = re.search(r'csrfmiddlewaretoken" value="([^"]+)"', html).group(1)
 
 data = urllib.parse.urlencode({
-    'username': 'admin@bottlecrm.com',
+    'username': 'admin@allshoptotal.com.br',
     'password': 'admin',
     'csrfmiddlewaretoken': csrf_html,
     'next': '/admin/'

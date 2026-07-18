@@ -1,7 +1,7 @@
 """Create Org, Profile, and PAT via session auth."""
 import requests, re, json, sys, secrets, hashlib
 
-base = 'https://bottlecrm.onrender.com'
+base = 'https://allshoptotal.onrender.com'
 s = requests.Session()
 
 # Login
@@ -10,7 +10,7 @@ csrf = re.search(r'csrfmiddlewaretoken" value="([^"]+)"', r.text).group(1)
 print(f"CSRF: {csrf}")
 
 r = s.post(base + '/admin/login/', data={
-    'username': 'admin@bottlecrm.com',
+    'username': 'admin@allshoptotal.com.br',
     'password': 'admin',
     'csrfmiddlewaretoken': csrf,
     'next': '/admin/'

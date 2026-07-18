@@ -1,4 +1,4 @@
-# BottleCRM MCP Server — Design
+# AllShopTotal CRM MCP Server — Design
 
 **Date:** 2026-06-01
 **Status:** Approved design (pre-implementation)
@@ -6,7 +6,7 @@
 
 ## Goal
 
-Let users connect BottleCRM to their AI agents / LLMs (Claude Desktop, custom
+Let users connect AllShopTotal CRM to their AI agents / LLMs (Claude Desktop, custom
 agents, etc.) through a Model Context Protocol (MCP) server, with full CRUD +
 actions across the main CRM entities — without ever weakening the existing
 security model.
@@ -169,7 +169,7 @@ up automatically. Tool *code* stays entity-agnostic.
 
 - **stdio** (`bcrm-mcp` console script via `uvx`/`pipx`): reads `BCRM_BASE_URL` +
   `BCRM_TOKEN` from env. Drops into Claude Desktop's `mcpServers` config. **Ships first.**
-- **Streamable HTTP** (`bcrm-mcp --http`, hosted e.g. at `mcp.bottlecrm.io`): PAT
+- **Streamable HTTP** (`bcrm-mcp --http`, hosted e.g. at `mcp.allshoptotal.com.br`): PAT
   travels in each request's `Authorization` header — server is **stateless and
   multi-tenant**, never stores a token. Phase 2 adds OAuth on top.
 
@@ -220,7 +220,7 @@ page and documented in `mcp_server/README.md`.
 
 1. **Phase 1 (MVP):** PAT model + auth + CRUD API; FastMCP server with the 6 generic
    tools + `crm_describe`; **stdio** transport; frontend token page; tests.
-2. **Phase 2:** Streamable HTTP transport hosted at `mcp.bottlecrm.io`; per-token
+2. **Phase 2:** Streamable HTTP transport hosted at `mcp.allshoptotal.com.br`; per-token
    throttling + scopes; richer named actions via `crm_action`.
 3. **Phase 3:** OAuth 2.1 authorization-code flow for one-click "Connect" UX on the
    hosted endpoint; MCP resources/prompts for common workflows.

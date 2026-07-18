@@ -1,7 +1,7 @@
-"""Login to BottleCRM admin, create org, profile, and PAT via session auth."""
+"""Login to AllShopTotal CRM admin, create org, profile, and PAT via session auth."""
 import urllib.request, urllib.parse, http.cookiejar, re, json, sys
 
-base = 'https://bottlecrm.onrender.com'
+base = 'https://allshoptotal.onrender.com'
 
 # Setup cookie jar
 cj = http.cookiejar.CookieJar()
@@ -26,7 +26,7 @@ csrf = get_csrf()
 print(f"CSRF token: {csrf}")
 
 data = urllib.parse.urlencode({
-    'username': 'admin@bottlecrm.com',
+    'username': 'admin@allshoptotal.com.br',
     'password': 'admin',
     'csrfmiddlewaretoken': csrf,
     'next': '/admin/'

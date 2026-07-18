@@ -251,7 +251,7 @@
 </script>
 
 <svelte:head>
-  <title>Invoice {invoice.invoiceNumber} | BottleCRM</title>
+  <title>Invoice {invoice.invoiceNumber} | AllShopTotal CRM</title>
 </svelte:head>
 
 <!-- Hidden Forms -->
