@@ -107,21 +107,22 @@ class RequireOrgContext:
 
     # Paths that don't require org context
     EXEMPT_PATHS = [
-        "/api/auth/refresh-token/",
-        "/api/auth/me/",
-        "/api/auth/switch-org/",
-        "/api/auth/google/",
-        "/api/auth/magic-link/request/",
-        "/api/auth/magic-link/verify/",
-        "/api/auth/magic-link/verify-code/",
-        "/api/org/",
-        "/admin/",
-        "/swagger-ui/",
-        "/api/schema/",
-        # Public CSAT survey link (Tier 2 csat) — anonymous, sets RLS
-        # context manually inside the view from the survey's own org_id.
-        "/api/public/csat/",
-    ]
+            "/api/auth/refresh-token/",
+            "/api/auth/me/",
+            "/api/auth/switch-org/",
+            "/api/auth/google/",
+            "/api/auth/magic-link/request/",
+            "/api/auth/magic-link/verify/",
+            "/api/auth/magic-link/verify-code/",
+            "/api/org/",
+            "/admin/",
+            "/swagger-ui/",
+            "/api/schema/",
+            # Public CSAT survey link (Tier 2 csat) — anonymous, sets RLS
+            # context manually inside the view from the survey's own org_id.
+            "/api/public/csat/",
+            "/healthz/",
+        ]
 
     def __init__(self, get_response):
         self.get_response = get_response
@@ -155,8 +156,10 @@ class RequireOrgContext:
         return response
 
     def _is_exempt(self, path):
-        """Check if path is exempt from org context requirement."""
-        return any(path.startswith(exempt) for exempt in self.EXEMPT_PATHS)
+            """Check if path is exempt from org context requirement."""
+            if path == "/":
+                return True
+            return any(path.startswith(exempt) for exempt in self.EXEMPT_PATHS)
 
     def _set_org_context(self, request):
         """Set PostgreSQL session variable (session scope for autocommit mode)."""
