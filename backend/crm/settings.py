@@ -249,7 +249,7 @@ REST_FRAMEWORK = {
         "common.pat_auth.PATAuthentication",
         "rest_framework_simplejwt.authentication.JWTAuthentication",
         "common.external_auth.APIKeyAuthentication",
-        # "rest_framework.authentication.SessionAuthentication",
+        "rest_framework.authentication.SessionAuthentication",
         # "rest_framework.authentication.BasicAuthentication",
     ),
     "DEFAULT_PAGINATION_CLASS": "rest_framework.pagination.LimitOffsetPagination",
