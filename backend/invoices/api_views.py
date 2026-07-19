@@ -2210,12 +2210,12 @@ class InvoiceFromOpportunityView(APIView):
             # Create invoice
             invoice = Invoice.objects.create(
                 invoice_number=new_number,
-                title=f"Invoice for {opportunity.name}",
+                invoice_title=f"Invoice for {opportunity.name}",
                 account=opportunity.account,
                 contact=primary_contact,
                 opportunity=opportunity,
                 currency=opportunity.currency or org.default_currency or "USD",
-                status="DRAFT",
+                status="Draft",
                 issue_date=timezone.now().date(),
                 due_date=timezone.now().date() + timedelta(days=30),
                 created_by=request.profile.user,
