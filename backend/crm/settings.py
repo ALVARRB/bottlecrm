@@ -168,8 +168,11 @@ if "django_ses" in EMAIL_BACKEND:
 
 
 # celery Tasks
-CELERY_BROKER_URL = os.environ.get("CELERY_BROKER_URL", "redis://localhost:6379/0")
-CELERY_RESULT_BACKEND = os.environ.get("CELERY_RESULT_BACKEND", "redis://localhost:6379/0")
+CELERY_BROKER_URL = os.environ.get("CELERY_BROKER_URL", "")
+CELERY_RESULT_BACKEND = os.environ.get("CELERY_RESULT_BACKEND", "")
+# No Redis on free tier — run Celery tasks synchronously (in-process)
+CELERY_TASK_ALWAYS_EAGER = True
+CELERY_TASK_EAGER_PROPAGATES = True
 
 
 LOGGING = {
