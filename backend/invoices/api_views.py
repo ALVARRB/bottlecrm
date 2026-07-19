@@ -204,24 +204,30 @@ class InvoiceListView(APIView, LimitOffsetPagination):
         if serializer.is_valid():
             invoice = serializer.save(custom_fields=cleaned_cf)
 
-            # Create history entry
-            create_invoice_history.delay(
-                str(invoice.id),
-                str(request.profile.id),
-                [],
-                str(request.profile.org.id),
-            )
+            # Create history entry (non-critical - fail silently if no Celery broker)
+            try:
+                create_invoice_history.delay(
+                    str(invoice.id),
+                    str(request.profile.id),
+                    [],
+                    str(request.profile.org.id),
+                )
+            except Exception:
+                pass
 
-            # Send notification email to assigned users
+            # Send notification email to assigned users (non-critical)
             assigned_to_ids = list(invoice.assigned_to.values_list("id", flat=True))
             if assigned_to_ids:
-                send_email.delay(
-                    str(invoice.id),
-                    [str(uid) for uid in assigned_to_ids],
-                    str(request.profile.org.id),
-                    domain=getattr(settings, "DOMAIN_NAME", "localhost"),
-                    protocol=request.scheme,
-                )
+                try:
+                    send_email.delay(
+                        str(invoice.id),
+                        [str(uid) for uid in assigned_to_ids],
+                        str(request.profile.org.id),
+                        domain=getattr(settings, "DOMAIN_NAME", "localhost"),
+                        protocol=request.scheme,
+                    )
+                except Exception:
+                    pass
 
             return Response(
                 {
@@ -353,13 +359,16 @@ class InvoiceDetailView(APIView):
         if serializer.is_valid():
             invoice = serializer.save(**save_kwargs)
 
-            # Create history entry
-            create_invoice_history.delay(
-                str(invoice.id),
-                str(request.profile.id),
-                [],
-                str(request.profile.org.id),
-            )
+            # Create history entry (non-critical)
+            try:
+                create_invoice_history.delay(
+                    str(invoice.id),
+                    str(request.profile.id),
+                    [],
+                    str(request.profile.org.id),
+                )
+            except Exception:
+                pass
 
             return Response(
                 {
@@ -2246,13 +2255,16 @@ class InvoiceFromOpportunityView(APIView):
             invoice.recalculate_totals()
             invoice.save()
 
-            # Create invoice history entry
-            create_invoice_history.delay(
-                str(invoice.id),
-                str(request.profile.id),
-                "created",
-                f"Invoice created from opportunity: {opportunity.name}",
-            )
+            # Create invoice history entry (non-critical - fail silently)
+            try:
+                create_invoice_history.delay(
+                    str(invoice.id),
+                    str(request.profile.id),
+                    "created",
+                    f"Invoice created from opportunity: {opportunity.name}",
+                )
+            except Exception:
+                pass
 
         # Return the created invoice
         return Response(
