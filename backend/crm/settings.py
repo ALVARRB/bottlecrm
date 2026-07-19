@@ -130,13 +130,22 @@ USE_I18N = True
 
 USE_TZ = True
 
-EMAIL_BACKEND = os.environ.get(
-    "EMAIL_BACKEND", "django.core.mail.backends.smtp.EmailBackend"
-)
+# ── SendGrid (HTTP API) ───────────────────────────────────────────
+# SendGrid v3 Web API via HTTPS (port 443). Works on Render free tier
+# where SMTP ports are blocked. Set SENDGRID_API_KEY env var.
+# Falls back to console backend for local development.
+SENDGRID_API_KEY = os.environ.get("SENDGRID_API_KEY", "")
+if SENDGRID_API_KEY:
+    EMAIL_BACKEND = "common.sendgrid_backend.SendGridEmailBackend"
+else:
+    EMAIL_BACKEND = os.environ.get(
+        "EMAIL_BACKEND", "django.core.mail.backends.console.EmailBackend"
+    )
+# SMTP settings kept as fallback if EMAIL_BACKEND is overridden via env var
 EMAIL_HOST = os.environ.get("EMAIL_HOST", "smtp.gmail.com")
 EMAIL_PORT = int(os.environ.get("EMAIL_PORT", 587))
 EMAIL_HOST_USER = os.environ.get("EMAIL_HOST_USER", "all.shop.total@gmail.com")
-EMAIL_HOST_PASSWORD = os.environ.get("EMAIL_HOST_PASSWORD", "xvgv yhgf jcus fomi")
+EMAIL_HOST_PASSWORD = os.environ.get("EMAIL_HOST_PASSWORD", "")
 EMAIL_USE_TLS = os.environ.get("EMAIL_USE_TLS", "True").lower() == "true"
 EMAIL_USE_SSL = os.environ.get("EMAIL_USE_SSL", "False").lower() == "true"
 EMAIL_TIMEOUT = 30
@@ -154,7 +163,7 @@ if ENV_TYPE == "dev":
 elif ENV_TYPE == "prod":
     from .server_settings import *  # noqa: F401
 
-DEFAULT_FROM_EMAIL = os.environ.get("DEFAULT_FROM_EMAIL", "noreply@localhost")
+DEFAULT_FROM_EMAIL = os.environ.get("DEFAULT_FROM_EMAIL", "all.shop.total@gmail.com")
 ADMIN_EMAIL = os.environ.get("ADMIN_EMAIL", "admin@localhost")
 
 # AWS SES settings (loaded when EMAIL_BACKEND is django_ses.SESBackend)
