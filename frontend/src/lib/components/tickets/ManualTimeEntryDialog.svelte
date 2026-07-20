@@ -1,5 +1,6 @@
 <script>
-  import { invalidateAll } from '$app/navigation';
+  import { t } from '$lib/i18n';
+import { invalidateAll } from '$app/navigation';
   import { toast } from 'svelte-sonner';
   import { Loader2 } from '@lucide/svelte';
   import { Button } from '$lib/components/ui/button/index.js';
@@ -152,13 +153,13 @@
         type="button"
         variant="outline"
         onclick={() => (open = false)}
-        disabled={submitting}>Cancel</Button
+        disabled={submitting}>{t('Cancel')}</Button
       >
       <Button
         type="button"
         disabled={!canSubmit}
         onclick={submit}
-        title={!description.trim() ? 'Add a description first' : undefined}
+        title={!description.trim() ? 't('t('Add a description first')')' : undefined}
       >
         {#if submitting}<Loader2 class="mr-1 h-3.5 w-3.5 animate-spin" />{/if}
         Save entry

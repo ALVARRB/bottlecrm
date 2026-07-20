@@ -49,8 +49,8 @@ class User(AbstractBaseUser, PermissionsMixin):
     objects = UserManager()
 
     class Meta:
-        verbose_name = "User"
-        verbose_name_plural = "Users"
+        verbose_name = _("User")
+        verbose_name_plural = _("Users")
         db_table = "users"
         ordering = ("-is_active",)
 
@@ -84,8 +84,8 @@ class Address(BaseModel):
     )
 
     class Meta:
-        verbose_name = "Address"
-        verbose_name_plural = "Addresses"
+        verbose_name = _("Address")
+        verbose_name_plural = _("Addresses")
         db_table = "address"
         ordering = ("-created_at",)
 
@@ -104,10 +104,10 @@ class Org(BaseModel):
 
     # Company Profile (for invoices, documents, etc.)
     company_name = models.CharField(
-        max_length=255, blank=True, help_text="Legal company name for invoices"
+        max_length=255, blank=True, help_text=_("Legal company name for invoices")
     )
     logo = models.ImageField(
-        upload_to="org_logos/", blank=True, null=True, help_text="Company logo"
+        upload_to="org_logos/", blank=True, null=True, help_text=_("Company logo")
     )
     address_line = models.CharField(max_length=255, blank=True)
     city = models.CharField(max_length=100, blank=True)
@@ -118,7 +118,7 @@ class Org(BaseModel):
     email = models.EmailField(blank=True)
     website = models.URLField(blank=True)
     tax_id = models.CharField(
-        max_length=50, blank=True, help_text="Tax ID / VAT / Registration number"
+        max_length=50, blank=True, help_text=_("Tax ID / VAT / Registration number")
     )
 
     # Locale settings
@@ -139,8 +139,8 @@ class Org(BaseModel):
     auto_close_children_on_parent_close = models.BooleanField(default=False)
 
     class Meta:
-        verbose_name = "Organization"
-        verbose_name_plural = "Organizations"
+        verbose_name = _("Organization")
+        verbose_name_plural = _("Organizations")
         db_table = "organization"
         ordering = ("-created_at",)
 
@@ -184,8 +184,8 @@ class Tags(BaseModel):
     )
 
     class Meta:
-        verbose_name = "Tag"
-        verbose_name_plural = "Tags"
+        verbose_name = _("Tag")
+        verbose_name_plural = _("Tags")
         db_table = "tags"
         ordering = ("name",)
         unique_together = ["slug", "org"]
@@ -218,8 +218,8 @@ class Profile(BaseModel):
     date_of_joining = models.DateField(null=True, blank=True)
 
     class Meta:
-        verbose_name = "Profile"
-        verbose_name_plural = "Profiles"
+        verbose_name = _("Profile")
+        verbose_name_plural = _("Profiles")
         db_table = "profile"
         ordering = ("-created_at",)
         unique_together = [["user", "org"], ["phone", "org"]]
@@ -269,8 +269,8 @@ class Comment(BaseModel):
     )
 
     class Meta:
-        verbose_name = "Comment"
-        verbose_name_plural = "Comments"
+        verbose_name = _("Comment")
+        verbose_name_plural = _("Comments")
         db_table = "comment"
         ordering = ("-created_at",)
         indexes = [
@@ -324,8 +324,8 @@ class CommentFiles(BaseModel):
     )
 
     class Meta:
-        verbose_name = "CommentFile"
-        verbose_name_plural = "CommentFiles"
+        verbose_name = _("CommentFile")
+        verbose_name_plural = _("CommentFiles")
         db_table = "commentFiles"
         ordering = ("-created_at",)
 
@@ -361,8 +361,8 @@ class Attachments(BaseModel):
     )
 
     class Meta:
-        verbose_name = "Attachment"
-        verbose_name_plural = "Attachments"
+        verbose_name = _("Attachment")
+        verbose_name_plural = _("Attachments")
         db_table = "attachments"
         ordering = ("-created_at",)
         indexes = [
@@ -440,8 +440,8 @@ class Document(BaseModel):
     )
 
     class Meta:
-        verbose_name = "Document"
-        verbose_name_plural = "Documents"
+        verbose_name = _("Document")
+        verbose_name_plural = _("Documents")
         db_table = "document"
         ordering = ("-created_at",)
 
@@ -493,8 +493,8 @@ class APISettings(BaseModel):
     )
 
     class Meta:
-        verbose_name = "APISetting"
-        verbose_name_plural = "APISettings"
+        verbose_name = _("APISetting")
+        verbose_name_plural = _("APISettings")
         db_table = "apiSettings"
         ordering = ("-created_at",)
 
@@ -528,8 +528,8 @@ class SessionToken(BaseModel):
     last_used_at = models.DateTimeField(auto_now=True)
 
     class Meta:
-        verbose_name = "Session Token"
-        verbose_name_plural = "Session Tokens"
+        verbose_name = _("Session Token")
+        verbose_name_plural = _("Session Tokens")
         db_table = "session_token"
         ordering = ("-created_at",)
         indexes = [
@@ -669,8 +669,8 @@ class Activity(BaseModel):
     org = models.ForeignKey(Org, on_delete=models.CASCADE, related_name="activities")
 
     class Meta:
-        verbose_name = "Activity"
-        verbose_name_plural = "Activities"
+        verbose_name = _("Activity")
+        verbose_name_plural = _("Activities")
         db_table = "activity"
         ordering = ("-created_at",)
         indexes = [
@@ -723,8 +723,8 @@ class Notification(BaseModel):
     )
 
     class Meta:
-        verbose_name = "Notification"
-        verbose_name_plural = "Notifications"
+        verbose_name = _("Notification")
+        verbose_name_plural = _("Notifications")
         db_table = "notification"
         ordering = ("-created_at",)
         indexes = [
@@ -743,8 +743,8 @@ class Teams(BaseModel):
     org = models.ForeignKey(Org, on_delete=models.CASCADE, related_name="teams")
 
     class Meta:
-        verbose_name = "Team"
-        verbose_name_plural = "Teams"
+        verbose_name = _("Team")
+        verbose_name_plural = _("Teams")
         db_table = "teams"
         ordering = ("-created_at",)
 
@@ -770,11 +770,11 @@ class ContactFormSubmission(BaseModel):
     reason = models.CharField(
         max_length=100,
         choices=[
-            ("general", "General Inquiry"),
-            ("sales", "Sales Question"),
-            ("support", "Technical Support"),
-            ("partnership", "Partnership Opportunity"),
-            ("other", "Other"),
+            ("general", _("General Inquiry")),
+            ("sales", _("Sales Question")),
+            ("support", _("Technical Support")),
+            ("partnership", _("Partnership Opportunity")),
+            ("other", _("Other")),
         ],
         default="general",
     )
@@ -802,8 +802,8 @@ class ContactFormSubmission(BaseModel):
     replied_at = models.DateTimeField(null=True, blank=True)
 
     class Meta:
-        verbose_name = "Contact Form Submission"
-        verbose_name_plural = "Contact Form Submissions"
+        verbose_name = _("Contact Form Submission")
+        verbose_name_plural = _("Contact Form Submissions")
         db_table = "contact_form_submission"
         ordering = ["-created_at"]
         indexes = [
@@ -858,7 +858,7 @@ class CustomFieldDefinition(BaseModel):
     options = models.JSONField(
         blank=True,
         null=True,
-        help_text="List of {value, label} pairs for dropdown fields.",
+        help_text=_("List of {value, label} pairs for dropdown fields."),
     )
     is_required = models.BooleanField(default=False)
     is_filterable = models.BooleanField(default=False)
@@ -866,8 +866,8 @@ class CustomFieldDefinition(BaseModel):
     is_active = models.BooleanField(default=True)
 
     class Meta:
-        verbose_name = "Custom Field Definition"
-        verbose_name_plural = "Custom Field Definitions"
+        verbose_name = _("Custom Field Definition")
+        verbose_name_plural = _("Custom Field Definitions")
         db_table = "custom_field_definition"
         ordering = ("target_model", "display_order", "label")
         constraints = [

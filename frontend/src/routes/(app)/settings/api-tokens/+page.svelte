@@ -1,5 +1,6 @@
 <script>
-  import { enhance } from '$app/forms';
+  import { t } from '$lib/i18n';
+import { enhance } from '$app/forms';
   import { invalidateAll } from '$app/navigation';
   import { toast } from 'svelte-sonner';
   import {
@@ -297,7 +298,7 @@ BCRM_TOKEN = "${token}"`;
                   {#if isRevoked(token)}
                     <Badge variant="secondary">Revoked</Badge>
                   {:else}
-                    <Badge variant="outline">Active</Badge>
+                    <Badge variant="outline">{t('Active')}</Badge>
                   {/if}
                 </Table.Cell>
                 <Table.Cell class="text-right">

@@ -1,5 +1,6 @@
 <script>
-  import { invalidateAll, goto } from '$app/navigation';
+  import { t } from '$lib/i18n';
+import { invalidateAll, goto } from '$app/navigation';
   import { page } from '$app/stores';
   import { onMount, tick } from 'svelte';
   import { toast } from 'svelte-sonner';
@@ -67,35 +68,35 @@
   const stageOptions = [
     {
       value: 'PROSPECTING',
-      label: 'Prospecting',
+      label: t('Prospecting'),
       color: 'bg-[var(--stage-new-bg)] text-[var(--stage-new)] dark:bg-[var(--stage-new)]/15'
     },
     {
       value: 'QUALIFICATION',
-      label: 'Qualification',
+      label: t('Qualification'),
       color:
         'bg-[var(--stage-qualified-bg)] text-[var(--stage-qualified)] dark:bg-[var(--stage-qualified)]/15'
     },
     {
       value: 'PROPOSAL',
-      label: 'Proposal',
+      label: t('Proposal'),
       color:
         'bg-[var(--stage-proposal-bg)] text-[var(--stage-proposal)] dark:bg-[var(--stage-proposal)]/15'
     },
     {
       value: 'NEGOTIATION',
-      label: 'Negotiation',
+      label: t('Negotiation'),
       color:
         'bg-[var(--stage-negotiation-bg)] text-[var(--stage-negotiation)] dark:bg-[var(--stage-negotiation)]/15'
     },
     {
       value: 'CLOSED_WON',
-      label: 'Won',
+      label: t('Won'),
       color: 'bg-[var(--stage-won-bg)] text-[var(--stage-won)] dark:bg-[var(--stage-won)]/15'
     },
     {
       value: 'CLOSED_LOST',
-      label: 'Lost',
+      label: t('Lost'),
       color: 'bg-[var(--stage-lost-bg)] text-[var(--stage-lost)] dark:bg-[var(--stage-lost)]/15'
     }
   ];
@@ -377,7 +378,7 @@
     },
     {
       key: 'contacts',
-      label: 'Contacts',
+      label: t('Contacts'),
       type: 'multiselect',
       icon: Contact,
       options: contactOptions,
@@ -1731,7 +1732,7 @@
           </AlertDialog.Trigger>
           <AlertDialog.Content>
             <AlertDialog.Header>
-              <AlertDialog.Title>Create Invoice</AlertDialog.Title>
+              <AlertDialog.Title>{t('Create Invoice')}</AlertDialog.Title>
               <AlertDialog.Description>
                 This will create a new invoice from this opportunity with {lineItems.length} product{lineItems.length ===
                 1
@@ -1743,8 +1744,8 @@
               </AlertDialog.Description>
             </AlertDialog.Header>
             <AlertDialog.Footer>
-              <AlertDialog.Cancel>Cancel</AlertDialog.Cancel>
-              <AlertDialog.Action onclick={confirmCreateInvoice}>Create Invoice</AlertDialog.Action>
+              <AlertDialog.Cancel>{t('Cancel')}</AlertDialog.Cancel>
+              <AlertDialog.Action onclick={confirmCreateInvoice}>{t('Create Invoice')}</AlertDialog.Action>
             </AlertDialog.Footer>
           </AlertDialog.Content>
         </AlertDialog.Root>

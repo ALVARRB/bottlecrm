@@ -55,12 +55,12 @@ class Case(AssignableMixin, BaseModel):
     sla_first_response_hours = models.PositiveIntegerField(
         _("First Response SLA (hours)"),
         default=4,
-        help_text="Target hours for first response",
+        help_text=_("Target hours for first response"),
     )
     sla_resolution_hours = models.PositiveIntegerField(
         _("Resolution SLA (hours)"),
         default=24,
-        help_text="Target hours for resolution",
+        help_text=_("Target hours for resolution"),
     )
 
     # Kanban/Pipeline support
@@ -70,20 +70,20 @@ class Case(AssignableMixin, BaseModel):
         null=True,
         blank=True,
         related_name="cases",
-        help_text="Current pipeline stage (null = use status-based kanban)",
+        help_text=_("Current pipeline stage (null = use status-based kanban)"),
     )
     kanban_order = models.DecimalField(
         _("Kanban Order"),
         max_digits=15,
         decimal_places=6,
         default=0,
-        help_text="Order within the kanban column for drag-drop positioning",
+        help_text=_("Order within the kanban column for drag-drop positioning"),
     )
 
     custom_fields = models.JSONField(
         default=dict,
         blank=True,
-        help_text="Per-org schema extension; values are validated against common.CustomFieldDefinition.",
+        help_text=_("Per-org schema extension; values are validated against common.CustomFieldDefinition."),
     )
 
     # SLA pause: when status flips to Pending we record the moment, and on
@@ -151,12 +151,12 @@ class Case(AssignableMixin, BaseModel):
     )
     is_problem = models.BooleanField(
         default=False,
-        help_text="Marks this case as an ITIL 'problem' (umbrella ticket).",
+        help_text=_("Marks this case as an ITIL 'problem' (umbrella ticket)."),
     )
 
     class Meta:
-        verbose_name = "Case"
-        verbose_name_plural = "Cases"
+        verbose_name = _("Case")
+        verbose_name_plural = _("Cases")
         db_table = "case"
         ordering = ("-created_at",)
         indexes = [
@@ -373,8 +373,8 @@ class CaseWatcher(BaseModel):
     )
 
     class Meta:
-        verbose_name = "Case Watcher"
-        verbose_name_plural = "Case Watchers"
+        verbose_name = _("Case Watcher")
+        verbose_name_plural = _("Case Watchers")
         db_table = "case_watcher"
         ordering = ("-created_at",)
         indexes = [
@@ -428,8 +428,8 @@ class CsatSurvey(BaseModel):
     )
 
     class Meta:
-        verbose_name = "CSAT Survey"
-        verbose_name_plural = "CSAT Surveys"
+        verbose_name = _("CSAT Survey")
+        verbose_name_plural = _("CSAT Surveys")
         db_table = "csat_survey"
         ordering = ("-created_at",)
         indexes = [
@@ -470,8 +470,8 @@ class Solution(BaseModel):
     cases = models.ManyToManyField(Case, related_name="solutions", blank=True)
 
     class Meta:
-        verbose_name = "Solution"
-        verbose_name_plural = "Solutions"
+        verbose_name = _("Solution")
+        verbose_name_plural = _("Solutions")
         db_table = "solution"
         ordering = ("-created_at",)
         indexes = [
@@ -508,13 +508,13 @@ class CasePipeline(BaseModel):
     )
     is_default = models.BooleanField(
         default=False,
-        help_text="If true, new cases without explicit pipeline go here",
+        help_text=_("If true, new cases without explicit pipeline go here"),
     )
     is_active = models.BooleanField(default=True)
 
     class Meta:
-        verbose_name = "Case Pipeline"
-        verbose_name_plural = "Case Pipelines"
+        verbose_name = _("Case Pipeline")
+        verbose_name_plural = _("Case Pipelines")
         db_table = "case_pipeline"
         ordering = ("-is_default", "name")
         indexes = [
@@ -560,7 +560,7 @@ class CaseStage(BaseModel):
         blank=True,
         null=True,
         choices=STATUS_CHOICE,
-        help_text="When case enters this stage, also update Case.status",
+        help_text=_("When case enters this stage, also update Case.status"),
     )
 
     # Kanban features
@@ -568,14 +568,14 @@ class CaseStage(BaseModel):
         _("WIP Limit"),
         null=True,
         blank=True,
-        help_text="Maximum cases allowed in this stage (null = unlimited)",
+        help_text=_("Maximum cases allowed in this stage (null = unlimited)"),
     )
 
     org = models.ForeignKey(Org, on_delete=models.CASCADE, related_name="case_stages")
 
     class Meta:
-        verbose_name = "Case Stage"
-        verbose_name_plural = "Case Stages"
+        verbose_name = _("Case Stage")
+        verbose_name_plural = _("Case Stages")
         db_table = "case_stage"
         ordering = ("order",)
         unique_together = ("pipeline", "name")
@@ -605,19 +605,19 @@ class ReopenPolicy(BaseModel):
     is_enabled = models.BooleanField(default=True)
     reopen_window_days = models.PositiveSmallIntegerField(
         default=7,
-        help_text="Replies within this many days of closed_on reopen the case.",
+        help_text=_("Replies within this many days of closed_on reopen the case."),
     )
     reopen_to_status = models.CharField(
         max_length=64,
         choices=STATUS_CHOICE,
         default="Pending",
-        help_text="Status the case flips to on reopen (must be non-terminal).",
+        help_text=_("Status the case flips to on reopen (must be non-terminal)."),
     )
     notify_assigned = models.BooleanField(default=True)
 
     class Meta:
-        verbose_name = "Reopen Policy"
-        verbose_name_plural = "Reopen Policies"
+        verbose_name = _("Reopen Policy")
+        verbose_name_plural = _("Reopen Policies")
         db_table = "reopen_policy"
 
     def __str__(self):
@@ -652,7 +652,7 @@ class EscalationPolicy(BaseModel):
         blank=True,
         null=True,
         related_name="first_response_escalation_policies",
-        help_text="Profile reassigned to and/or notified on first-response breach.",
+        help_text=_("Profile reassigned to and/or notified on first-response breach."),
     )
     resolution_target = models.ForeignKey(
         Profile,
@@ -660,7 +660,7 @@ class EscalationPolicy(BaseModel):
         blank=True,
         null=True,
         related_name="resolution_escalation_policies",
-        help_text="Profile reassigned to and/or notified on resolution breach.",
+        help_text=_("Profile reassigned to and/or notified on resolution breach."),
     )
     notify_team = models.ForeignKey(
         Teams,
@@ -668,13 +668,13 @@ class EscalationPolicy(BaseModel):
         blank=True,
         null=True,
         related_name="escalation_policies",
-        help_text="Optional team CC'd on either breach action.",
+        help_text=_("Optional team CC'd on either breach action."),
     )
     is_active = models.BooleanField(default=True)
 
     class Meta:
-        verbose_name = "Escalation Policy"
-        verbose_name_plural = "Escalation Policies"
+        verbose_name = _("Escalation Policy")
+        verbose_name_plural = _("Escalation Policies")
         db_table = "escalation_policy"
         ordering = ("priority",)
         constraints = [
@@ -717,8 +717,8 @@ class InboundMailbox(BaseModel):
         max_length=128,
         blank=True,
         default="",
-        help_text="Shared secret / SNS Topic ARN suffix used to verify webhook "
-        "calls. Auto-generated on create if left blank.",
+        help_text=_("Shared secret / SNS Topic ARN suffix used to verify webhook "
+                    "calls. Auto-generated on create if left blank."),
     )
 
     # Reserved for future IMAP support (Tier 1+ follow-up).
@@ -732,7 +732,7 @@ class InboundMailbox(BaseModel):
     )
     default_case_type = models.CharField(
         max_length=255,
-        choices=[("Question", "Question"), ("Incident", "Incident"), ("Problem", "Problem")],
+        choices=[("Question", _("Question")), ("Incident", _("Incident")), ("Problem", _("Problem"))],
         blank=True,
         null=True,
     )
@@ -746,8 +746,8 @@ class InboundMailbox(BaseModel):
     is_active = models.BooleanField(default=True)
 
     class Meta:
-        verbose_name = "Inbound Mailbox"
-        verbose_name_plural = "Inbound Mailboxes"
+        verbose_name = _("Inbound Mailbox")
+        verbose_name_plural = _("Inbound Mailboxes")
         db_table = "inbound_mailbox"
         ordering = ("address",)
         constraints = [
@@ -783,8 +783,8 @@ class EmailMessage(BaseModel):
         related_name="email_messages",
         null=True,
         blank=True,
-        help_text="Null when the message was dropped (spam/bounce/auto-reply) "
-        "but we still want an audit trail.",
+        help_text=_("Null when the message was dropped (spam/bounce/auto-reply) "
+                    "but we still want an audit trail."),
     )
     direction = models.CharField(
         max_length=16, choices=DIRECTION_CHOICES, default="inbound"
@@ -796,8 +796,8 @@ class EmailMessage(BaseModel):
     references = models.TextField(
         blank=True,
         default="",
-        help_text="Whitespace-separated list of RFC-5322 Message-IDs from the "
-        "References header.",
+        help_text=_("Whitespace-separated list of RFC-5322 Message-IDs from the "
+                    "References header."),
     )
     from_address = models.EmailField()
     to_addresses = models.TextField(blank=True, default="")
@@ -810,13 +810,13 @@ class EmailMessage(BaseModel):
         max_length=64,
         blank=True,
         default="",
-        help_text="If non-empty, the message was rejected (spam/bounce/etc.) "
-        "before any Case was touched. `case` will be null in this case.",
+        help_text=_("If non-empty, the message was rejected (spam/bounce/etc.) "
+                    "before any Case was touched. `case` will be null in this case."),
     )
 
     class Meta:
-        verbose_name = "Email Message"
-        verbose_name_plural = "Email Messages"
+        verbose_name = _("Email Message")
+        verbose_name_plural = _("Email Messages")
         db_table = "email_message"
         ordering = ("-received_at",)
         constraints = [
@@ -862,13 +862,13 @@ class RoutingRule(BaseModel):
     priority_order = models.PositiveIntegerField(
         default=100,
         db_index=True,
-        help_text="Lower runs first; ties broken by created_at.",
+        help_text=_("Lower runs first; ties broken by created_at."),
     )
     is_active = models.BooleanField(default=True)
     conditions = models.JSONField(
         default=list,
         blank=True,
-        help_text="List of {field, op, value} triples; AND across entries.",
+        help_text=_("List of {field, op, value} triples; AND across entries."),
     )
     strategy = models.CharField(
         max_length=16, choices=STRATEGY_CHOICES, default="direct"
@@ -885,12 +885,12 @@ class RoutingRule(BaseModel):
     )
     stop_processing = models.BooleanField(
         default=True,
-        help_text="If a rule matches and this is True, skip lower-priority rules.",
+        help_text=_("If a rule matches and this is True, skip lower-priority rules."),
     )
 
     class Meta:
-        verbose_name = "Routing Rule"
-        verbose_name_plural = "Routing Rules"
+        verbose_name = _("Routing Rule")
+        verbose_name_plural = _("Routing Rules")
         db_table = "routing_rule"
         ordering = ("priority_order", "created_at")
         indexes = [
@@ -921,8 +921,8 @@ class RoutingRuleState(BaseModel):
     last_assigned_index = models.PositiveIntegerField(default=0)
 
     class Meta:
-        verbose_name = "Routing Rule State"
-        verbose_name_plural = "Routing Rule States"
+        verbose_name = _("Routing Rule State")
+        verbose_name_plural = _("Routing Rule States")
         db_table = "routing_rule_state"
 
     def __str__(self):
@@ -952,11 +952,11 @@ class TimeEntry(BaseModel):
 
     started_at = models.DateTimeField()
     ended_at = models.DateTimeField(
-        null=True, blank=True, help_text="Null while the timer is running."
+        null=True, blank=True, help_text=_("Null while the timer is running.")
     )
     duration_minutes = models.PositiveIntegerField(
         default=0,
-        help_text="Recomputed on save when both timestamps are present.",
+        help_text=_("Recomputed on save when both timestamps are present."),
     )
 
     description = models.TextField(blank=True, default="")
@@ -966,7 +966,7 @@ class TimeEntry(BaseModel):
         decimal_places=2,
         null=True,
         blank=True,
-        help_text="Snapshot at log time so future rate changes do not alter history.",
+        help_text=_("Snapshot at log time so future rate changes do not alter history."),
     )
     currency = models.CharField(
         max_length=3, choices=CURRENCY_CODES, default="USD"
@@ -978,16 +978,16 @@ class TimeEntry(BaseModel):
         blank=True,
         on_delete=models.SET_NULL,
         related_name="time_entries",
-        help_text="Set when this entry has been pushed to a draft invoice.",
+        help_text=_("Set when this entry has been pushed to a draft invoice."),
     )
     auto_stopped = models.BooleanField(
         default=False,
-        help_text="Set by the auto-stop Celery task when a forgotten timer is killed.",
+        help_text=_("Set by the auto-stop Celery task when a forgotten timer is killed."),
     )
 
     class Meta:
-        verbose_name = "Time Entry"
-        verbose_name_plural = "Time Entries"
+        verbose_name = _("Time Entry")
+        verbose_name_plural = _("Time Entries")
         db_table = "time_entry"
         ordering = ("-started_at",)
         indexes = [

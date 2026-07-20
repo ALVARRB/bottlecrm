@@ -1,5 +1,6 @@
 <script>
-  import { goto } from '$app/navigation';
+  import { t } from '$lib/i18n';
+import { goto } from '$app/navigation';
   import {
     Pencil,
     Mail,
@@ -211,7 +212,7 @@
 <PageHeader
   title={accountName}
   subtitle={industryLabel}
-  breadcrumb={[{ label: 'Accounts', href: '/accounts' }, { label: accountName }]}
+  breadcrumb={[{ label: t('Accounts'), href: '/accounts' }, { label: accountName }]}
 >
   {#snippet meta()}
     <div

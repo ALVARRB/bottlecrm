@@ -7,6 +7,7 @@ from rest_framework.permissions import IsAuthenticated
 from rest_framework.response import Response
 from rest_framework.views import APIView
 
+from django.utils.translation import gettext_lazy as _
 from cases.models import Case
 from common.models import Activity, Profile, Tags
 from common.permissions import HasOrgContext

@@ -1,5 +1,6 @@
 <script>
-  import { DollarSign, TrendingUp, Target, Percent, AlertCircle } from '@lucide/svelte';
+  import { t } from '$lib/i18n';
+import { DollarSign, TrendingUp, Target, Percent, AlertCircle } from '@lucide/svelte';
   import {
     KPICard,
     FocusBar,
@@ -104,7 +105,7 @@
       <!-- Revenue Metrics Grid - 4 columns with hover effects -->
       <div class="grid grid-cols-2 gap-4 lg:grid-cols-4">
         <KPICard
-          label="Pipeline Value"
+          label={t('Pipeline Value')}
           value={formatCurrency(revenueMetrics.pipeline_value || 0, orgCurrency, true)}
           subtitle={currencyNote}
           accentColor="orange"
@@ -114,7 +115,7 @@
           {/snippet}
         </KPICard>
         <KPICard
-          label="Weighted Pipeline"
+          label={t('Weighted Pipeline')}
           value={formatCurrency(revenueMetrics.weighted_pipeline || 0, orgCurrency, true)}
           subtitle={currencyNote}
           accentColor="violet"
@@ -124,7 +125,7 @@
           {/snippet}
         </KPICard>
         <KPICard
-          label="Won This Month"
+          label={t('Won This Month')}
           value={formatCurrency(revenueMetrics.won_this_month || 0, orgCurrency, true)}
           subtitle={currencyNote}
           accentColor="emerald"
@@ -134,7 +135,7 @@
           {/snippet}
         </KPICard>
         <KPICard
-          label="Conversion Rate"
+          label={t('Conversion Rate')}
           value="{revenueMetrics.conversion_rate || 0}%"
           accentColor="amber"
         >

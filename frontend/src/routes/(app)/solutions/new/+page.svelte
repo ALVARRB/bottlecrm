@@ -1,5 +1,6 @@
 <script>
-  import { goto } from '$app/navigation';
+  import { t } from '$lib/i18n';
+import { goto } from '$app/navigation';
   import { enhance } from '$app/forms';
   import { toast } from 'svelte-sonner';
   import { Loader2 } from '@lucide/svelte';
@@ -87,7 +88,7 @@
     {/if}
 
     <div class="flex items-center justify-end gap-2">
-      <Button type="button" variant="ghost" onclick={() => goto('/solutions')}>Cancel</Button>
+      <Button type="button" variant="ghost" onclick={() => goto('/solutions')}>{t('Cancel')}</Button>
       <Button type="submit" disabled={submitting}>
         {#if submitting}<Loader2 class="mr-1 h-3.5 w-3.5 animate-spin" />{/if}
         Create solution

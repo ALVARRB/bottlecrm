@@ -1,5 +1,6 @@
 <script>
-  import '../../../../app.css';
+  import { t } from '$lib/i18n';
+import '../../../../app.css';
   import imgLogo from '$lib/assets/images/logo.png';
   import { enhance } from '$app/forms';
   import { goto } from '$app/navigation';
@@ -21,7 +22,7 @@
 </script>
 
 <svelte:head>
-  <title>Create Organization | AllShopTotal CRM</title>
+  <title>{t('Create Organization')} | AllShopTotal CRM</title>
 </svelte:head>
 
 <div class="flex min-h-screen flex-col bg-[var(--surface-sunken)]">
@@ -37,7 +38,7 @@
         class="flex items-center gap-2 rounded-lg px-3 py-2 text-sm font-medium text-[var(--text-secondary)] transition-colors hover:bg-[var(--surface-raised)] hover:text-[var(--text-primary)]"
       >
         <ArrowLeft class="h-4 w-4" />
-        <span>Back</span>
+        <span>{t('Back')}</span>
       </a>
     </div>
   </header>
@@ -119,7 +120,7 @@
                   Organization created!
                 </p>
                 <p class="mt-1 text-sm text-[var(--color-success-default)]/80">
-                  Redirecting to your organizations...
+                  {t('Redirecting to your organizations...')}
                 </p>
               </div>
             </div>
@@ -138,10 +139,10 @@
               <span>Creating...</span>
             {:else if form?.data}
               <Check class="h-4 w-4" />
-              <span>Created!</span>
+              <span>{t('Created!')}</span>
             {:else}
               <Building2 class="h-4 w-4" />
-              <span>Create organization</span>
+              <span>{t('Create organization')}</span>
             {/if}
           </button>
         </form>

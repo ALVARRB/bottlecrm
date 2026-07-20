@@ -1,21 +1,22 @@
 {% extends 'root_email_template_new.html' %}
+{% load i18n %}
 
-{% block preheader %}Activate your AllShopTotal CRM account{% endblock preheader %}
+{% block preheader %}{% trans "Activate your AllShopTotal CRM account" %}{% endblock preheader %}
 
-{% block heading %}Welcome to AllShopTotal CRM{% endblock heading %}
+{% block heading %}{% trans "Welcome to AllShopTotal CRM" %}{% endblock heading %}
 
 {% block content_body %}
-<p style="margin:0 0 8px 0;">Thanks for creating an account. Click the button below to verify your email and activate your account.</p>
+<p style="margin:0 0 8px 0;">{% blocktrans %}Thanks for creating an account. Click the button below to verify your email and activate your account.{% endblocktrans %}</p>
 {% endblock content_body %}
 
 {% block metadata %}
 <table class="metadata-table" role="presentation" cellpadding="0" cellspacing="0" border="0"
   style="width:100%;background-color:#FAFAFA;border-radius:6px;margin-bottom:24px;">
   <tr>
-    <td class="metadata-label" style="padding:12px 16px 4px 16px;font-size:13px;color:#757575;font-weight:500;">Link expires in</td>
+    <td class="metadata-label" style="padding:12px 16px 4px 16px;font-size:13px;color:#757575;font-weight:500;">{% trans "Link expires in" %}</td>
   </tr>
   <tr>
-    <td class="metadata-value" style="padding:0 16px 12px 16px;font-size:15px;color:#212121;">2 hours</td>
+    <td class="metadata-value" style="padding:0 16px 12px 16px;font-size:15px;color:#212121;">{% trans "2 hours" %}</td>
   </tr>
 </table>
 {% endblock metadata %}
@@ -23,12 +24,12 @@
 {% block button_link %}
 <a class="btn-link" href="{{ complete_url }}"
    style="display:inline-block;padding:14px 32px;background-color:#EA580C;color:#ffffff;text-decoration:none;border-radius:6px;font-size:16px;font-weight:600;line-height:1;">
-  Verify Your Email
+  {% trans "Verify Your Email" %}
 </a>
 {% endblock button_link %}
 
 {% block extra_content %}
 <p style="font-size:13px;color:#757575;margin:0;">
-  Once activated, you'll have access to all AllShopTotal CRM features.
+  {% trans "Once activated, you'll have access to all AllShopTotal CRM features." %}
 </p>
 {% endblock extra_content %}

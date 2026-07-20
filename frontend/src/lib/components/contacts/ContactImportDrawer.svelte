@@ -1,5 +1,6 @@
 <script>
-  import { invalidateAll } from '$app/navigation';
+  import { t } from '$lib/i18n';
+import { invalidateAll } from '$app/navigation';
   import { deserialize } from '$app/forms';
   import { toast } from 'svelte-sonner';
   import {
@@ -471,7 +472,7 @@
         </div>
       </div>
       <Dialog.Footer>
-        <Button type="button" onclick={() => (open = false)}>Close</Button>
+        <Button type="button" onclick={() => (open = false)}>{t('Close')}</Button>
       </Dialog.Footer>
     {/if}
   </Dialog.Content>

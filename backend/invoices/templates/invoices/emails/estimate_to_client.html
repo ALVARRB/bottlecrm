@@ -1,3 +1,4 @@
+{% load i18n %}
 <!DOCTYPE html>
 <html>
 <head>
@@ -17,47 +18,47 @@
 <body>
     <div class="container">
         <div class="header">
-            <h1>Estimate from {{ org.name }}</h1>
+            <h1>{% blocktrans %}Estimate from {{ org.name }}{% endblocktrans %}</h1>
         </div>
         <div class="content">
-            <p>Dear {{ estimate.client_name }},</p>
-            <p>Please find attached your estimate <strong>#{{ estimate.estimate_number }}</strong>.</p>
+            <p>{% blocktrans %}Dear {{ estimate.client_name }},{% endblocktrans %}</p>
+            <p>{% blocktrans %}Please find attached your estimate {% endblocktrans %}<strong>#{{ estimate.estimate_number }}</strong>.</p>
 
             <div class="details">
                 <div class="details-row">
-                    <span>Estimate Number:</span>
+                    <span>{% trans "Estimate Number:" %}</span>
                     <span>#{{ estimate.estimate_number }}</span>
                 </div>
                 {% if estimate.title %}
                 <div class="details-row">
-                    <span>Description:</span>
+                    <span>{% trans "Description:" %}</span>
                     <span>{{ estimate.title }}</span>
                 </div>
                 {% endif %}
                 <div class="details-row">
-                    <span>Date:</span>
+                    <span>{% trans "Date:" %}</span>
                     <span>{{ estimate.issue_date|date:"F d, Y" }}</span>
                 </div>
                 {% if estimate.expiry_date %}
                 <div class="details-row">
-                    <span>Valid Until:</span>
+                    <span>{% trans "Valid Until:" %}</span>
                     <span>{{ estimate.expiry_date|date:"F d, Y" }}</span>
                 </div>
                 {% endif %}
                 <div class="details-row total">
-                    <span>Total:</span>
+                    <span>{% trans "Total:" %}</span>
                     <span>{{ estimate.currency }} {{ estimate.total_amount }}</span>
                 </div>
             </div>
 
             {% if public_url %}
             <p style="text-align: center; margin: 30px 0;">
-                <a href="{{ public_url }}" class="button">View Estimate Online</a>
+                <a href="{{ public_url }}" class="button">{% trans "View Estimate Online" %}</a>
             </p>
             {% endif %}
 
-            <p>If you have any questions or would like to proceed with this estimate, please don't hesitate to contact us.</p>
-            <p>Thank you for considering our services!</p>
+            <p>{% trans "If you have any questions or would like to proceed with this estimate, please don't hesitate to contact us." %}</p>
+            <p>{% trans "Thank you for considering our services!" %}</p>
         </div>
         <div class="footer">
             <p>{{ org.name }}</p>

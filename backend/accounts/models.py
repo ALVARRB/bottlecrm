@@ -73,7 +73,7 @@ class Account(AssignableMixin, BaseModel):
     custom_fields = models.JSONField(
         default=dict,
         blank=True,
-        help_text="Per-org schema extension; values are validated against common.CustomFieldDefinition.",
+        help_text=_("Per-org schema extension; values are validated against common.CustomFieldDefinition."),
     )
 
     # System Fields
@@ -85,8 +85,8 @@ class Account(AssignableMixin, BaseModel):
     )
 
     class Meta:
-        verbose_name = "Account"
-        verbose_name_plural = "Accounts"
+        verbose_name = _("Account")
+        verbose_name_plural = _("Accounts")
         db_table = "accounts"
         ordering = ("-created_at",)
         indexes = [
@@ -131,8 +131,8 @@ class AccountEmail(BaseModel):
     )
 
     class Meta:
-        verbose_name = "Account Email"
-        verbose_name_plural = "Account Emails"
+        verbose_name = _("Account Email")
+        verbose_name_plural = _("Account Emails")
         db_table = "account_email"
         ordering = ("-created_at",)
         indexes = [
@@ -178,8 +178,8 @@ class AccountEmailLog(BaseModel):
     )
 
     class Meta:
-        verbose_name = "EmailLog"
-        verbose_name_plural = "EmailLogs"
+        verbose_name = _("EmailLog")
+        verbose_name_plural = _("EmailLogs")
         db_table = "emailLogs"
         ordering = ("-created_at",)
         indexes = [

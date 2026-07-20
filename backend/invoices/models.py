@@ -108,8 +108,8 @@ class InvoiceTemplate(BaseModel):
     )
 
     class Meta:
-        verbose_name = "Invoice Template"
-        verbose_name_plural = "Invoice Templates"
+        verbose_name = _("Invoice Template")
+        verbose_name_plural = _("Invoice Templates")
         db_table = "invoice_template"
         ordering = ("-created_at",)
         indexes = [
@@ -153,8 +153,8 @@ class Product(BaseModel):
     org = models.ForeignKey(Org, on_delete=models.CASCADE, related_name="products")
 
     class Meta:
-        verbose_name = "Product"
-        verbose_name_plural = "Products"
+        verbose_name = _("Product")
+        verbose_name_plural = _("Products")
         db_table = "product"
         ordering = ("name",)
         unique_together = [["sku", "org"]]
@@ -195,7 +195,7 @@ class Invoice(AssignableMixin, BaseModel):
         null=True,
         blank=True,
         related_name="invoices",
-        help_text="The legal entity responsible for payment (REQUIRED via validation)",
+        help_text=_("The legal entity responsible for payment (REQUIRED via validation)"),
     )
     contact = models.ForeignKey(
         Contact,
@@ -203,7 +203,7 @@ class Invoice(AssignableMixin, BaseModel):
         null=True,
         blank=True,
         related_name="invoices",
-        help_text="The 'Bill To' contact (REQUIRED via validation)",
+        help_text=_("The 'Bill To' contact (REQUIRED via validation)"),
     )
     opportunity = models.ForeignKey(
         Opportunity,
@@ -211,7 +211,7 @@ class Invoice(AssignableMixin, BaseModel):
         null=True,
         blank=True,
         related_name="invoices",
-        help_text="The sales opportunity this invoice relates to (optional)",
+        help_text=_("The sales opportunity this invoice relates to (optional)"),
     )
 
     # Client Details (denormalized for PDF generation and history)
@@ -343,7 +343,7 @@ class Invoice(AssignableMixin, BaseModel):
     custom_fields = models.JSONField(
         default=dict,
         blank=True,
-        help_text="Per-org schema extension; values are validated against common.CustomFieldDefinition.",
+        help_text=_("Per-org schema extension; values are validated against common.CustomFieldDefinition."),
     )
 
     # Assignment
@@ -356,8 +356,8 @@ class Invoice(AssignableMixin, BaseModel):
     org = models.ForeignKey(Org, on_delete=models.CASCADE, related_name="invoices")
 
     class Meta:
-        verbose_name = "Invoice"
-        verbose_name_plural = "Invoices"
+        verbose_name = _("Invoice")
+        verbose_name_plural = _("Invoices")
         db_table = "invoice"
         ordering = ("-created_at",)
         indexes = [
@@ -549,8 +549,8 @@ class InvoiceLineItem(BaseModel):
     )
 
     class Meta:
-        verbose_name = "Invoice Line Item"
-        verbose_name_plural = "Invoice Line Items"
+        verbose_name = _("Invoice Line Item")
+        verbose_name_plural = _("Invoice Line Items")
         db_table = "invoice_line_item"
         ordering = ("order",)
         indexes = [
@@ -622,8 +622,8 @@ class Payment(BaseModel):
     org = models.ForeignKey(Org, on_delete=models.CASCADE, related_name="payments")
 
     class Meta:
-        verbose_name = "Payment"
-        verbose_name_plural = "Payments"
+        verbose_name = _("Payment")
+        verbose_name_plural = _("Payments")
         db_table = "payment"
         ordering = ("-payment_date",)
         indexes = [
@@ -694,7 +694,7 @@ class Estimate(AssignableMixin, BaseModel):
         null=True,
         blank=True,
         related_name="estimates",
-        help_text="The legal entity (REQUIRED via validation)",
+        help_text=_("The legal entity (REQUIRED via validation)"),
     )
     contact = models.ForeignKey(
         Contact,
@@ -702,7 +702,7 @@ class Estimate(AssignableMixin, BaseModel):
         null=True,
         blank=True,
         related_name="estimates",
-        help_text="The contact person (REQUIRED via validation)",
+        help_text=_("The contact person (REQUIRED via validation)"),
     )
     opportunity = models.ForeignKey(
         Opportunity,
@@ -788,7 +788,7 @@ class Estimate(AssignableMixin, BaseModel):
     custom_fields = models.JSONField(
         default=dict,
         blank=True,
-        help_text="Per-org schema extension; values are validated against common.CustomFieldDefinition.",
+        help_text=_("Per-org schema extension; values are validated against common.CustomFieldDefinition."),
     )
 
     # Assignment
@@ -799,8 +799,8 @@ class Estimate(AssignableMixin, BaseModel):
     org = models.ForeignKey(Org, on_delete=models.CASCADE, related_name="estimates")
 
     class Meta:
-        verbose_name = "Estimate"
-        verbose_name_plural = "Estimates"
+        verbose_name = _("Estimate")
+        verbose_name_plural = _("Estimates")
         db_table = "estimate"
         ordering = ("-created_at",)
         indexes = [
@@ -935,8 +935,8 @@ class EstimateLineItem(BaseModel):
     )
 
     class Meta:
-        verbose_name = "Estimate Line Item"
-        verbose_name_plural = "Estimate Line Items"
+        verbose_name = _("Estimate Line Item")
+        verbose_name_plural = _("Estimate Line Items")
         db_table = "estimate_line_item"
         ordering = ("order",)
         indexes = [
@@ -1052,7 +1052,7 @@ class RecurringInvoice(AssignableMixin, BaseModel):
     custom_fields = models.JSONField(
         default=dict,
         blank=True,
-        help_text="Per-org schema extension; values are validated against common.CustomFieldDefinition.",
+        help_text=_("Per-org schema extension; values are validated against common.CustomFieldDefinition."),
     )
 
     # Statistics
@@ -1070,8 +1070,8 @@ class RecurringInvoice(AssignableMixin, BaseModel):
     )
 
     class Meta:
-        verbose_name = "Recurring Invoice"
-        verbose_name_plural = "Recurring Invoices"
+        verbose_name = _("Recurring Invoice")
+        verbose_name_plural = _("Recurring Invoices")
         db_table = "recurring_invoice"
         ordering = ("-created_at",)
         indexes = [
@@ -1146,8 +1146,8 @@ class RecurringInvoiceLineItem(BaseModel):
     )
 
     class Meta:
-        verbose_name = "Recurring Invoice Line Item"
-        verbose_name_plural = "Recurring Invoice Line Items"
+        verbose_name = _("Recurring Invoice Line Item")
+        verbose_name_plural = _("Recurring Invoice Line Items")
         db_table = "recurring_invoice_line_item"
         ordering = ("order",)
 
@@ -1209,8 +1209,8 @@ class InvoiceHistory(BaseModel):
     )
 
     class Meta:
-        verbose_name = "Invoice History"
-        verbose_name_plural = "Invoice Histories"
+        verbose_name = _("Invoice History")
+        verbose_name_plural = _("Invoice Histories")
         db_table = "invoice_history"
         ordering = ("-created_at",)
         indexes = [

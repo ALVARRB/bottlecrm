@@ -1,5 +1,6 @@
 <script>
-  import { goto, invalidateAll } from '$app/navigation';
+  import { t } from '$lib/i18n';
+import { goto, invalidateAll } from '$app/navigation';
   import { enhance } from '$app/forms';
   import { tick } from 'svelte';
   import { toast } from 'svelte-sonner';
@@ -285,8 +286,8 @@
 
 <PageHeader
   title="New Invoice"
-  subtitle="Create a new invoice for your client"
-  breadcrumb={[{ label: 'Invoices', href: '/invoices' }, { label: 'New Invoice' }]}
+  subtitle={t("Create a new invoice for your client")}
+  breadcrumb={[{ label: t('Invoices'), href: '/invoices' }, { label: 'New Invoice' }]}
 >
   {#snippet actions()}
     <Button variant="outline" onclick={saveDraft} disabled={isSaving}>

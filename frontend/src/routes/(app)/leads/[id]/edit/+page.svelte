@@ -1,5 +1,6 @@
 <script>
-  import { goto } from '$app/navigation';
+  import { t } from '$lib/i18n';
+import { goto } from '$app/navigation';
   import { toast } from 'svelte-sonner';
   import { Loader2 } from '@lucide/svelte';
 
@@ -68,7 +69,7 @@
 <PageHeader
   title="Edit {displayName}"
   breadcrumb={[
-    { label: 'Leads', href: '/leads' },
+    { label: t('Leads'), href: '/leads' },
     { label: displayName, href: lead?.id ? `/leads/${lead.id}` : '/leads' },
     { label: 'Edit' }
   ]}

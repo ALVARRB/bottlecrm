@@ -1,5 +1,6 @@
 <script>
-  import { enhance } from '$app/forms';
+  import { t } from '$lib/i18n';
+import { enhance } from '$app/forms';
   import { invalidateAll, goto } from '$app/navigation';
   import { page } from '$app/stores';
   import { onMount, tick, untrack } from 'svelte';
@@ -187,7 +188,7 @@
     },
     {
       key: 'contacts',
-      label: 'Contacts',
+      label: t('Contacts'),
       type: 'relation',
       width: 'w-36',
       relationIcon: 'contact',
@@ -933,7 +934,7 @@
     },
     {
       key: 'contacts',
-      label: 'Contacts',
+      label: t('Contacts'),
       type: 'multiselect',
       icon: Contact,
       options: contactOptions
@@ -1294,7 +1295,7 @@
             >
               <CheckSquare class="size-8 text-[var(--text-tertiary)]" />
             </div>
-            <h3 class="text-lg font-medium text-[var(--text-primary)]">No tasks found</h3>
+            <h3 class="text-lg font-medium text-[var(--text-primary)]">{t('No tasks found')}</h3>
             <p class="mt-1 text-sm text-[var(--text-secondary)]">
               Try adjusting your filters or create a new task
             </p>
@@ -1578,10 +1579,10 @@
 
   {#snippet footerActions()}
     {#if isCreateMode}
-      <Button variant="outline" size="sm" onclick={closeTaskSheet}>Cancel</Button>
+      <Button variant="outline" size="sm" onclick={closeTaskSheet}>{t('Cancel')}</Button>
       <Button size="sm" onclick={handleDrawerSave}>Create Task</Button>
     {:else if selectedTask}
-      <Button variant="outline" size="sm" onclick={closeTaskSheet}>Cancel</Button>
+      <Button variant="outline" size="sm" onclick={closeTaskSheet}>{t('Cancel')}</Button>
       {#if isCompleted}
         <Button variant="outline" size="sm" onclick={reopenSelectedTask}>
           <RotateCcw class="mr-2 h-4 w-4" />
@@ -1593,7 +1594,7 @@
           Complete
         </Button>
       {/if}
-      <Button size="sm" onclick={handleDrawerUpdate}>Save</Button>
+      <Button size="sm" onclick={handleDrawerUpdate}>{t('Save')}</Button>
     {/if}
   {/snippet}
 </CrmDrawer>

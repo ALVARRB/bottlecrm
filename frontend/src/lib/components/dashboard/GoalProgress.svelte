@@ -1,5 +1,6 @@
 <script>
-  import { Trophy, ArrowRight } from '@lucide/svelte';
+  import { t } from '$lib/i18n';
+import { Trophy, ArrowRight } from '@lucide/svelte';
   import { Progress } from '$lib/components/ui/progress/index.js';
   import { formatCurrency } from '$lib/utils/formatting.js';
   import { orgSettings } from '$lib/stores/org.js';
@@ -37,12 +38,12 @@
 
   {#if goals.length === 0}
     <div class="py-6 text-center">
-      <p class="mb-2 text-sm text-[var(--text-tertiary)]">No active goals</p>
+      <p class="mb-2 text-sm text-[var(--text-tertiary)]">{t('No active goals')}</p>
       <a
         href={resolve('/goals')}
         class="text-xs font-medium text-[var(--color-primary-default)] hover:underline"
       >
-        Create a goal
+        t('t('Create a goal')')
       </a>
     </div>
   {:else}

@@ -1,4 +1,5 @@
 from django.db import models
+from django.utils.translation import gettext_lazy as _
 
 from common.base import BaseModel
 from common.models import Org, Profile
@@ -36,8 +37,8 @@ class Macro(BaseModel):
     org = models.ForeignKey(Org, on_delete=models.CASCADE, related_name="macros")
 
     class Meta:
-        verbose_name = "Macro"
-        verbose_name_plural = "Macros"
+        verbose_name = _("Macro")
+        verbose_name_plural = _("Macros")
         db_table = "macro"
         ordering = ("-updated_at",)
         constraints = [

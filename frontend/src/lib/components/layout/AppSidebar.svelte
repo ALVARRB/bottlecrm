@@ -1,5 +1,6 @@
 <script>
-  import { untrack } from 'svelte';
+  import { t } from '$lib/i18n';
+import { untrack } from 'svelte';
   import { page } from '$app/stores';
   import { afterNavigate, goto } from '$app/navigation';
 
@@ -176,56 +177,56 @@
 
   // Five-section IA per spec §4
   const workspaceItems = [
-    { href: '/', label: 'Home', icon: Home, type: 'link', preload: 'off', count: undefined },
-    { href: '/leads', label: 'Pipeline', icon: Activity, type: 'link', preload: 'off', count: undefined }
+    { href: '/', label: t('Home'), icon: Home, type: 'link', preload: 'off', count: undefined },
+    { href: '/leads', label: t('Pipeline'), icon: Activity, type: 'link', preload: 'off', count: undefined }
   ];
 
   const recordsItems = [
-    { href: '/leads', label: 'Leads', icon: Target, type: 'link', preload: 'off', count: undefined },
-    { href: '/contacts', label: 'Contacts', icon: Users, type: 'link', preload: 'off', count: undefined },
-    { href: '/accounts', label: 'Accounts', icon: Building, type: 'link', preload: 'off', count: undefined },
-    { href: '/opportunities', label: 'Deals', icon: Sparkles, type: 'link', preload: 'off', count: undefined }
+    { href: '/leads', label: t('Leads'), icon: Target, type: 'link', preload: 'off', count: undefined },
+    { href: '/contacts', label: t('Contacts'), icon: Users, type: 'link', preload: 'off', count: undefined },
+    { href: '/accounts', label: t('Accounts'), icon: Building, type: 'link', preload: 'off', count: undefined },
+    { href: '/opportunities', label: t('Deals'), icon: Sparkles, type: 'link', preload: 'off', count: undefined }
   ];
 
   const workItems = [
     {
       key: 'tickets',
-      label: 'Tickets',
+      label: t('Tickets'),
       icon: Briefcase,
       type: 'dropdown',
       count: undefined,
       children: [
-        { href: '/tickets', label: 'All tickets', icon: Briefcase, preload: 'off', count: undefined },
-        { href: '/tickets/approvals', label: 'Approvals', icon: ShieldCheck, preload: 'off', count: undefined },
-        { href: '/tickets/analytics', label: 'Analytics', icon: BarChart3, preload: 'off', count: undefined },
-        { href: '/solutions', label: 'Knowledge base', icon: BookOpen, preload: 'off', count: undefined }
+        { href: '/tickets', label: t('All tickets'), icon: Briefcase, preload: 'off', count: undefined },
+        { href: '/tickets/approvals', label: t('Approvals'), icon: ShieldCheck, preload: 'off', count: undefined },
+        { href: '/tickets/analytics', label: t('Analytics'), icon: BarChart3, preload: 'off', count: undefined },
+        { href: '/solutions', label: t('Knowledge base'), icon: BookOpen, preload: 'off', count: undefined }
       ]
     },
-    { href: '/tasks', label: 'Tasks', icon: CheckSquare, type: 'link', preload: 'off', count: undefined },
-    { href: '/timesheet', label: 'Timesheet', icon: Clock, type: 'link', preload: 'off', count: undefined },
-    { href: '/goals', label: 'Goals', icon: Trophy, type: 'link', preload: 'off', count: undefined }
+    { href: '/tasks', label: t('Tasks'), icon: CheckSquare, type: 'link', preload: 'off', count: undefined },
+    { href: '/timesheet', label: t('Timesheet'), icon: Clock, type: 'link', preload: 'off', count: undefined },
+    { href: '/goals', label: t('Goals'), icon: Trophy, type: 'link', preload: 'off', count: undefined }
   ];
 
   const revenueItems = [
     {
       key: 'invoices',
-      label: 'Invoices',
+      label: t('Invoices'),
       icon: FileText,
       type: 'dropdown',
       count: undefined,
       children: [
-        { href: '/invoices', label: 'All Invoices', icon: FileText, preload: 'off', count: undefined },
-        { href: '/invoices/estimates', label: 'Estimates', icon: FileEdit, preload: 'off', count: undefined },
-        { href: '/invoices/products', label: 'Products', icon: Package, preload: 'off', count: undefined },
-        { href: '/invoices/recurring', label: 'Recurring', icon: RefreshCw, preload: 'off', count: undefined },
-        { href: '/invoices/templates', label: 'Templates', icon: FileCode, preload: 'off', count: undefined },
-        { href: '/invoices/reports', label: 'Reports', icon: BarChart3, preload: 'off', count: undefined }
+        { href: '/invoices', label: t('All Invoices'), icon: FileText, preload: 'off', count: undefined },
+        { href: '/invoices/estimates', label: t('Estimates'), icon: FileEdit, preload: 'off', count: undefined },
+        { href: '/invoices/products', label: t('Products'), icon: Package, preload: 'off', count: undefined },
+        { href: '/invoices/recurring', label: t('Recurring'), icon: RefreshCw, preload: 'off', count: undefined },
+        { href: '/invoices/templates', label: t('Templates'), icon: FileCode, preload: 'off', count: undefined },
+        { href: '/invoices/reports', label: t('Reports'), icon: BarChart3, preload: 'off', count: undefined }
       ]
     }
   ];
 
   const supportItems = [
-    { href: '/support', label: 'Help desk', icon: HelpCircle, type: 'link', preload: 'off', count: undefined }
+    { href: '/support', label: t('Help desk'), icon: HelpCircle, type: 'link', preload: 'off', count: undefined }
   ];
 
   // Combine for the auto-open-on-active effect (which scans dropdown items)
@@ -298,9 +299,7 @@
     <Sidebar.Group>
       <Sidebar.GroupLabel
         class="mb-1 h-auto px-3 text-[10px] font-semibold leading-none text-[color:var(--sidebar-subtle)] [font-variant:small-caps] [text-transform:lowercase] group-data-[collapsible=icon]:hidden"
-      >
-        Workspace
-      </Sidebar.GroupLabel>
+      >{t('Workspace')}</Sidebar.GroupLabel>
       <Sidebar.GroupContent>
         <Sidebar.Menu class="space-y-px">
           {#each workspaceItems as item}
@@ -441,9 +440,7 @@
     <Sidebar.Group class="mt-1.5">
       <Sidebar.GroupLabel
         class="mb-1 h-auto px-3 text-[10px] font-semibold leading-none text-[color:var(--sidebar-subtle)] [font-variant:small-caps] [text-transform:lowercase] group-data-[collapsible=icon]:hidden"
-      >
-        Records
-      </Sidebar.GroupLabel>
+      >{t('Records')}</Sidebar.GroupLabel>
       <Sidebar.GroupContent>
         <Sidebar.Menu class="space-y-px">
           {#each recordsItems as item}
@@ -584,9 +581,7 @@
     <Sidebar.Group class="mt-1.5">
       <Sidebar.GroupLabel
         class="mb-1 h-auto px-3 text-[10px] font-semibold leading-none text-[color:var(--sidebar-subtle)] [font-variant:small-caps] [text-transform:lowercase] group-data-[collapsible=icon]:hidden"
-      >
-        Work
-      </Sidebar.GroupLabel>
+      >{t('Work')}</Sidebar.GroupLabel>
       <Sidebar.GroupContent>
         <Sidebar.Menu class="space-y-px">
           {#each workItems as item}
@@ -727,9 +722,7 @@
     <Sidebar.Group class="mt-1.5">
       <Sidebar.GroupLabel
         class="mb-1 h-auto px-3 text-[10px] font-semibold leading-none text-[color:var(--sidebar-subtle)] [font-variant:small-caps] [text-transform:lowercase] group-data-[collapsible=icon]:hidden"
-      >
-        Revenue
-      </Sidebar.GroupLabel>
+      >{t('Revenue')}</Sidebar.GroupLabel>
       <Sidebar.GroupContent>
         <Sidebar.Menu class="space-y-px">
           {#each revenueItems as item}
@@ -870,9 +863,7 @@
     <Sidebar.Group class="mt-1.5">
       <Sidebar.GroupLabel
         class="mb-1 h-auto px-3 text-[10px] font-semibold leading-none text-[color:var(--sidebar-subtle)] [font-variant:small-caps] [text-transform:lowercase] group-data-[collapsible=icon]:hidden"
-      >
-        Support
-      </Sidebar.GroupLabel>
+      >{t('Support')}</Sidebar.GroupLabel>
       <Sidebar.GroupContent>
         <Sidebar.Menu class="space-y-px">
           {#each supportItems as item}
@@ -1015,7 +1006,7 @@
       <!-- Download mobile app -->
       <Sidebar.MenuItem>
         <Sidebar.MenuButton
-          tooltipContent="Download mobile app"
+          tooltipContent={t('Download mobile app')}
           class="h-[30px] rounded-md pl-[18px] pr-[10px] text-[color:var(--sidebar-muted)] transition-colors duration-150 hover:bg-[color:var(--sidebar-accent)] hover:text-[color:var(--sidebar-foreground)]
             group-data-[collapsible=icon]:size-8 group-data-[collapsible=icon]:rounded-md group-data-[collapsible=icon]:px-0"
         >
@@ -1119,15 +1110,15 @@
                 class="gap-2.5"
               >
                 <User class="size-4" />
-                <span>Profile</span>
+                <span>{t('Profile')}</span>
               </DropdownMenu.Item>
               <DropdownMenu.Item inset={false} onclick={() => navigateTo('/users')} class="gap-2.5">
                 <Users class="size-4" />
-                <span>Users & Teams</span>
+                <span>{t('Users & Teams')}</span>
               </DropdownMenu.Item>
               <DropdownMenu.Item inset={false} onclick={() => navigateTo('/org')} class="gap-2.5">
                 <Building class="size-4" />
-                <span>Organizations</span>
+                <span>{t('Organizations')}</span>
               </DropdownMenu.Item>
               <DropdownMenu.Item
                 inset={false}
@@ -1135,7 +1126,7 @@
                 class="gap-2.5"
               >
                 <Settings class="size-4" />
-                <span>Settings</span>
+                <span>{t('Settings')}</span>
               </DropdownMenu.Item>
               <DropdownMenu.Item
                 inset={false}
@@ -1143,7 +1134,7 @@
                 class="gap-2.5"
               >
                 <Cloud class="size-4" />
-                <span>Salesforce</span>
+                <span>{t('Salesforce')}</span>
               </DropdownMenu.Item>
               <DropdownMenu.Item
                 inset={false}
@@ -1151,7 +1142,7 @@
                 class="gap-2.5"
               >
                 <Tag class="size-4" />
-                <span>Tags</span>
+                <span>{t('Tags')}</span>
               </DropdownMenu.Item>
               <DropdownMenu.Item
                 inset={false}
@@ -1159,7 +1150,7 @@
                 class="gap-2.5"
               >
                 <RotateCcw class="size-4" />
-                <span>Reopen Policy</span>
+                <span>{t('Reopen Policy')}</span>
               </DropdownMenu.Item>
               <DropdownMenu.Item
                 inset={false}
@@ -1167,7 +1158,7 @@
                 class="gap-2.5"
               >
                 <Sliders class="size-4" />
-                <span>Custom Fields</span>
+                <span>{t('Custom Fields')}</span>
               </DropdownMenu.Item>
               <DropdownMenu.Item
                 inset={false}
@@ -1175,7 +1166,7 @@
                 class="gap-2.5"
               >
                 <Route class="size-4" />
-                <span>Auto-Routing</span>
+                <span>{t('Auto-Routing')}</span>
               </DropdownMenu.Item>
               <DropdownMenu.Item
                 inset={false}
@@ -1183,7 +1174,7 @@
                 class="gap-2.5"
               >
                 <Megaphone class="size-4" />
-                <span>Escalation</span>
+                <span>{t('Escalation')}</span>
               </DropdownMenu.Item>
               <DropdownMenu.Item
                 inset={false}
@@ -1191,7 +1182,7 @@
                 class="gap-2.5"
               >
                 <ShieldCheck class="size-4" />
-                <span>Approval Rules</span>
+                <span>{t('Approval Rules')}</span>
               </DropdownMenu.Item>
               <DropdownMenu.Item
                 inset={false}
@@ -1199,7 +1190,7 @@
                 class="gap-2.5"
               >
                 <Mail class="size-4" />
-                <span>Inbound Email</span>
+                <span>{t('Inbound Email')}</span>
               </DropdownMenu.Item>
               <DropdownMenu.Item
                 inset={false}
@@ -1207,7 +1198,7 @@
                 class="gap-2.5"
               >
                 <Clock class="size-4" />
-                <span>Business Hours</span>
+                <span>{t('Business Hours')}</span>
               </DropdownMenu.Item>
               <DropdownMenu.Item
                 inset={false}
@@ -1215,7 +1206,7 @@
                 class="gap-2.5"
               >
                 <MessageSquareQuote class="size-4" />
-                <span>Macros</span>
+                <span>{t('Macros')}</span>
               </DropdownMenu.Item>
               <DropdownMenu.Item
                 inset={false}
@@ -1223,7 +1214,7 @@
                 class="gap-2.5"
               >
                 <KeyRound class="size-4" />
-                <span>API Tokens</span>
+                <span>{t('API Tokens')}</span>
               </DropdownMenu.Item>
             </DropdownMenu.Group>
             <DropdownMenu.Separator />
@@ -1241,7 +1232,7 @@
                   : 'hover:bg-sidebar-accent text-muted-foreground hover:text-foreground'}"
               >
                 <Sun class="size-4" />
-                <span class="text-[10px] font-medium">Light</span>
+                <span class="text-[10px] font-medium">{t('Light')}</span>
               </button>
               <button
                 onclick={() => setTheme('dark')}
@@ -1251,7 +1242,7 @@
                   : 'hover:bg-sidebar-accent text-muted-foreground hover:text-foreground'}"
               >
                 <Moon class="size-4" />
-                <span class="text-[10px] font-medium">Dark</span>
+                <span class="text-[10px] font-medium">{t('Dark')}</span>
               </button>
               <button
                 onclick={() => setTheme('system')}
@@ -1261,7 +1252,7 @@
                   : 'hover:bg-sidebar-accent text-muted-foreground hover:text-foreground'}"
               >
                 <Monitor class="size-4" />
-                <span class="text-[10px] font-medium">System</span>
+                <span class="text-[10px] font-medium">{t('System')}</span>
               </button>
             </DropdownMenu.Group>
             <DropdownMenu.Separator />
@@ -1271,7 +1262,7 @@
               onclick={() => navigateTo('/logout')}
             >
               <LogOut class="size-4" />
-              <span>Sign out</span>
+              <span>{t('Sign out')}</span>
             </DropdownMenu.Item>
           </DropdownMenu.Content>
         </DropdownMenu.Root>

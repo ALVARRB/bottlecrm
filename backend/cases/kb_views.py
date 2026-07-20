@@ -9,6 +9,7 @@ deliberate cut. The endpoint feeds the comment composer's typeahead.
 from __future__ import annotations
 
 from django.db.models import Q
+from django.utils.translation import gettext_lazy as _
 from drf_spectacular.utils import OpenApiParameter, extend_schema
 from rest_framework.permissions import IsAuthenticated
 from rest_framework.response import Response

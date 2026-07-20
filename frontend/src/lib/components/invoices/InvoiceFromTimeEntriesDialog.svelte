@@ -1,5 +1,6 @@
 <script>
-  import { goto } from '$app/navigation';
+  import { t } from '$lib/i18n';
+import { goto } from '$app/navigation';
   import { onMount } from 'svelte';
   import { toast } from 'svelte-sonner';
   import { Loader2 } from '@lucide/svelte';
@@ -139,7 +140,7 @@
 <Dialog.Root bind:open onOpenChange={(v) => onOpenChange?.(v)}>
   <Dialog.Content class="sm:max-w-2xl">
     <Dialog.Header>
-      <Dialog.Title>Create invoice from time entries</Dialog.Title>
+      <Dialog.Title>{t('Create invoice from time entries')}</Dialog.Title>
       <Dialog.Description>
         Pick an account, then select billable, unbilled time entries. We'll
         create a new draft invoice with one line per entry.
@@ -227,7 +228,7 @@
         type="button"
         variant="outline"
         onclick={() => (open = false)}
-        disabled={submitting}>Cancel</Button
+        disabled={submitting}>{t('Cancel')}</Button
       >
       <Button
         type="button"

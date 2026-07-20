@@ -2,6 +2,7 @@ from zoneinfo import available_timezones
 
 from django.core.exceptions import ValidationError
 from django.db import models
+from django.utils.translation import gettext_lazy as _
 
 from common.base import BaseModel
 from common.models import Org
@@ -25,7 +26,7 @@ class BusinessCalendar(BaseModel):
         max_length=64,
         default="UTC",
         validators=[_validate_iana_tz],
-        help_text="IANA timezone (e.g. America/New_York).",
+        help_text=_("IANA timezone (e.g. America/New_York)."),
     )
     is_default = models.BooleanField(default=True)
 
@@ -49,8 +50,8 @@ class BusinessCalendar(BaseModel):
     )
 
     class Meta:
-        verbose_name = "Business Calendar"
-        verbose_name_plural = "Business Calendars"
+        verbose_name = _("Business Calendar")
+        verbose_name_plural = _("Business Calendars")
         db_table = "business_calendar"
         ordering = ("-is_default", "name")
         constraints = [
@@ -97,8 +98,8 @@ class BusinessHoliday(BaseModel):
     )
 
     class Meta:
-        verbose_name = "Business Holiday"
-        verbose_name_plural = "Business Holidays"
+        verbose_name = _("Business Holiday")
+        verbose_name_plural = _("Business Holidays")
         db_table = "business_holiday"
         ordering = ("date",)
         constraints = [

@@ -1,18 +1,19 @@
 {% extends 'root_email_template_new.html' %}
+{% load i18n %}
 
-{% block preheader %}Welcome to AllShopTotal CRM{% endblock preheader %}
+{% block preheader %}{% trans "Welcome to AllShopTotal CRM" %}{% endblock preheader %}
 
-{% block heading %}Welcome to AllShopTotal CRM{% endblock heading %}
+{% block heading %}{% trans "Welcome to AllShopTotal CRM" %}{% endblock heading %}
 
 {% block content_body %}
-<p style="margin:0 0 8px 0;">Your account has been created. You can now set up your organization and start managing your contacts, deals, and more.</p>
+<p style="margin:0 0 8px 0;">{% blocktrans %}Your account has been created. You can now set up your organization and start managing your contacts, deals, and more.{% endblocktrans %}</p>
 {% endblock content_body %}
 
 {% block button_link %}
 {% if url %}
 <a class="btn-link" href="{{ url }}"
    style="display:inline-block;padding:14px 32px;background-color:#EA580C;color:#ffffff;text-decoration:none;border-radius:6px;font-size:16px;font-weight:600;line-height:1;">
-  Get Started
+  {% trans "Get Started" %}
 </a>
 {% endif %}
 {% endblock button_link %}

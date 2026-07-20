@@ -1,3 +1,4 @@
+{% load i18n %}
 <!DOCTYPE html>
 <html>
 <head>
@@ -18,46 +19,46 @@
 <body>
     <div class="container">
         <div class="header">
-            <h1>Payment Reminder</h1>
+            <h1>{% trans "Payment Reminder" %}</h1>
         </div>
         <div class="content">
-            <p>Dear {{ invoice.client_name }},</p>
+            <p>{% blocktrans %}Dear {{ invoice.client_name }},{% endblocktrans %}</p>
 
             {% if days_overdue > 0 %}
-            <p>This is a friendly reminder that invoice <strong>#{{ invoice.invoice_number }}</strong> is now <span class="overdue">{{ days_overdue }} days overdue</span>.</p>
+            <p>{% blocktrans %}This is a friendly reminder that invoice <strong>#{{ invoice.invoice_number }}</strong> is now <span class="overdue">{{ days_overdue }} days overdue</span>.{% endblocktrans %}</p>
             {% else %}
-            <p>This is a friendly reminder that invoice <strong>#{{ invoice.invoice_number }}</strong> is due soon.</p>
+            <p>{% blocktrans %}This is a friendly reminder that invoice <strong>#{{ invoice.invoice_number }}</strong> is due soon.{% endblocktrans %}</p>
             {% endif %}
 
             <div class="details">
                 <div class="details-row">
-                    <span>Invoice Number:</span>
+                    <span>{% trans "Invoice Number:" %}</span>
                     <span>#{{ invoice.invoice_number }}</span>
                 </div>
                 {% if invoice.invoice_title %}
                 <div class="details-row">
-                    <span>Description:</span>
+                    <span>{% trans "Description:" %}</span>
                     <span>{{ invoice.invoice_title }}</span>
                 </div>
                 {% endif %}
                 <div class="details-row">
-                    <span>Due Date:</span>
+                    <span>{% trans "Due Date:" %}</span>
                     <span{% if days_overdue > 0 %} class="overdue"{% endif %}>{{ invoice.due_date|date:"F d, Y" }}</span>
                 </div>
                 <div class="details-row total">
-                    <span>Amount Due:</span>
+                    <span>{% trans "Amount Due:" %}</span>
                     <span>{{ invoice.currency }} {{ invoice.amount_due }}</span>
                 </div>
             </div>
 
             {% if public_url %}
             <p style="text-align: center; margin: 30px 0;">
-                <a href="{{ public_url }}" class="button">View & Pay Invoice</a>
+                <a href="{{ public_url }}" class="button">{% trans "View & Pay Invoice" %}</a>
             </p>
             {% endif %}
 
-            <p>If you have already made payment, please disregard this reminder. If you have any questions about this invoice, please don't hesitate to contact us.</p>
-            <p>Thank you!</p>
+            <p>{% trans "If you have already made payment, please disregard this reminder. If you have any questions about this invoice, please don't hesitate to contact us." %}</p>
+            <p>{% trans "Thank you!" %}</p>
         </div>
         <div class="footer">
             <p>{{ org.name }}</p>

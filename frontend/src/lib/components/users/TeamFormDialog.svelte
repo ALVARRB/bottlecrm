@@ -1,5 +1,6 @@
 <script>
-  import { X } from '@lucide/svelte';
+  import { t } from '$lib/i18n';
+import { X } from '@lucide/svelte';
   import * as Dialog from '$lib/components/ui/dialog/index.js';
   import { Button } from '$lib/components/ui/button/index.js';
   import { Input } from '$lib/components/ui/input/index.js';
@@ -102,7 +103,7 @@
       <Dialog.Description class="">
         {isEditing
           ? 'Update team details and member assignments.'
-          : 'Create a new team to group users for assignments.'}
+          : t('Create a new team to group users for assignments.')}
       </Dialog.Description>
     </Dialog.Header>
 

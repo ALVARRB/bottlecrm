@@ -1,5 +1,6 @@
 <script>
-  import { enhance } from '$app/forms';
+  import { t } from '$lib/i18n';
+import { enhance } from '$app/forms';
   import { invalidateAll } from '$app/navigation';
   import PageHeader from '$lib/components/layout/PageHeader.svelte';
 
@@ -104,7 +105,7 @@
 <PageHeader
   title={data.board.name}
   subtitle={data.board.description || ''}
-  breadcrumb={[{ label: 'Tasks', href: '/tasks' }, { label: data.board.name }]}
+  breadcrumb={[{ label: t('Tasks'), href: '/tasks' }, { label: data.board.name }]}
 />
 
 <div class="board-container">
@@ -205,7 +206,7 @@
               <div class="form-actions">
                 <button type="submit" class="btn-primary">Add Task</button>
                 <button type="button" class="btn-secondary" on:click={cancelAddingTask}
-                  >Cancel</button
+                  >{t('Cancel')}</button
                 >
               </div>
             </form>
@@ -246,7 +247,7 @@
           <div class="form-actions">
             <button type="submit" class="btn-primary">Add</button>
             <button type="button" class="btn-secondary" on:click={() => (showAddColumn = false)}
-              >Cancel</button
+              >{t('Cancel')}</button
             >
           </div>
         </form>

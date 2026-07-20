@@ -1,5 +1,6 @@
 <script>
-  import { tick } from 'svelte';
+  import { t } from '$lib/i18n';
+import { tick } from 'svelte';
   import { Check, ChevronDown, Building2, User } from '@lucide/svelte';
   import * as DropdownMenu from '$lib/components/ui/dropdown-menu/index.js';
   import { getOptionStyle, getOptionLabel, getOptionBgColor } from '$lib/utils/table-helpers.js';
@@ -209,7 +210,7 @@
       {@render emptyState()}
     {:else}
       <div class="flex flex-col items-center justify-center py-16 text-center">
-        <p class="text-muted-foreground text-sm">No items found</p>
+        <p class="text-muted-foreground text-sm">{t('No items found')}</p>
       </div>
     {/if}
   {:else}

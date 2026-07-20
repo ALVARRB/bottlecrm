@@ -1,5 +1,6 @@
 <script>
-  import { invalidateAll } from '$app/navigation';
+  import { t } from '$lib/i18n';
+import { invalidateAll } from '$app/navigation';
   import { toast } from 'svelte-sonner';
   import { ShieldCheck, Loader2, Plus, Trash2, Edit3 } from '@lucide/svelte';
   import PageHeader from '$lib/components/layout/PageHeader.svelte';
@@ -231,7 +232,7 @@
 
         <label class="flex items-center gap-2 text-sm">
           <input type="checkbox" bind:checked={draft.is_active} />
-          <span>Active</span>
+          <span>{t('Active')}</span>
         </label>
       </div>
 

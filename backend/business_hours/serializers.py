@@ -50,7 +50,7 @@ class BusinessCalendarSerializer(serializers.ModelSerializer):
 
     def validate_timezone(self, value):
         if value not in available_timezones():
-            raise serializers.ValidationError("Not a valid IANA timezone.")
+            raise serializers._ValidationError("Not a valid IANA timezone."))
         return value
 
     def validate(self, attrs):

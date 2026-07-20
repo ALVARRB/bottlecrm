@@ -1,5 +1,6 @@
 <script>
-  import { goto } from '$app/navigation';
+  import { t } from '$lib/i18n';
+import { goto } from '$app/navigation';
   import { page } from '$app/state';
   import { onDestroy, untrack } from 'svelte';
   import { ChevronLeft, ChevronRight, Clock, User } from '@lucide/svelte';
@@ -191,7 +192,7 @@
 
     {#if data.isAdmin}
       <div>
-        <Label for="profile" class="text-xs">Profile</Label>
+        <Label for="profile" class="text-xs">{t('Profile')}</Label>
         <select
           id="profile"
           bind:value={profileInput}

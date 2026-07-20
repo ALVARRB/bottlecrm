@@ -29,6 +29,7 @@ from rest_framework.renderers import BaseRenderer
 from rest_framework.response import Response
 from rest_framework.views import APIView
 
+from django.utils.translation import gettext_lazy as _
 from common import notifications as notif_mod
 from common.models import Notification
 from common.serializer import NotificationSerializer

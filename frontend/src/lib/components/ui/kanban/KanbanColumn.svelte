@@ -1,5 +1,6 @@
 <script>
-  import { TrendingUp, Plus } from '@lucide/svelte';
+  import { t } from '$lib/i18n';
+import { TrendingUp, Plus } from '@lucide/svelte';
 
   /**
    * @typedef {Object} Column
@@ -230,7 +231,7 @@
     {/if}
   </div>
 
-  <!-- Footer: Add a card -->
+  <!-- Footer: {t('{t('Add a card')}')} -->
   {#if onAddItem}
     <button
       type="button"
@@ -238,7 +239,7 @@
       class="m-2 flex items-center gap-2 rounded-md px-2 py-1.5 text-left text-[13px] font-medium text-gray-500 hover:bg-gray-200/70 hover:text-gray-700 dark:text-gray-400 dark:hover:bg-white/[0.06] dark:hover:text-gray-200"
     >
       <Plus class="h-4 w-4" />
-      Add a card
+      {t('{t('Add a card')}')}
     </button>
   {/if}
 </div>
