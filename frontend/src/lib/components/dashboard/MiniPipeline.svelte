@@ -1,5 +1,6 @@
 <script>
-  import { Badge } from '$lib/components/ui/badge/index.js';
+  import { t } from '$lib/i18n';
+import { Badge } from '$lib/components/ui/badge/index.js';
   import { ChevronRight, Trophy, XCircle } from '@lucide/svelte';
   import { formatCurrency } from '$lib/utils/formatting.js';
 
@@ -134,7 +135,7 @@
           <div class="h-4 w-px bg-[var(--border-default)]/50"></div>
           <span
             class="text-[8px] font-medium tracking-widest text-[var(--text-tertiary)]/50 uppercase"
-            >Closed</span
+            >{t('Closed')}</span
           >
           <div class="h-4 w-px bg-[var(--border-default)]/50"></div>
         </div>

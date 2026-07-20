@@ -1,5 +1,6 @@
 <script>
-  import { enhance } from '$app/forms';
+  import { t } from '$lib/i18n';
+import { enhance } from '$app/forms';
   import { invalidateAll } from '$app/navigation';
   import { page } from '$app/stores';
   import { tick, onMount, untrack } from 'svelte';
@@ -849,7 +850,7 @@
         <User class="size-8 text-[var(--text-tertiary)]" />
       </div>
       <h3 class="text-lg font-medium text-[var(--text-primary)]">No contacts found</h3>
-      <p class="mt-1 text-sm text-[var(--text-secondary)]">Create a new contact to get started</p>
+      <p class="mt-1 text-sm text-[var(--text-secondary)]">{t('Create a new contact to get started')}</p>
     </div>
   {:else}
     <CrmTable
@@ -952,7 +953,7 @@
 
   {#snippet footerActions()}
     {#if drawerMode === 'create'}
-      <Button variant="outline" onclick={closeDrawer} disabled={isSubmitting}>Cancel</Button>
+      <Button variant="outline" onclick={closeDrawer} disabled={isSubmitting}>{t('Cancel')}</Button>
       <Button
         onclick={handleDrawerSave}
         disabled={isSubmitting || !drawerFormData.firstName?.trim()}
@@ -960,7 +961,7 @@
         {isSubmitting ? 'Creating...' : 'Create Contact'}
       </Button>
     {:else}
-      <Button variant="outline" onclick={closeDrawer} disabled={isSubmitting}>Cancel</Button>
+      <Button variant="outline" onclick={closeDrawer} disabled={isSubmitting}>{t('Cancel')}</Button>
       <Button
         onclick={handleDrawerUpdate}
         disabled={isSubmitting || !drawerFormData.firstName?.trim()}

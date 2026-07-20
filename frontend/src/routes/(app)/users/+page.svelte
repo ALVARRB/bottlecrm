@@ -1,5 +1,6 @@
 <script>
-  import { enhance } from '$app/forms';
+  import { t } from '$lib/i18n';
+import { enhance } from '$app/forms';
   import { invalidateAll } from '$app/navigation';
   import { toast } from 'svelte-sonner';
   import {
@@ -368,7 +369,7 @@
                                 {/if}
                                 {#if !user.isActive}
                                   <Badge variant="outline" class="text-muted-foreground text-xs"
-                                    >Inactive</Badge
+                                    >{t('Inactive')}</Badge
                                   >
                                 {/if}
                               </div>
@@ -466,7 +467,7 @@
                                   </AlertDialog.Description>
                                 </AlertDialog.Header>
                                 <AlertDialog.Footer>
-                                  <AlertDialog.Cancel>Cancel</AlertDialog.Cancel>
+                                  <AlertDialog.Cancel>{t('Cancel')}</AlertDialog.Cancel>
                                   <Button
                                     variant="destructive"
                                     onclick={() => handleRemoveUser(user.id)}
@@ -528,8 +529,8 @@
               </div>
               <h3 class="mb-2 text-lg font-semibold">No teams yet</h3>
               <p class="text-muted-foreground mx-auto mb-6 max-w-sm text-sm">
-                Teams help you organize users and manage access to records. Create your first team
-                to get started.
+                {t('Teams help you organize users and manage access to records. Create your first team')}
+                to get {t('started.')}
               </p>
               <Button onclick={openCreateTeamDialog}>
                 <Plus class="mr-2 h-4 w-4" />

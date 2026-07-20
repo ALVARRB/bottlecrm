@@ -1,5 +1,6 @@
 <script>
-  import { toast } from 'svelte-sonner';
+  import { t } from '$lib/i18n';
+import { toast } from 'svelte-sonner';
   import { MessageSquare, Send, Trash2, Loader2, ChevronDown, ChevronUp } from '@lucide/svelte';
   import { Button } from '$lib/components/ui/button/index.js';
   import { Textarea } from '$lib/components/ui/textarea/index.js';
@@ -464,13 +465,13 @@
 <AlertDialog.Root bind:open={deleteDialogOpen}>
   <AlertDialog.Content>
     <AlertDialog.Header>
-      <AlertDialog.Title>Delete comment</AlertDialog.Title>
+      <AlertDialog.Title>{t('Delete comment')}</AlertDialog.Title>
       <AlertDialog.Description>
         Are you sure you want to delete this comment? This action cannot be undone.
       </AlertDialog.Description>
     </AlertDialog.Header>
     <AlertDialog.Footer>
-      <AlertDialog.Cancel>Cancel</AlertDialog.Cancel>
+      <AlertDialog.Cancel>{t('Cancel')}</AlertDialog.Cancel>
       <AlertDialog.Action
         onclick={handleDeleteComment}
         class="bg-red-600 text-white hover:bg-red-700 dark:bg-red-600 dark:hover:bg-red-700"

@@ -1,5 +1,6 @@
 <script>
-  import { untrack } from 'svelte';
+  import { t } from '$lib/i18n';
+import { untrack } from 'svelte';
   import { toast } from 'svelte-sonner';
   import KanbanColumn from './KanbanColumn.svelte';
   import { TrendingUp, Users, Flame, Zap } from '@lucide/svelte';
@@ -48,7 +49,7 @@
     onItemMove,
     onCardClick,
     CardComponent,
-    emptyMessage = 'No data available',
+    emptyMessage = t('No data available'),
     onAddItem
   } = $props();
 
@@ -305,7 +306,7 @@
     <div>
       <p class="text-lg font-semibold text-gray-600 dark:text-gray-300">{emptyMessage}</p>
       <p class="mt-1 text-sm text-gray-400 dark:text-gray-500">
-        Add some {itemNamePlural} to get started
+        {t('Add some {itemNamePlural} to get started', {itemNamePlural})}
       </p>
     </div>
   </div>
@@ -432,7 +433,7 @@
               onclick={() => onAddItem(activeMobileColumn.id)}
               class="flex w-full items-center justify-center gap-2 rounded-md px-2 py-2 text-[13px] font-medium text-gray-500 hover:bg-gray-200/70 hover:text-gray-700 dark:text-gray-400 dark:hover:bg-white/[0.06] dark:hover:text-gray-200"
             >
-              Add a card
+              {t('{t('Add a card')}')}
             </button>
           {/if}
         </div>

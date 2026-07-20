@@ -1,5 +1,6 @@
 <script>
-  import { enhance } from '$app/forms';
+  import { t } from '$lib/i18n';
+import { enhance } from '$app/forms';
   import { invalidateAll } from '$app/navigation';
   import { toast } from 'svelte-sonner';
   import { Loader2, Clock, Check, Plus, Trash2 } from '@lucide/svelte';
@@ -154,7 +155,7 @@
           <thead class="bg-[var(--surface-muted)] text-xs uppercase tracking-wide text-[var(--text-secondary)]">
             <tr>
               <th class="px-3 py-2 text-left">Day</th>
-              <th class="px-3 py-2 text-left">Closed</th>
+              <th class="px-3 py-2 text-left">{t('Closed')}</th>
               <th class="px-3 py-2 text-left">Open</th>
               <th class="px-3 py-2 text-left">Close</th>
             </tr>

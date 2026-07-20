@@ -1,19 +1,20 @@
 {% extends 'root_email_template_new.html' %}
+{% load i18n %}
 
 {% block heading %}
-Hello {{ user.get_username }}
+{% blocktrans %}Hello {{ user.get_username }}{% endblocktrans %}
 {% endblock heading %}
 
 {% block content_body %}
-<p>You have <strong>{{ deal_count }}</strong> stale deal{{ deal_count|pluralize }} that {{ deal_count|pluralize:"needs,need" }} attention:</p>
+<p>{% blocktrans count counter=deal_count %}You have {{ deal_count }} stale deal that needs attention:{% plural %}You have {{ deal_count }} stale deals that need attention:{% endblocktrans %}</p>
 
 <table style="width:100%;border-collapse:collapse;margin:20px 0;font-size:14px;">
   <thead>
     <tr style="background:#f0f0f0;">
-      <th style="text-align:left;padding:8px 12px;border-bottom:2px solid #ddd;">Deal</th>
-      <th style="text-align:left;padding:8px 12px;border-bottom:2px solid #ddd;">Stage</th>
-      <th style="text-align:center;padding:8px 12px;border-bottom:2px solid #ddd;">Days in Stage</th>
-      <th style="text-align:center;padding:8px 12px;border-bottom:2px solid #ddd;">Expected</th>
+      <th style="text-align:left;padding:8px 12px;border-bottom:2px solid #ddd;">{% trans "Deal" %}</th>
+      <th style="text-align:left;padding:8px 12px;border-bottom:2px solid #ddd;">{% trans "Stage" %}</th>
+      <th style="text-align:center;padding:8px 12px;border-bottom:2px solid #ddd;">{% trans "Days in Stage" %}</th>
+      <th style="text-align:center;padding:8px 12px;border-bottom:2px solid #ddd;">{% trans "Expected" %}</th>
     </tr>
   </thead>
   <tbody>
@@ -32,6 +33,6 @@ Hello {{ user.get_username }}
 {% block button_link %}
 <div style="margin-bottom:20px">
     <a href="{{url}}/opportunities?rotten=true"
-        style="display:block;width:200px;background:#dc2626;padding:10px;text-align:center;color:#fff;font-size:1rem;font-weight:600;margin:0px auto;margin-bottom:20px;border-radius:5px;text-decoration:none">View Stale Deals</a>
+        style="display:block;width:200px;background:#dc2626;padding:10px;text-align:center;color:#fff;font-size:1rem;font-weight:600;margin:0px auto;margin-bottom:20px;border-radius:5px;text-decoration:none">{% trans "View Stale Deals" %}</a>
 </div>
 {% endblock button_link %}

@@ -1,0 +1,684 @@
+# Translation file for BottleCRM - Brazilian Portuguese
+# Copyright (C) 2026 AllShopTotal
+# This file is distributed under the same license as the BottleCRM package.
+# Automatically generated, manually translated.
+#
+msgid ""
+msgstr ""
+"Project-Id-Version: bottlecrm 1.0\n"
+"Report-Msgid-Bugs-To: all.shop.total@gmail.com\n"
+"POT-Creation-Date: 2026-07-20 00:00:00+0000\n"
+"PO-Revision-Date: 2026-07-20 00:00:00+0000\n"
+"Last-Translator: AllShopTotal <all.shop.total@gmail.com>\n"
+"Language-Team: Portuguese (Brazil) <all.shop.total@gmail.com>\n"
+"Language: pt_BR\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"Plural-Forms: nplurals=2; plural=(n > 1);\n"
+
+#: common/models.py
+msgid "User"
+msgstr "Usuário"
+
+msgid "Users"
+msgstr "Usuários"
+
+msgid "Address"
+msgstr "Endereço"
+
+msgid "Addresses"
+msgstr "Endereços"
+
+msgid "Legal company name for invoices"
+msgstr "Razão social para notas fiscais"
+
+msgid "Company logo"
+msgstr "Logotipo da empresa"
+
+msgid "Tax ID / VAT / Registration number"
+msgstr "CNPJ / CPF / Inscrição estadual"
+
+msgid "Organization"
+msgstr "Organização"
+
+msgid "Organizations"
+msgstr "Organizações"
+
+msgid "Tag"
+msgstr "Tag"
+
+msgid "Tags"
+msgstr "Tags"
+
+msgid "Profile"
+msgstr "Perfil"
+
+msgid "Profiles"
+msgstr "Perfis"
+
+msgid "Comment"
+msgstr "Comentário"
+
+msgid "Comments"
+msgstr "Comentários"
+
+msgid "CommentFile"
+msgstr "Arquivo de Comentário"
+
+msgid "CommentFiles"
+msgstr "Arquivos de Comentário"
+
+msgid "Attachment"
+msgstr "Anexo"
+
+msgid "Attachments"
+msgstr "Anexos"
+
+msgid "Document"
+msgstr "Documento"
+
+msgid "Documents"
+msgstr "Documentos"
+
+msgid "APISetting"
+msgstr "Configuração de API"
+
+msgid "APISettings"
+msgstr "Configurações de API"
+
+msgid "Session Token"
+msgstr "Token de Sessão"
+
+msgid "Session Tokens"
+msgstr "Tokens de Sessão"
+
+msgid "Activity"
+msgstr "Atividade"
+
+msgid "Activities"
+msgstr "Atividades"
+
+msgid "Notification"
+msgstr "Notificação"
+
+msgid "Notifications"
+msgstr "Notificações"
+
+msgid "Team"
+msgstr "Equipe"
+
+msgid "Teams"
+msgstr "Equipes"
+
+msgid "Account"
+msgstr "Conta"
+
+msgid "Accounts"
+msgstr "Contas"
+
+msgid "Case"
+msgstr "Ticket"
+
+msgid "Cases"
+msgstr "Tickets"
+
+msgid "Contact"
+msgstr "Contato"
+
+msgid "Contacts"
+msgstr "Contatos"
+
+msgid "Lead"
+msgstr "Lead"
+
+msgid "Leads"
+msgstr "Leads"
+
+msgid "Opportunity"
+msgstr "Oportunidade"
+
+msgid "Opportunities"
+msgstr "Oportunidades"
+
+msgid "Task"
+msgstr "Tarefa"
+
+msgid "Tasks"
+msgstr "Tarefas"
+
+msgid "Invoice"
+msgstr "Fatura"
+
+msgid "Invoices"
+msgstr "Faturas"
+
+msgid "Order"
+msgstr "Pedido"
+
+msgid "Orders"
+msgstr "Pedidos"
+
+msgid "Product"
+msgstr "Produto"
+
+msgid "Products"
+msgstr "Produtos"
+
+msgid "Estimate"
+msgstr "Orçamento"
+
+msgid "Estimates"
+msgstr "Orçamentos"
+
+msgid "Macro"
+msgstr "Macro"
+
+msgid "Macros"
+msgstr "Macros"
+
+# Status choices
+msgid "Open"
+msgstr "Aberto"
+
+msgid "Closed"
+msgstr "Fechado"
+
+msgid "Pending"
+msgstr "Pendente"
+
+msgid "In Progress"
+msgstr "Em Andamento"
+
+msgid "Completed"
+msgstr "Concluído"
+
+msgid "Cancelled"
+msgstr "Cancelado"
+
+msgid "Deleted"
+msgstr "Excluído"
+
+msgid "Archived"
+msgstr "Arquivado"
+
+msgid "Draft"
+msgstr "Rascunho"
+
+msgid "Sent"
+msgstr "Enviado"
+
+msgid "Paid"
+msgstr "Pago"
+
+msgid "Overdue"
+msgstr "Vencido"
+
+msgid "Active"
+msgstr "Ativo"
+
+msgid "Inactive"
+msgstr "Inativo"
+
+msgid "New"
+msgstr "Novo"
+
+msgid "Assigned"
+msgstr "Atribuído"
+
+msgid "Reopened"
+msgstr "Reaberto"
+
+# Priority
+msgid "Low"
+msgstr "Baixa"
+
+msgid "Medium"
+msgstr "Média"
+
+msgid "High"
+msgstr "Alta"
+
+msgid "Urgent"
+msgstr "Urgente"
+
+# Common fields
+msgid "Name"
+msgstr "Nome"
+
+msgid "Email"
+msgstr "E-mail"
+
+msgid "Phone"
+msgstr "Telefone"
+
+msgid "Mobile"
+msgstr "Celular"
+
+msgid "Address Line 1"
+msgstr "Endereço"
+
+msgid "Address Line 2"
+msgstr "Complemento"
+
+msgid "City"
+msgstr "Cidade"
+
+msgid "State"
+msgstr "Estado"
+
+msgid "Country"
+msgstr "País"
+
+msgid "Zip Code"
+msgstr "CEP"
+
+msgid "Website"
+msgstr "Site"
+
+msgid "Description"
+msgstr "Descrição"
+
+msgid "Created Date"
+msgstr "Data de Criação"
+
+msgid "Created On"
+msgstr "Criado Em"
+
+msgid "Updated On"
+msgstr "Atualizado Em"
+
+msgid "Created By"
+msgstr "Criado Por"
+
+msgid "Assigned To"
+msgstr "Atribuído A"
+
+msgid "Status"
+msgstr "Status"
+
+msgid "Priority"
+msgstr "Prioridade"
+
+msgid "Category"
+msgstr "Categoria"
+
+msgid "Subcategory"
+msgstr "Subcategoria"
+
+msgid "Type"
+msgstr "Tipo"
+
+msgid "Amount"
+msgstr "Valor"
+
+msgid "Currency"
+msgstr "Moeda"
+
+msgid "Start Date"
+msgstr "Data de Início"
+
+msgid "Due Date"
+msgstr "Data de Vencimento"
+
+msgid "Close Date"
+msgstr "Data de Fechamento"
+
+msgid "Notes"
+msgstr "Observações"
+
+msgid "Title"
+msgstr "Título"
+
+msgid "Subject"
+msgstr "Assunto"
+
+msgid "Body"
+msgstr "Corpo"
+
+msgid "Message"
+msgstr "Mensagem"
+
+msgid "Comment"
+msgstr "Comentário"
+
+msgid "Attachment"
+msgstr "Anexo"
+
+# Buttons and actions
+msgid "Save"
+msgstr "Salvar"
+
+msgid "Cancel"
+msgstr "Cancelar"
+
+msgid "Delete"
+msgstr "Excluir"
+
+msgid "Edit"
+msgstr "Editar"
+
+msgid "Create"
+msgstr "Criar"
+
+msgid "Update"
+msgstr "Atualizar"
+
+msgid "Search"
+msgstr "Pesquisar"
+
+msgid "Filter"
+msgstr "Filtrar"
+
+msgid "Export"
+msgstr "Exportar"
+
+msgid "Import"
+msgstr "Importar"
+
+msgid "Submit"
+msgstr "Enviar"
+
+msgid "Confirm"
+msgstr "Confirmar"
+
+msgid "Close"
+msgstr "Fechar"
+
+msgid "Back"
+msgstr "Voltar"
+
+msgid "Next"
+msgstr "Próximo"
+
+msgid "Previous"
+msgstr "Anterior"
+
+msgid "Actions"
+msgstr "Ações"
+
+msgid "More"
+msgstr "Mais"
+
+msgid "Loading"
+msgstr "Carregando"
+
+msgid "No results found"
+msgstr "Nenhum resultado encontrado"
+
+msgid "Are you sure?"
+msgstr "Tem certeza?"
+
+msgid "Yes, delete it"
+msgstr "Sim, excluir"
+
+msgid "No, keep it"
+msgstr "Não, manter"
+
+# Time
+msgid "Today"
+msgstr "Hoje"
+
+msgid "Yesterday"
+msgstr "Ontem"
+
+msgid "Tomorrow"
+msgstr "Amanhã"
+
+msgid "This Week"
+msgstr "Esta Semana"
+
+msgid "This Month"
+msgstr "Este Mês"
+
+msgid "Last Month"
+msgstr "Mês Passado"
+
+msgid "Custom Range"
+msgstr "Período Personalizado"
+
+msgid "All Time"
+msgstr "Todo o Período"
+
+# Navigation
+msgid "Dashboard"
+msgstr "Painel"
+
+msgid "Tickets"
+msgstr "Tickets"
+
+msgid "Leads"
+msgstr "Leads"
+
+msgid "Opportunities"
+msgstr "Oportunidades"
+
+msgid "Contacts"
+msgstr "Contatos"
+
+msgid "Accounts"
+msgstr "Contas"
+
+msgid "Invoices"
+msgstr "Faturas"
+
+msgid "Reports"
+msgstr "Relatórios"
+
+msgid "Settings"
+msgstr "Configurações"
+
+msgid "Profile"
+msgstr "Perfil"
+
+msgid "Logout"
+msgstr "Sair"
+
+msgid "Sign in"
+msgstr "Entrar"
+
+msgid "Sign up"
+msgstr "Cadastrar"
+
+msgid "Forgot password?"
+msgstr "Esqueceu a senha?"
+
+# Email templates
+msgid "Welcome to AllShopTotal CRM"
+msgstr "Bem-vindo ao AllShopTotal CRM"
+
+msgid "Your account has been created"
+msgstr "Sua conta foi criada"
+
+msgid "Click here to verify your email"
+msgstr "Clique aqui para verificar seu e-mail"
+
+msgid "Thank you for using our service"
+msgstr "Obrigado por usar nosso serviço"
+
+msgid "This is an automated message, please do not reply"
+msgstr "Esta é uma mensagem automática, por favor não responda"
+
+msgid "Best regards"
+msgstr "Atenciosamente"
+
+msgid "The AllShopTotal Team"
+msgstr "Equipe AllShopTotal"
+
+msgid "Hello"
+msgstr "Olá"
+
+msgid "Hi"
+msgstr "Olá"
+
+# Magic link
+msgid "Your magic link"
+msgstr "Seu link mágico"
+
+msgid "Sign in to AllShopTotal CRM"
+msgstr "Entrar no AllShopTotal CRM"
+
+msgid "Click the button below to sign in"
+msgstr "Clique no botão abaixo para entrar"
+
+msgid "Or copy and paste this link"
+msgstr "Ou copie e cole este link"
+
+msgid "This link will expire in 15 minutes"
+msgstr "Este link expira em 15 minutos"
+
+msgid "If you didn't request this, please ignore this email"
+msgstr "Se você não solicitou isso, ignore este e-mail"
+
+# Validation
+msgid "This field is required"
+msgstr "Este campo é obrigatório"
+
+msgid "Invalid email address"
+msgstr "E-mail inválido"
+
+msgid "Invalid phone number"
+msgstr "Telefone inválido"
+
+msgid "Value must be positive"
+msgstr "O valor deve ser positivo"
+
+msgid "Enter a valid URL"
+msgstr "Insira uma URL válida"
+
+# Billing
+msgid "Payment received"
+msgstr "Pagamento recebido"
+
+msgid "Payment reminder"
+msgstr "Lembrete de pagamento"
+
+msgid "Invoice #{number}"
+msgstr "Fatura nº {number}"
+
+msgid "Amount due"
+msgstr "Valor a pagar"
+
+msgid "Due date"
+msgstr "Data de vencimento"
+
+msgid "Pay now"
+msgstr "Pagar agora"
+
+# Tasks
+msgid "Board"
+msgstr "Quadro"
+
+msgid "Kanban"
+msgstr "Kanban"
+
+msgid "Calendar"
+msgstr "Calendário"
+
+msgid "List"
+msgstr "Lista"
+
+msgid "Column"
+msgstr "Coluna"
+
+msgid "Add column"
+msgstr "Adicionar coluna"
+
+msgid "Add task"
+msgstr "Adicionar tarefa"
+
+msgid "Move to"
+msgstr "Mover para"
+
+msgid "Drag and drop"
+msgstr "Arraste e solte"
+
+# Settings
+msgid "General Settings"
+msgstr "Configurações Gerais"
+
+msgid "Email Settings"
+msgstr "Configurações de E-mail"
+
+msgid "Security"
+msgstr "Segurança"
+
+msgid "API Tokens"
+msgstr "Tokens de API"
+
+msgid "Custom Fields"
+msgstr "Campos Personalizados"
+
+msgid "Business Hours"
+msgstr "Horário Comercial"
+
+msgid "Escalation Rules"
+msgstr "Regras de Escalação"
+
+msgid "Routing Rules"
+msgstr "Regras de Roteamento"
+
+msgid "Tags Management"
+msgstr "Gerenciamento de Tags"
+
+msgid "Users & Permissions"
+msgstr "Usuários e Permissões"
+
+# Analytics
+msgid "Total"
+msgstr "Total"
+
+msgid "Average"
+msgstr "Média"
+
+msgid "Count"
+msgstr "Quantidade"
+
+msgid "Percentage"
+msgstr "Porcentagem"
+
+msgid "Growth"
+msgstr "Crescimento"
+
+msgid "Conversion Rate"
+msgstr "Taxa de Conversão"
+
+msgid "Win Rate"
+msgstr "Taxa de Sucesso"
+
+# General
+msgid "No data available"
+msgstr "Sem dados disponíveis"
+
+msgid "Something went wrong"
+msgstr "Algo deu errado"
+
+msgid "Please try again"
+msgstr "Tente novamente"
+
+msgid "Successfully saved"
+msgstr "Salvo com sucesso"
+
+msgid "Successfully deleted"
+msgstr "Excluído com sucesso"
+
+msgid "Operation completed"
+msgstr "Operação concluída"
+
+msgid "Loading..."
+msgstr "Carregando..."
+
+msgid "Search..."
+msgstr "Pesquisar..."
+
+msgid "Select..."
+msgstr "Selecionar..."
+
+msgid "All"
+msgstr "Todos"
+
+msgid "None"
+msgstr "Nenhum"
+
+msgid "Any"
+msgstr "Qualquer"

@@ -1,5 +1,6 @@
 <script>
-  import { Clock, AlertTriangle, PauseCircle } from '@lucide/svelte';
+  import { t } from '$lib/i18n';
+import { Clock, AlertTriangle, PauseCircle } from '@lucide/svelte';
 
   /** @type {{ ticketItem: any, formOptions: any }} */
   let { ticketItem, formOptions } = $props();
@@ -117,7 +118,7 @@
 
   {#if ticketItem.tags?.length}
     <section class="rounded-lg border border-[var(--border-default)] bg-[var(--surface-default)] p-4">
-      <h3 class="mb-2 text-sm font-medium text-[var(--text-secondary)]">Tags</h3>
+      <h3 class="mb-2 text-sm font-medium text-[var(--text-secondary)]">{t('Tags')}</h3>
       <div class="flex flex-wrap gap-1">
         {#each ticketItem.tags as tag}
           <span class="rounded-md bg-[var(--surface-sunken)] px-2 py-0.5 text-xs">{tag.name}</span>

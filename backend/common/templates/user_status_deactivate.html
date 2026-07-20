@@ -1,15 +1,16 @@
 {% extends 'root_email_template_new.html' %}
+{% load i18n %}
 
-{% block preheader %}Your AllShopTotal CRM account has been deactivated{% endblock preheader %}
+{% block preheader %}{% trans "Your AllShopTotal CRM account has been deactivated" %}{% endblock preheader %}
 
-{% block heading %}Account Deactivated{% endblock heading %}
+{% block heading %}{% trans "Account Deactivated" %}{% endblock heading %}
 
 {% block content_body %}
-<p style="margin:0 0 8px 0;">Your account has been deactivated by {{ status_changed_user }}. You'll receive an email if your account is reactivated.</p>
+<p style="margin:0 0 8px 0;">{% blocktrans %}Your account has been deactivated by {{ status_changed_user }}. You'll receive an email if your account is reactivated.{% endblocktrans %}</p>
 {% endblock content_body %}
 
 {% block extra_content %}
 <p style="font-size:13px;color:#757575;margin:0;">
-  Please contact your admin if you have any questions.
+  {% trans "Please contact your admin if you have any questions." %}
 </p>
 {% endblock extra_content %}

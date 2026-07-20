@@ -106,7 +106,7 @@ class Opportunity(AssignableMixin, BaseModel):
     custom_fields = models.JSONField(
         default=dict,
         blank=True,
-        help_text="Per-org schema extension; values are validated against common.CustomFieldDefinition.",
+        help_text=_("Per-org schema extension; values are validated against common.CustomFieldDefinition."),
     )
 
     # Deal Aging
@@ -122,7 +122,7 @@ class Opportunity(AssignableMixin, BaseModel):
         max_digits=15,
         decimal_places=6,
         default=0,
-        help_text="Order within the kanban column for drag-drop positioning",
+        help_text=_("Order within the kanban column for drag-drop positioning"),
     )
 
     # System Fields
@@ -134,8 +134,8 @@ class Opportunity(AssignableMixin, BaseModel):
     )
 
     class Meta:
-        verbose_name = "Opportunity"
-        verbose_name_plural = "Opportunities"
+        verbose_name = _("Opportunity")
+        verbose_name_plural = _("Opportunities")
         db_table = "opportunity"
         ordering = ("-created_at",)
         indexes = [
@@ -343,8 +343,8 @@ class OpportunityLineItem(BaseModel):
     )
 
     class Meta:
-        verbose_name = "Opportunity Line Item"
-        verbose_name_plural = "Opportunity Line Items"
+        verbose_name = _("Opportunity Line Item")
+        verbose_name_plural = _("Opportunity Line Items")
         db_table = "opportunity_line_item"
         ordering = ["order", "created_at"]
         indexes = [
@@ -419,8 +419,8 @@ class StageAgingConfig(BaseModel):
     )
 
     class Meta:
-        verbose_name = "Stage Aging Config"
-        verbose_name_plural = "Stage Aging Configs"
+        verbose_name = _("Stage Aging Config")
+        verbose_name_plural = _("Stage Aging Configs")
         db_table = "stage_aging_config"
         unique_together = ("org", "stage")
 
@@ -468,8 +468,8 @@ class SalesGoal(BaseModel):
     )
 
     class Meta:
-        verbose_name = "Sales Goal"
-        verbose_name_plural = "Sales Goals"
+        verbose_name = _("Sales Goal")
+        verbose_name_plural = _("Sales Goals")
         db_table = "sales_goal"
         ordering = ["-created_at"]
         indexes = [

@@ -17,6 +17,7 @@ from uuid import UUID
 
 from django.db.models import Q
 from django.http import StreamingHttpResponse
+from django.utils.translation import gettext_lazy as _
 from drf_spectacular.utils import extend_schema, OpenApiParameter
 from rest_framework.permissions import IsAuthenticated
 from rest_framework.response import Response

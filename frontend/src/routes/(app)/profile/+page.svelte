@@ -1,5 +1,6 @@
 <script>
-  import { enhance } from '$app/forms';
+  import { t } from '$lib/i18n';
+import { enhance } from '$app/forms';
   import { User, Mail, Phone, Building2, Calendar, Edit, Save, X, Check } from '@lucide/svelte';
   import { validatePhoneNumber, formatPhoneNumber } from '$lib/utils/phone.js';
   import { formatDate, getInitials } from '$lib/utils/formatting.js';
@@ -201,7 +202,7 @@
             <div class="grid gap-6 sm:grid-cols-2">
               <!-- Name -->
               <div class="sm:col-span-2">
-                <Label for="name" class="">Full Name</Label>
+                <Label for="name" class="">{t('Full Name')}</Label>
                 <Input
                   type="text"
                   id="name"
@@ -215,7 +216,7 @@
 
               <!-- Email (read-only) -->
               <div>
-                <Label for="email" class="">Email Address</Label>
+                <Label for="email" class="">{t('Email Address')}</Label>
                 <Input
                   type="email"
                   id="email"
@@ -223,12 +224,12 @@
                   disabled
                   class="bg-muted mt-1.5"
                 />
-                <p class="text-muted-foreground mt-1 text-xs">Email cannot be changed</p>
+                <p class="text-muted-foreground mt-1 text-xs">{t('Email cannot be changed')}</p>
               </div>
 
               <!-- Phone -->
               <div>
-                <Label for="phone" class="">Phone Number</Label>
+                <Label for="phone" class="">{t('Phone Number')}</Label>
                 <Input
                   type="tel"
                   id="phone"

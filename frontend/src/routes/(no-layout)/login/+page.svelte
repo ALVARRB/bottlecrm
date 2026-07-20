@@ -1,5 +1,6 @@
 <script>
-  import '../../../app.css';
+  import { t } from '$lib/i18n';
+import '../../../app.css';
   import { enhance } from '$app/forms';
 
   import imgGoogle from '$lib/assets/images/google.svg';
@@ -53,7 +54,7 @@
 
     <!-- Login Card -->
     <div class="login-card">
-      <h1 class="login-title">Sign in to your account</h1>
+      <h1 class="login-title">{t('Sign in to your account')}</h1>
 
       <!-- Google Sign In -->
       <a
@@ -64,30 +65,30 @@
       >
         {#if isLoading}
           <span class="spinner"></span>
-          <span>Redirecting...</span>
+          <span>{t('Redirecting...')}</span>
         {:else}
           <img src={imgGoogle} alt="" class="google-icon" />
-          <span>Continue with Google</span>
+          <span>{t('Continue with Google')}</span>
         {/if}
       </a>
 
       <!-- Divider -->
       <div class="divider">
-        <span>or</span>
+        <span>{t('or')}</span>
       </div>
 
       <!-- Magic Link -->
       {#if magicLinkSent}
         <div class="magic-link-success">
-          <p>Check your email for a sign-in link.</p>
-          <p class="magic-link-hint">The link expires in 10 minutes.</p>
+          <p>{t('Check your email for a sign-in link')}.</p>
+          <p class="magic-link-hint">{t('The link expires in 10 minutes.')}</p>
         </div>
       {:else}
         <form method="POST" use:enhance={handleMagicLink} class="magic-link-form">
           <input
             type="email"
             name="email"
-            placeholder="Enter your email address"
+            placeholder={t('Enter your email address')}
             class="email-input"
             required
             bind:value={email}
@@ -96,9 +97,9 @@
           <button type="submit" class="magic-link-btn" disabled={isSendingLink}>
             {#if isSendingLink}
               <span class="spinner"></span>
-              <span>Sending...</span>
+              <span>{t('Sending...')}</span>
             {:else}
-              <span>Continue with email</span>
+              <span>{t('Continue with email')}</span>
               <ArrowRight size={16} />
             {/if}
           </button>
@@ -111,14 +112,14 @@
 
     <!-- Help Links -->
     <div class="help-section">
-      <p class="help-text">New here? Just enter your email above to get started.</p>
+      <p class="help-text">{t('New here? Just enter your email above to get {t('started.')}')}</p>
     </div>
 
     <!-- Footer -->
     <footer class="login-footer">
-      <a href="https://allshoptotal.com.br/privacy-policy">Privacy Policy</a>
+      <a href="https://allshoptotal.com.br/privacy-policy">{t('Privacy Policy')}</a>
       <span class="dot"></span>
-      <a href="https://allshoptotal.com.br/terms">Terms of Service</a>
+      <a href="https://allshoptotal.com.br/terms">{t('Terms of Service')}</a>
       <span class="dot"></span>
       <a href="https://github.com/MicroPyramid/Django-CRM" target="_blank" rel="noopener">GitHub</a>
     </footer>

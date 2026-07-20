@@ -1,5 +1,6 @@
 <script>
-  import { enhance } from '$app/forms';
+  import { t } from '$lib/i18n';
+import { enhance } from '$app/forms';
   import { toast } from 'svelte-sonner';
   import { Button } from '$lib/components/ui/button/index.js';
   import { SectionCard } from '$lib/components/ui/section-card/index.js';
@@ -307,7 +308,7 @@
       };
     }}>
       <div class="flex justify-end gap-2 pt-4">
-        <Button variant="outline" type="button" onclick={() => (disconnectDialogOpen = false)}>Cancel</Button>
+        <Button variant="outline" type="button" onclick={() => (disconnectDialogOpen = false)}>{t('Cancel')}</Button>
         <Button variant="destructive" type="submit" disabled={isDisconnecting}>
           {isDisconnecting ? 'Disconnecting...' : 'Disconnect'}
         </Button>

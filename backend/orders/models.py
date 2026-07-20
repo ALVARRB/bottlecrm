@@ -42,7 +42,7 @@ class Order(BaseOrgModel):
         "accounts.Account",
         on_delete=models.CASCADE,
         related_name="orders",
-        help_text="The account this order belongs to",
+        help_text=_("The account this order belongs to"),
     )
     contact = models.ForeignKey(
         "contacts.Contact",
@@ -50,7 +50,7 @@ class Order(BaseOrgModel):
         related_name="orders",
         null=True,
         blank=True,
-        help_text="The contact associated with this order",
+        help_text=_("The contact associated with this order"),
     )
     opportunity = models.ForeignKey(
         "opportunity.Opportunity",
@@ -58,7 +58,7 @@ class Order(BaseOrgModel):
         related_name="orders",
         null=True,
         blank=True,
-        help_text="The opportunity this order originated from",
+        help_text=_("The opportunity this order originated from"),
     )
 
     # Financial
@@ -119,8 +119,8 @@ class Order(BaseOrgModel):
     description = models.TextField(_("Description"), blank=True, default="")
 
     class Meta:
-        verbose_name = "Order"
-        verbose_name_plural = "Orders"
+        verbose_name = _("Order")
+        verbose_name_plural = _("Orders")
         db_table = "orders"
         ordering = ("-created_at",)
 
@@ -161,8 +161,8 @@ class OrderLineItem(BaseOrgModel):
     sort_order = models.IntegerField(_("Sort Order"), default=0)
 
     class Meta:
-        verbose_name = "Order Line Item"
-        verbose_name_plural = "Order Line Items"
+        verbose_name = _("Order Line Item")
+        verbose_name_plural = _("Order Line Items")
         db_table = "order_line_item"
         ordering = ("sort_order",)
 

@@ -1,5 +1,6 @@
 <script>
-  import { page } from '$app/stores';
+  import { t } from '$lib/i18n';
+import { page } from '$app/stores';
   import { goto, invalidateAll } from '$app/navigation';
   import { enhance } from '$app/forms';
   import { tick } from 'svelte';
@@ -408,7 +409,7 @@
           <span class="text-4xl">🎨</span>
         </div>
         <h3 class="text-lg font-medium text-[var(--text-primary)]">No templates yet</h3>
-        <p class="text-sm text-[var(--text-secondary)]">Create your first invoice template</p>
+        <p class="text-sm text-[var(--text-secondary)]">{t('Create your first invoice template')}</p>
       </div>
     {/snippet}
     {#snippet cellContent(row, column)}
@@ -462,7 +463,7 @@
 >
   {#snippet footerActions()}
     <div class="flex w-full items-center justify-end gap-2">
-      <Button variant="outline" onclick={closeDrawer}>Cancel</Button>
+      <Button variant="outline" onclick={closeDrawer}>{t('Cancel')}</Button>
       <Button onclick={handleDrawerSave}>
         {drawerMode === 'create' ? 'Create Template' : 'Save Changes'}
       </Button>

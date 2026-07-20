@@ -61,7 +61,7 @@ class Contact(AssignableMixin, BaseModel):
     is_active = models.BooleanField(default=True)
     auto_created = models.BooleanField(
         default=False,
-        help_text="True when the contact was created by an inbound channel "
+        help_text=_("True when the contact was created by an inbound channel ")
         "(e.g. email-to-ticket) rather than a human; flagged for admin review.",
     )
     org = models.ForeignKey(Org, on_delete=models.CASCADE, related_name="contacts")
@@ -73,18 +73,18 @@ class Contact(AssignableMixin, BaseModel):
         null=True,
         blank=True,
         related_name="primary_contacts",
-        help_text="Primary account this contact belongs to",
+        help_text=_("Primary account this contact belongs to"),
     )
 
     custom_fields = models.JSONField(
         default=dict,
         blank=True,
-        help_text="Per-org schema extension; values are validated against common.CustomFieldDefinition.",
+        help_text=_("Per-org schema extension; values are validated against common.CustomFieldDefinition."),
     )
 
     class Meta:
-        verbose_name = "Contact"
-        verbose_name_plural = "Contacts"
+        verbose_name = _("Contact")
+        verbose_name_plural = _("Contacts")
         db_table = "contacts"
         ordering = ("-created_at",)
         indexes = [

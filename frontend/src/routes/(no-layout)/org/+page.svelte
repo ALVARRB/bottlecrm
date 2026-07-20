@@ -1,5 +1,6 @@
 <script>
-  import '../../../app.css';
+  import { t } from '$lib/i18n';
+import '../../../app.css';
   import imgLogo from '$lib/assets/images/logo.png';
   import { Building2, LogOut, Plus, ChevronRight, Users, Shield } from '@lucide/svelte';
   import { enhance } from '$app/forms';
@@ -28,7 +29,7 @@
         class="flex items-center gap-2 rounded-lg px-3 py-2 text-sm font-medium text-[var(--text-secondary)] transition-colors hover:bg-[var(--surface-raised)] hover:text-[var(--text-primary)]"
       >
         <LogOut class="h-4 w-4" />
-        <span class="hidden sm:inline">Sign out</span>
+        <span class="hidden sm:inline">{t('Sign out')}</span>
       </a>
     </div>
   </header>
@@ -112,7 +113,7 @@
             class="flex w-full items-center justify-center gap-2 rounded-xl border-2 border-dashed border-[var(--border-default)] bg-[var(--surface-sunken)] px-5 py-4 text-sm font-medium text-[var(--text-secondary)] transition-all hover:border-[var(--color-primary-default)] hover:bg-[var(--color-primary-light)] hover:text-[var(--color-primary-default)]"
           >
             <Plus class="h-4 w-4" />
-            Create new organization
+            {t('{t('Create new organization')}')}
           </a>
         </div>
       {:else}
@@ -127,7 +128,7 @@
           </div>
           <h3 class="text-lg font-semibold text-[var(--text-primary)]">No organizations yet</h3>
           <p class="mt-2 text-[var(--text-secondary)]">
-            Create your first organization to get started with AllShopTotal CRM
+            {t('Create your first organization to get started with AllShopTotal CRM')}
           </p>
           <a
             href="/org/new"

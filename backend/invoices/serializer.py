@@ -507,7 +507,7 @@ class InvoiceCreateSerializer(serializers.ModelSerializer):
     def validate_account_id(self, value):
         """Validate account exists and belongs to org"""
         if not self.org:
-            raise serializers.ValidationError("Organization context required")
+            raise serializers._ValidationError("Organization context required"))
         if not Account.objects.filter(id=value, org=self.org).exists():
             raise serializers.ValidationError(
                 "Account not found or does not belong to your organization"
@@ -517,7 +517,7 @@ class InvoiceCreateSerializer(serializers.ModelSerializer):
     def validate_contact_id(self, value):
         """Validate contact exists and belongs to org"""
         if not self.org:
-            raise serializers.ValidationError("Organization context required")
+            raise serializers._ValidationError("Organization context required"))
         if not Contact.objects.filter(id=value, org=self.org).exists():
             raise serializers.ValidationError(
                 "Contact not found or does not belong to your organization"
@@ -529,7 +529,7 @@ class InvoiceCreateSerializer(serializers.ModelSerializer):
         if value is None:
             return value
         if not self.org:
-            raise serializers.ValidationError("Organization context required")
+            raise serializers._ValidationError("Organization context required"))
         if not Opportunity.objects.filter(id=value, org=self.org).exists():
             raise serializers.ValidationError(
                 "Opportunity not found or does not belong to your organization"
@@ -760,7 +760,7 @@ class EstimateCreateSerializer(serializers.ModelSerializer):
     def validate_account_id(self, value):
         """Validate account exists and belongs to org"""
         if not self.org:
-            raise serializers.ValidationError("Organization context required")
+            raise serializers._ValidationError("Organization context required"))
         if not Account.objects.filter(id=value, org=self.org).exists():
             raise serializers.ValidationError(
                 "Account not found or does not belong to your organization"
@@ -770,7 +770,7 @@ class EstimateCreateSerializer(serializers.ModelSerializer):
     def validate_contact_id(self, value):
         """Validate contact exists and belongs to org"""
         if not self.org:
-            raise serializers.ValidationError("Organization context required")
+            raise serializers._ValidationError("Organization context required"))
         if not Contact.objects.filter(id=value, org=self.org).exists():
             raise serializers.ValidationError(
                 "Contact not found or does not belong to your organization"
@@ -782,7 +782,7 @@ class EstimateCreateSerializer(serializers.ModelSerializer):
         if value is None:
             return value
         if not self.org:
-            raise serializers.ValidationError("Organization context required")
+            raise serializers._ValidationError("Organization context required"))
         if not Opportunity.objects.filter(id=value, org=self.org).exists():
             raise serializers.ValidationError(
                 "Opportunity not found or does not belong to your organization"
@@ -957,7 +957,7 @@ class RecurringInvoiceCreateSerializer(serializers.ModelSerializer):
     def validate_account_id(self, value):
         """Validate account exists and belongs to org"""
         if not self.org:
-            raise serializers.ValidationError("Organization context required")
+            raise serializers._ValidationError("Organization context required"))
         if not Account.objects.filter(id=value, org=self.org).exists():
             raise serializers.ValidationError(
                 "Account not found or does not belong to your organization"
@@ -967,7 +967,7 @@ class RecurringInvoiceCreateSerializer(serializers.ModelSerializer):
     def validate_contact_id(self, value):
         """Validate contact exists and belongs to org"""
         if not self.org:
-            raise serializers.ValidationError("Organization context required")
+            raise serializers._ValidationError("Organization context required"))
         if not Contact.objects.filter(id=value, org=self.org).exists():
             raise serializers.ValidationError(
                 "Contact not found or does not belong to your organization"
@@ -979,7 +979,7 @@ class RecurringInvoiceCreateSerializer(serializers.ModelSerializer):
         if value is None:
             return value
         if not self.org:
-            raise serializers.ValidationError("Organization context required")
+            raise serializers._ValidationError("Organization context required"))
         if not Opportunity.objects.filter(id=value, org=self.org).exists():
             raise serializers.ValidationError(
                 "Opportunity not found or does not belong to your organization"

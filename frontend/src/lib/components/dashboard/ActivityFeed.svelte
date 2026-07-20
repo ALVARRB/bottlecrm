@@ -1,5 +1,6 @@
 <script>
-  import { Button } from '$lib/components/ui/button/index.js';
+  import { t } from '$lib/i18n';
+import { Button } from '$lib/components/ui/button/index.js';
   import {
     Activity,
     Plus,
@@ -164,8 +165,8 @@
         >
           <Clock class="size-6 text-[var(--text-tertiary)]" />
         </div>
-        <p class="text-sm font-medium text-[var(--text-secondary)]">No recent activity</p>
-        <p class="text-xs text-[var(--text-tertiary)]">Actions will appear here</p>
+        <p class="text-sm font-medium text-[var(--text-secondary)]">{t('No recent activity')}</p>
+        <p class="text-xs text-[var(--text-tertiary)]">{t('Actions will appear here')}</p>
       </div>
     {:else}
       <div class="space-y-5">

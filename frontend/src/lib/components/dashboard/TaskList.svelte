@@ -1,5 +1,6 @@
 <script>
-  import { Badge } from '$lib/components/ui/badge/index.js';
+  import { t } from '$lib/i18n';
+import { Badge } from '$lib/components/ui/badge/index.js';
   import { Button } from '$lib/components/ui/button/index.js';
   import { Circle, CheckCircle2, ChevronRight, ListTodo } from '@lucide/svelte';
 
@@ -128,10 +129,10 @@
 
   /** @type {{ id: 'all' | 'overdue' | 'today' | 'week', label: string }[]} */
   const filterButtons = [
-    { id: 'all', label: 'All' },
-    { id: 'overdue', label: 'Overdue' },
-    { id: 'today', label: 'Today' },
-    { id: 'week', label: 'Week' }
+    { id: 'all', label: t('All') },
+    { id: 'overdue', label: t('Overdue') },
+    { id: 'today', label: t('Today') },
+    { id: 'week', label: t('Week') }
   ];
 </script>
 
@@ -148,7 +149,7 @@
       >
         <ListTodo class="size-4 text-[var(--color-primary-default)]" />
       </div>
-      <h3 class="text-sm font-semibold tracking-tight text-[var(--text-primary)]">My Tasks</h3>
+      <h3 class="text-sm font-semibold tracking-tight text-[var(--text-primary)]">{t('My Tasks')}</h3>
     </div>
     <Button variant="ghost" size="sm" href="/tasks" class="gap-1 text-xs font-medium">
       View all
@@ -189,8 +190,8 @@
         >
           <ListTodo class="size-6 text-[var(--text-tertiary)]" />
         </div>
-        <p class="text-sm font-medium text-[var(--text-secondary)]">No tasks found</p>
-        <p class="text-xs text-[var(--text-tertiary)]">All caught up!</p>
+        <p class="text-sm font-medium text-[var(--text-secondary)]">{t('No tasks found')}</p>
+        <p class="text-xs text-[var(--text-tertiary)]">{t('All caught up!')}</p>
       </div>
     {:else}
       <div class="divide-y divide-[var(--border-default)]/30">

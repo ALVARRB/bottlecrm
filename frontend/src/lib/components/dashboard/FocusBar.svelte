@@ -1,5 +1,6 @@
 <script>
-  import { AlertCircle, Calendar, Phone, Flame, Zap } from '@lucide/svelte';
+  import { t } from '$lib/i18n';
+import { AlertCircle, Calendar, Phone, Flame, Zap } from '@lucide/svelte';
 
   /**
    * @typedef {Object} Props
@@ -19,7 +20,7 @@
       iconClass: 'text-[var(--task-overdue)]',
       bgClass: 'bg-[var(--task-overdue-bg)] dark:bg-[var(--task-overdue)]/15',
       count: overdueCount,
-      label: 'Overdue',
+      label: t('Overdue'),
       show: overdueCount > 0
     },
     {
@@ -28,7 +29,7 @@
       iconClass: 'text-[var(--task-due-today)]',
       bgClass: 'bg-[var(--task-due-today-bg)] dark:bg-[var(--task-due-today)]/15',
       count: todayCount,
-      label: 'Due Today',
+      label: t('Due Today'),
       show: true
     },
     {
@@ -37,7 +38,7 @@
       iconClass: 'text-[var(--activity-call)]',
       bgClass: 'bg-[var(--color-success-light)] dark:bg-[var(--activity-call)]/15',
       count: followupsCount,
-      label: 'Follow-ups',
+      label: t('Follow-ups'),
       show: true
     },
     {
@@ -46,7 +47,7 @@
       iconClass: 'text-[var(--lead-hot)]',
       bgClass: 'bg-[var(--lead-hot-bg)] dark:bg-[var(--lead-hot)]/15',
       count: hotLeadsCount,
-      label: 'Hot Leads',
+      label: t('Hot Leads'),
       show: hotLeadsCount > 0
     }
   ]);

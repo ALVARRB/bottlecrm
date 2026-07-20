@@ -1,5 +1,6 @@
 <script>
-  import { enhance } from '$app/forms';
+  import { t } from '$lib/i18n';
+import { enhance } from '$app/forms';
   import { untrack } from 'svelte';
   import { Star, CheckCircle2 } from '@lucide/svelte';
 
@@ -39,7 +40,7 @@
     </section>
   {:else if data.error}
     <section class="rounded-lg border border-red-200 bg-red-50 p-6 text-center">
-      <h1 class="text-lg font-semibold text-red-700">Something went wrong</h1>
+      <h1 class="text-lg font-semibold text-red-700">{t('Something went wrong')}</h1>
       <p class="mt-2 text-sm text-red-700/80">{data.error}</p>
     </section>
   {:else if form?.success}

@@ -3,6 +3,7 @@ from datetime import date
 from django.db.models import Q, Sum, F, DecimalField
 from django.db.models.functions import Coalesce
 from django.utils import timezone
+from django.utils.translation import gettext_lazy as _
 from drf_spectacular.utils import OpenApiParameter, extend_schema, inline_serializer
 
 from rest_framework import serializers, status

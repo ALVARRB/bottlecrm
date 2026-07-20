@@ -1,5 +1,6 @@
 <script>
-  import { Badge } from '$lib/components/ui/badge/index.js';
+  import { t } from '$lib/i18n';
+import { Badge } from '$lib/components/ui/badge/index.js';
   import { Button } from '$lib/components/ui/button/index.js';
   import { Progress } from '$lib/components/ui/progress/index.js';
   import { Sparkles, ChevronRight, Calendar } from '@lucide/svelte';
@@ -30,37 +31,37 @@
   const stageConfig =
     /** @type {Record<string, { label: string, bg: string, text: string, border: string }>} */ ({
       PROSPECTING: {
-        label: 'Prospecting',
+        label: t('Prospecting'),
         bg: 'bg-[var(--stage-new-bg)] dark:bg-[var(--stage-new)]/15',
         text: 'text-[var(--stage-new)]',
         border: 'border-[var(--stage-new)]/30'
       },
       QUALIFICATION: {
-        label: 'Qualification',
+        label: t('Qualification'),
         bg: 'bg-[var(--stage-qualified-bg)] dark:bg-[var(--stage-qualified)]/15',
         text: 'text-[var(--stage-qualified)]',
         border: 'border-[var(--stage-qualified)]/30'
       },
       PROPOSAL: {
-        label: 'Proposal',
+        label: t('Proposal'),
         bg: 'bg-[var(--stage-proposal-bg)] dark:bg-[var(--stage-proposal)]/15',
         text: 'text-[var(--stage-proposal)]',
         border: 'border-[var(--stage-proposal)]/30'
       },
       NEGOTIATION: {
-        label: 'Negotiation',
+        label: t('Negotiation'),
         bg: 'bg-[var(--stage-negotiation-bg)] dark:bg-[var(--stage-negotiation)]/15',
         text: 'text-[var(--stage-negotiation)]',
         border: 'border-[var(--stage-negotiation)]/30'
       },
       CLOSED_WON: {
-        label: 'Won',
+        label: t('Won'),
         bg: 'bg-[var(--stage-won-bg)] dark:bg-[var(--stage-won)]/15',
         text: 'text-[var(--stage-won)]',
         border: 'border-[var(--stage-won)]/30'
       },
       CLOSED_LOST: {
-        label: 'Lost',
+        label: t('Lost'),
         bg: 'bg-[var(--stage-lost-bg)] dark:bg-[var(--stage-lost)]/15',
         text: 'text-[var(--stage-lost)]',
         border: 'border-[var(--stage-lost)]/30'
@@ -131,8 +132,8 @@
         >
           <Sparkles class="size-6 text-[var(--text-tertiary)]" />
         </div>
-        <p class="text-sm font-medium text-[var(--text-secondary)]">No open opportunities</p>
-        <p class="text-xs text-[var(--text-tertiary)]">Create one to start tracking</p>
+        <p class="text-sm font-medium text-[var(--text-secondary)]">{t('No open opportunities')}</p>
+        <p class="text-xs text-[var(--text-tertiary)]">{t('Create one to start tracking')}</p>
       </div>
     {:else}
       <div class="divide-y divide-[var(--border-default)]/30">

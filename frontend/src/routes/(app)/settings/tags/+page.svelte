@@ -1,5 +1,6 @@
 <script>
-  import { enhance } from '$app/forms';
+  import { t } from '$lib/i18n';
+import { enhance } from '$app/forms';
   import { invalidateAll } from '$app/navigation';
   import { toast } from 'svelte-sonner';
   import {
@@ -159,7 +160,7 @@
 
 <PageHeader
   title="Tags"
-  subtitle="Create and manage tags to organize contacts, companies, deals, and tickets."
+  subtitle="t('t('Create and manage tags to organize contacts, companies, deals, and tickets.')')"
 >
   {#snippet actions()}
     <Button
@@ -222,8 +223,8 @@
           {:else}
             <h3 class="text-foreground text-lg font-medium">No tags yet</h3>
             <p class="text-muted-foreground mt-1 max-w-sm text-sm">
-              Tags help you organize and filter your CRM records. Create your first tag to get
-              started.
+              {t('Tags help you organize and filter your CRM records. Create your first tag to get')}
+              {t('started.')}
             </p>
             <Button
               onclick={openCreate}
@@ -409,7 +410,7 @@
 <Dialog.Root bind:open={createDialogOpen}>
   <Dialog.Content class="gap-0 overflow-hidden p-0 sm:max-w-md">
     <div class="border-border border-b px-6 py-4">
-      <Dialog.Title class="text-lg font-semibold">Create a tag</Dialog.Title>
+      <Dialog.Title class="text-lg font-semibold">{t('Create a tag')}</Dialog.Title>
       <Dialog.Description class="text-muted-foreground mt-1 text-sm">
         Tags help you organize and segment your records.
       </Dialog.Description>

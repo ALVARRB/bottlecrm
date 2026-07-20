@@ -1,5 +1,6 @@
 <script>
-  import { enhance } from '$app/forms';
+  import { t } from '$lib/i18n';
+import { enhance } from '$app/forms';
   import { invalidateAll, goto } from '$app/navigation';
   import { page } from '$app/stores';
   import { tick, onMount, untrack } from 'svelte';
@@ -279,7 +280,7 @@
     },
     {
       key: 'contacts',
-      label: 'Contacts',
+      label: t('Contacts'),
       type: 'multiselect',
       icon: Contact,
       options: contactOptions,
@@ -1143,12 +1144,12 @@
 
   {#snippet footerActions()}
     {#if drawerMode === 'create'}
-      <Button variant="outline" onclick={closeDrawer} disabled={isSubmitting}>Cancel</Button>
+      <Button variant="outline" onclick={closeDrawer} disabled={isSubmitting}>{t('Cancel')}</Button>
       <Button onclick={handleDrawerSave} disabled={isSubmitting || !drawerFormData.name?.trim()}>
         {isSubmitting ? 'Creating...' : 'Create Account'}
       </Button>
     {:else if isClosed}
-      <Button variant="outline" onclick={closeDrawer} disabled={isSubmitting}>Cancel</Button>
+      <Button variant="outline" onclick={closeDrawer} disabled={isSubmitting}>{t('Cancel')}</Button>
       <Button
         variant="outline"
         class="text-[var(--color-success-default)] hover:text-[var(--color-success-dark)]"
@@ -1159,7 +1160,7 @@
         Reopen Account
       </Button>
     {:else}
-      <Button variant="outline" onclick={closeDrawer} disabled={isSubmitting}>Cancel</Button>
+      <Button variant="outline" onclick={closeDrawer} disabled={isSubmitting}>{t('Cancel')}</Button>
       <Button
         variant="ghost"
         class="text-[var(--color-primary-default)] hover:text-[var(--color-primary-dark)]"

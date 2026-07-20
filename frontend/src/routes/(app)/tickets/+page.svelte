@@ -1,5 +1,6 @@
 <script>
-  import { enhance } from '$app/forms';
+  import { t } from '$lib/i18n';
+import { enhance } from '$app/forms';
   import { invalidateAll, goto } from '$app/navigation';
   import { page } from '$app/stores';
   import { onMount, tick } from 'svelte';
@@ -344,7 +345,7 @@
     },
     {
       key: 'contacts',
-      label: 'Contacts',
+      label: t('Contacts'),
       type: 'multiselect',
       icon: User,
       options: contacts.map((/** @type {any} */ c) => ({ id: c.id, name: c.name, email: c.email })),

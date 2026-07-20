@@ -37,14 +37,14 @@ class Lead(AssignableMixin, BaseModel):
         max_length=255,
         blank=True,
         null=True,
-        help_text="Lead name/subject (e.g., 'Enterprise Deal', 'Website Inquiry')",
+        help_text=_("Lead name/subject (e.g., 'Enterprise Deal', 'Website Inquiry')"),
     )
     salutation = models.CharField(
         _("Salutation"),
         max_length=64,
         blank=True,
         null=True,
-        help_text="e.g., Mr, Mrs, Ms, Dr",
+        help_text=_("e.g., Mr, Mrs, Ms, Dr"),
     )
     first_name = models.CharField(_("First name"), null=True, max_length=255)
     last_name = models.CharField(_("Last name"), null=True, max_length=255)
@@ -61,7 +61,7 @@ class Lead(AssignableMixin, BaseModel):
         max_length=255,
         blank=True,
         null=True,
-        help_text="Person's job title (e.g., 'VP of Sales', 'CTO')",
+        help_text=_("Person's job title (e.g., 'VP of Sales', 'CTO')"),
     )
     website = models.CharField(_("Website"), max_length=255, blank=True, null=True)
     linkedin_url = models.URLField(
@@ -83,7 +83,7 @@ class Lead(AssignableMixin, BaseModel):
         max_length=10,
         blank=True,
         null=True,
-        choices=[("HOT", "Hot"), ("WARM", "Warm"), ("COLD", "Cold")],
+        choices=[("HOT", _("Hot")), ("WARM", _("Warm")), ("COLD", _("Cold"))],
     )
     opportunity_amount = models.DecimalField(
         _("Deal Value"), decimal_places=2, max_digits=12, blank=True, null=True
@@ -130,25 +130,25 @@ class Lead(AssignableMixin, BaseModel):
         null=True,
         blank=True,
         related_name="leads",
-        help_text="Current pipeline stage (null = use status-based kanban)",
+        help_text=_("Current pipeline stage (null = use status-based kanban)"),
     )
     kanban_order = models.DecimalField(
         _("Kanban Order"),
         max_digits=15,
         decimal_places=6,
         default=0,
-        help_text="Order within the kanban column for drag-drop",
+        help_text=_("Order within the kanban column for drag-drop"),
     )
 
     custom_fields = models.JSONField(
         default=dict,
         blank=True,
-        help_text="Per-org schema extension; values are validated against common.CustomFieldDefinition.",
+        help_text=_("Per-org schema extension; values are validated against common.CustomFieldDefinition."),
     )
 
     class Meta:
-        verbose_name = "Lead"
-        verbose_name_plural = "Leads"
+        verbose_name = _("Lead")
+        verbose_name_plural = _("Leads")
         db_table = "lead"
         ordering = ("-created_at",)
         indexes = [
@@ -238,13 +238,13 @@ class LeadPipeline(BaseModel):
     )
     is_default = models.BooleanField(
         default=False,
-        help_text="If true, new leads without explicit pipeline go here",
+        help_text=_("If true, new leads without explicit pipeline go here"),
     )
     is_active = models.BooleanField(default=True)
 
     class Meta:
-        verbose_name = "Lead Pipeline"
-        verbose_name_plural = "Lead Pipelines"
+        verbose_name = _("Lead Pipeline")
+        verbose_name_plural = _("Lead Pipelines")
         db_table = "lead_pipeline"
         ordering = ("-is_default", "name")
         indexes = [
@@ -291,12 +291,12 @@ class LeadStage(BaseModel):
         blank=True,
         null=True,
         choices=LEAD_STATUS,
-        help_text="When lead enters this stage, also update Lead.status",
+        help_text=_("When lead enters this stage, also update Lead.status"),
     )
     win_probability = models.IntegerField(
         _("Default Win Probability %"),
         default=0,
-        help_text="Default probability when lead enters this stage",
+        help_text=_("Default probability when lead enters this stage"),
     )
 
     # Kanban features
@@ -304,14 +304,14 @@ class LeadStage(BaseModel):
         _("WIP Limit"),
         null=True,
         blank=True,
-        help_text="Maximum leads allowed in this stage (null = unlimited)",
+        help_text=_("Maximum leads allowed in this stage (null = unlimited)"),
     )
 
     org = models.ForeignKey(Org, on_delete=models.CASCADE, related_name="lead_stages")
 
     class Meta:
-        verbose_name = "Lead Stage"
-        verbose_name_plural = "Lead Stages"
+        verbose_name = _("Lead Stage")
+        verbose_name_plural = _("Lead Stages")
         db_table = "lead_stage"
         ordering = ("order",)
         unique_together = ("pipeline", "name")

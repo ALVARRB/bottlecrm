@@ -1,15 +1,16 @@
 {% extends 'root_email_template_new.html' %}
+{% load i18n %}
 
-{% block preheader %}Your AllShopTotal CRM account has been deleted{% endblock preheader %}
+{% block preheader %}{% trans "Your AllShopTotal CRM account has been deleted" %}{% endblock preheader %}
 
-{% block heading %}Account Deleted{% endblock heading %}
+{% block heading %}{% trans "Account Deleted" %}{% endblock heading %}
 
 {% block content_body %}
-<p style="margin:0 0 8px 0;">Your account has been deleted by {{ deleted_by }}. You are no longer able to access your account.</p>
+<p style="margin:0 0 8px 0;">{% blocktrans %}Your account has been deleted by {{ deleted_by }}. You are no longer able to access your account.{% endblocktrans %}</p>
 {% endblock content_body %}
 
 {% block extra_content %}
 <p style="font-size:13px;color:#757575;margin:0;">
-  If you believe this was a mistake, please contact your organization administrator.
+  {% trans "If you believe this was a mistake, please contact your organization administrator." %}
 </p>
 {% endblock extra_content %}

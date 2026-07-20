@@ -1,5 +1,6 @@
 <script>
-  import { goto, invalidateAll } from '$app/navigation';
+  import { t } from '$lib/i18n';
+import { goto, invalidateAll } from '$app/navigation';
   import { deserialize } from '$app/forms';
   import { page } from '$app/stores';
   import { untrack } from 'svelte';
@@ -414,7 +415,7 @@
       </div>
       <h3 class="mb-1 text-lg font-semibold text-[var(--text-primary)]">No goals set yet</h3>
       <p class="mb-4 text-sm text-[var(--text-secondary)]">
-        Create your first sales goal to start tracking performance.
+        {t('Create your first sales goal to start tracking performance.')}
       </p>
       {#if isAdmin}
         <Button onclick={openCreateDrawer} variant="outline" class="gap-2">
@@ -850,13 +851,13 @@
 <AlertDialog.Root bind:open={deleteDialogOpen}>
   <AlertDialog.Content>
     <AlertDialog.Header>
-      <AlertDialog.Title>Delete Goal</AlertDialog.Title>
+      <AlertDialog.Title>{t('Delete Goal')}</AlertDialog.Title>
       <AlertDialog.Description>
         Are you sure you want to delete "{goalToDelete?.name}"? This action cannot be undone.
       </AlertDialog.Description>
     </AlertDialog.Header>
     <AlertDialog.Footer>
-      <AlertDialog.Cancel>Cancel</AlertDialog.Cancel>
+      <AlertDialog.Cancel>{t('Cancel')}</AlertDialog.Cancel>
       <AlertDialog.Action
         class="bg-red-600 text-white hover:bg-red-700"
         onclick={handleDelete}

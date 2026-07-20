@@ -1,5 +1,6 @@
 <script>
-  import { goto } from '$app/navigation';
+  import { t } from '$lib/i18n';
+import { goto } from '$app/navigation';
   import { Button } from '$lib/components/ui/button/index.js';
   import { ArrowLeft, Home, Compass, Users, FileText, Ticket, BarChart3 } from '@lucide/svelte';
 
@@ -17,30 +18,30 @@
   let showLinks = $derived(showQuickLinks ?? isNotFound);
 
   let title = $derived.by(() => {
-    if (isNotFound) return 'Page not found';
-    if (status === 403) return "You don't have access to this page";
-    if (status === 401) return 'Please sign in to continue';
-    if (status >= 500) return 'Something went wrong';
-    return 'Unable to open this page';
+    if (isNotFound) return t('Page not found');
+    if (status === 403) return t("You don't have access to this page");
+    if (status === 401) return t('Please sign in to continue');
+    if (status >= 500) return t('Something went wrong');
+    return t('Unable to open this page');
   });
 
   let description = $derived.by(() => {
     if (message) return message;
     if (isNotFound)
-      return "The page you're looking for doesn't exist or may have been moved.";
-    if (status === 403) return 'Your account does not have permission to view this resource.';
-    if (status === 401) return 'Your session may have expired. Sign in again to continue.';
+      return t("The page you're looking for doesn't exist or may have been moved.");
+    if (status === 403) return t('Your account does not have permission to view this resource.');
+    if (status === 401) return t('Your session may have expired. Sign in again to continue.');
     if (status >= 500)
-      return "An unexpected error occurred on our end. We've been notified — please try again in a moment.";
-    return 'Please check the URL or try going back to where you came from.';
+      return t("An unexpected error occurred on our end. We've been notified — please try again in a moment.");
+    return t('Please check the URL or try going back to where you came from.');
   });
 
   const quickLinks = [
-    { href: '/', label: 'Dashboard', icon: BarChart3 },
-    { href: '/leads', label: 'Leads', icon: Users },
-    { href: '/contacts', label: 'Contacts', icon: Users },
-    { href: '/tickets', label: 'Tickets', icon: Ticket },
-    { href: '/tasks', label: 'Tasks', icon: FileText }
+    { href: '/', label: t('Dashboard'), icon: BarChart3 },
+    { href: '/leads', label: t('Leads'), icon: Users },
+    { href: '/contacts', label: t('Contacts'), icon: Users },
+    { href: '/tickets', label: t('Tickets'), icon: Ticket },
+    { href: '/tasks', label: t('Tasks'), icon: FileText }
   ];
 
   function goBack() {

@@ -98,7 +98,7 @@
 >
   <Dialog.Content class="sm:max-w-lg">
     <Dialog.Header>
-      <Dialog.Title>Close ticket with children</Dialog.Title>
+      <Dialog.Title>{t('Close ticket with children')}</Dialog.Title>
       <Dialog.Description>
         Close <strong>{ticketSubject}</strong>{childCount > 0
           ? ` and review the ${childCount} linked child ticket${childCount === 1 ? '' : 's'} below.`

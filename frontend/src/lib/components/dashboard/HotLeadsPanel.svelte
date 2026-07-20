@@ -1,5 +1,6 @@
 <script>
-  import { Badge } from '$lib/components/ui/badge/index.js';
+  import { t } from '$lib/i18n';
+import { Badge } from '$lib/components/ui/badge/index.js';
   import { Button } from '$lib/components/ui/button/index.js';
   import { Flame, Phone, Mail, ChevronRight, Calendar, Sparkles } from '@lucide/svelte';
 
@@ -104,7 +105,7 @@
       >
         <Flame class="size-4 text-[var(--lead-hot)]" />
       </div>
-      <h3 class="text-sm font-semibold tracking-tight text-[var(--text-primary)]">Hot Leads</h3>
+      <h3 class="text-sm font-semibold tracking-tight text-[var(--text-primary)]">{t('Hot Leads')}</h3>
     </div>
     <Button variant="ghost" size="sm" href="/leads?rating=HOT" class="gap-1 text-xs font-medium">
       View all
@@ -121,8 +122,8 @@
         >
           <Sparkles class="size-6 text-[var(--text-tertiary)]" />
         </div>
-        <p class="text-sm font-medium text-[var(--text-secondary)]">No hot leads</p>
-        <p class="text-xs text-[var(--text-tertiary)]">Mark leads as "Hot" to see them here</p>
+        <p class="text-sm font-medium text-[var(--text-secondary)]">{t('No hot leads')}</p>
+        <p class="text-xs text-[var(--text-tertiary)]">{t('Mark leads as "Hot" to see them here')}</p>
       </div>
     {:else}
       <div class="divide-y divide-[var(--border-default)]/30">

@@ -190,7 +190,7 @@ class AccountCreateSerializer(serializers.ModelSerializer):
             return name
         if not Account.objects.filter(name__iexact=name, org=self.org).exists():
             return name
-        raise serializers.ValidationError("Account already exists with this name")
+        raise serializers._ValidationError("Account already exists with this name"))
 
     class Meta:
         model = Account

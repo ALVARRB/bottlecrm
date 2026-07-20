@@ -1,5 +1,6 @@
 <script>
-  import { page } from '$app/stores';
+  import { t } from '$lib/i18n';
+import { page } from '$app/stores';
   import { goto } from '$app/navigation';
 
   import { PageHeader, FilterStrip, ViewTabs, FilterPill } from '$lib/components/layout';
@@ -50,7 +51,7 @@
     },
     {
       value: 'Overdue',
-      label: 'Overdue',
+      label: t('Overdue'),
       color:
         'bg-[var(--color-negative-light)] text-[var(--color-negative-default)] dark:bg-[var(--color-negative-default)]/15'
     },
@@ -149,7 +150,7 @@
     { key: 'ALL', label: 'All' },
     { key: 'OPEN', label: 'Open', statuses: ['Draft', 'Sent', 'Viewed'] },
     { key: 'PAID', label: 'Paid', statuses: ['Paid', 'Partially_Paid'] },
-    { key: 'OVERDUE', label: 'Overdue', statuses: ['Overdue'] },
+    { key: 'OVERDUE', label: t('Overdue'), statuses: ['Overdue'] },
     { key: 'CANCELLED', label: 'Cancelled', statuses: ['Cancelled'] }
   ];
 
@@ -429,7 +430,7 @@
         </div>
         <h3 class="text-lg font-medium text-[var(--text-primary)]">No invoices yet</h3>
         <p class="mb-4 text-sm text-[var(--text-secondary)]">
-          Create your first invoice to get started
+          {t('Create your first invoice to get started')}
         </p>
         <Button onclick={createNewInvoice} class="gap-2">
           <Plus class="size-4" />

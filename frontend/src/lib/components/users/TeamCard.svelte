@@ -1,5 +1,6 @@
 <script>
-  import { Users, Pencil, Trash2 } from '@lucide/svelte';
+  import { t } from '$lib/i18n';
+import { Users, Pencil, Trash2 } from '@lucide/svelte';
   import { SectionCard } from '$lib/components/ui/section-card/index.js';
   import * as Avatar from '$lib/components/ui/avatar/index.js';
   import * as AlertDialog from '$lib/components/ui/alert-dialog/index.js';
@@ -80,15 +81,15 @@
         </AlertDialog.Trigger>
         <AlertDialog.Content>
           <AlertDialog.Header>
-            <AlertDialog.Title>Delete Team</AlertDialog.Title>
+            <AlertDialog.Title>{t('Delete Team')}</AlertDialog.Title>
             <AlertDialog.Description>
               Are you sure you want to delete <strong>{team.name}</strong>? This will remove the team
               from all assigned records. This action cannot be undone.
             </AlertDialog.Description>
           </AlertDialog.Header>
           <AlertDialog.Footer>
-            <AlertDialog.Cancel>Cancel</AlertDialog.Cancel>
-            <Button variant="destructive" onclick={() => onDelete?.(team.id)}>Delete</Button>
+            <AlertDialog.Cancel>{t('Cancel')}</AlertDialog.Cancel>
+            <Button variant="destructive" onclick={() => onDelete?.(team.id)}>{t('Delete')}</Button>
           </AlertDialog.Footer>
         </AlertDialog.Content>
       </AlertDialog.Root>

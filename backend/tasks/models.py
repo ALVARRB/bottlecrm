@@ -28,8 +28,8 @@ class Board(BaseModel):
     is_archived = models.BooleanField(default=False)
 
     class Meta:
-        verbose_name = "Board"
-        verbose_name_plural = "Boards"
+        verbose_name = _("Board")
+        verbose_name_plural = _("Boards")
         db_table = "board"
         ordering = ("-created_at",)
         indexes = [
@@ -63,8 +63,8 @@ class BoardMember(BaseModel):
     )
 
     class Meta:
-        verbose_name = "Board Member"
-        verbose_name_plural = "Board Members"
+        verbose_name = _("Board Member")
+        verbose_name_plural = _("Board Members")
         db_table = "board_member"
         unique_together = ("board", "profile")
         indexes = [
@@ -95,8 +95,8 @@ class BoardColumn(BaseModel):
     )
 
     class Meta:
-        verbose_name = "Board Column"
-        verbose_name_plural = "Board Columns"
+        verbose_name = _("Board Column")
+        verbose_name_plural = _("Board Columns")
         db_table = "board_column"
         ordering = ("order",)
         unique_together = ("board", "name")
@@ -167,8 +167,8 @@ class BoardTask(BaseModel):
     )
 
     class Meta:
-        verbose_name = "Board Task"
-        verbose_name_plural = "Board Tasks"
+        verbose_name = _("Board Task")
+        verbose_name_plural = _("Board Tasks")
         db_table = "board_task"
         ordering = ("order",)
         indexes = [
@@ -207,13 +207,13 @@ class TaskPipeline(BaseModel):
     )
     is_default = models.BooleanField(
         default=False,
-        help_text="If true, new tasks without explicit pipeline go here",
+        help_text=_("If true, new tasks without explicit pipeline go here"),
     )
     is_active = models.BooleanField(default=True)
 
     class Meta:
-        verbose_name = "Task Pipeline"
-        verbose_name_plural = "Task Pipelines"
+        verbose_name = _("Task Pipeline")
+        verbose_name_plural = _("Task Pipelines")
         db_table = "task_pipeline"
         ordering = ("-is_default", "name")
         indexes = [
@@ -259,7 +259,7 @@ class TaskStage(BaseModel):
         max_length=50,
         blank=True,
         null=True,
-        help_text="When task enters this stage, also update Task.status",
+        help_text=_("When task enters this stage, also update Task.status"),
     )
 
     # Kanban features
@@ -267,14 +267,14 @@ class TaskStage(BaseModel):
         _("WIP Limit"),
         null=True,
         blank=True,
-        help_text="Maximum tasks allowed in this stage (null = unlimited)",
+        help_text=_("Maximum tasks allowed in this stage (null = unlimited)"),
     )
 
     org = models.ForeignKey(Org, on_delete=models.CASCADE, related_name="task_stages")
 
     class Meta:
-        verbose_name = "Task Stage"
-        verbose_name_plural = "Task Stages"
+        verbose_name = _("Task Stage")
+        verbose_name_plural = _("Task Stages")
         db_table = "task_stage"
         ordering = ("order",)
         unique_together = ("pipeline", "name")
@@ -309,7 +309,7 @@ class Task(AssignableMixin, BaseModel):
     custom_fields = models.JSONField(
         default=dict,
         blank=True,
-        help_text="Per-org schema extension; values are validated against common.CustomFieldDefinition.",
+        help_text=_("Per-org schema extension; values are validated against common.CustomFieldDefinition."),
     )
     account = models.ForeignKey(
         Account,
@@ -353,7 +353,7 @@ class Task(AssignableMixin, BaseModel):
         max_digits=15,
         decimal_places=6,
         default=0,
-        help_text="Order within the kanban column for drag-drop positioning",
+        help_text=_("Order within the kanban column for drag-drop positioning"),
     )
     stage = models.ForeignKey(
         TaskStage,
@@ -361,12 +361,12 @@ class Task(AssignableMixin, BaseModel):
         null=True,
         blank=True,
         related_name="tasks",
-        help_text="Custom pipeline stage (if using pipeline mode)",
+        help_text=_("Custom pipeline stage (if using pipeline mode)"),
     )
 
     class Meta:
-        verbose_name = "Task"
-        verbose_name_plural = "Tasks"
+        verbose_name = _("Task")
+        verbose_name_plural = _("Tasks")
         db_table = "task"
         ordering = ("-created_at",)
         indexes = [

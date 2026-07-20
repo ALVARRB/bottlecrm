@@ -1,5 +1,6 @@
 <script>
-  import { Plus, Trash2 } from '@lucide/svelte';
+  import { t } from '$lib/i18n';
+import { Plus, Trash2 } from '@lucide/svelte';
   import { page } from '$app/stores';
   import { goto, invalidateAll } from '$app/navigation';
   import { enhance } from '$app/forms';
@@ -1003,7 +1004,7 @@
         </div>
         <h3 class="text-lg font-medium text-[var(--text-primary)]">No estimates yet</h3>
         <p class="text-sm text-[var(--text-secondary)]">
-          Create your first estimate to get started
+          {t('Create your first estimate to get started')}
         </p>
       </div>
     {/snippet}
@@ -1146,7 +1147,7 @@
       </div>
 
       <div class="flex gap-2">
-        <Button variant="outline" onclick={closeDrawer}>Cancel</Button>
+        <Button variant="outline" onclick={closeDrawer}>{t('Cancel')}</Button>
         <Button onclick={handleDrawerSave}>
           {drawerMode === 'create' ? 'Create Estimate' : 'Save Changes'}
         </Button>

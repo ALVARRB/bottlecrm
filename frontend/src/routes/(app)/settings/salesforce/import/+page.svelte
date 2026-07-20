@@ -1,5 +1,6 @@
 <script>
-  import { enhance } from '$app/forms';
+  import { t } from '$lib/i18n';
+import { enhance } from '$app/forms';
   import { goto } from '$app/navigation';
   import { toast } from 'svelte-sonner';
   import { Button } from '$lib/components/ui/button/index.js';
@@ -30,10 +31,10 @@
   let importHistory = $derived(polledHistory ?? serverHistory);
 
   const OBJECT_TYPES = [
-    { value: 'Account', label: 'Accounts', description: 'Companies and organizations', depends: [] },
-    { value: 'Contact', label: 'Contacts', description: 'People associated with accounts', depends: ['Account'] },
+    { value: 'Account', label: t('Accounts'), description: 'Companies and organizations', depends: [] },
+    { value: 'Contact', label: t('Contacts'), description: 'People associated with accounts', depends: ['Account'] },
     { value: 'Opportunity', label: 'Opportunities', description: 'Sales deals and pipeline', depends: ['Account'] },
-    { value: 'Product2', label: 'Products', description: 'Product catalog', depends: [] },
+    { value: 'Product2', label: t('Products'), description: 'Product catalog', depends: [] },
     { value: 'Order', label: 'Orders', description: 'Sales orders', depends: ['Account'] },
     { value: 'Quote', label: 'Quotes', description: 'Price quotes and estimates', depends: ['Account', 'Contact'] }
   ];

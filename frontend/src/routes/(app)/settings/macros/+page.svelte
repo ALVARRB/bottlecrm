@@ -1,5 +1,6 @@
 <script>
-  import { enhance } from '$app/forms';
+  import { t } from '$lib/i18n';
+import { enhance } from '$app/forms';
   import { invalidateAll } from '$app/navigation';
   import { toast } from 'svelte-sonner';
   import {
@@ -411,7 +412,7 @@
 <Dialog.Root bind:open={editOpen}>
   <Dialog.Content class="max-w-xl">
     <Dialog.Header>
-      <Dialog.Title>Edit macro</Dialog.Title>
+      <Dialog.Title>{t('Edit macro')}</Dialog.Title>
       <Dialog.Description>
         Changes apply the next time someone inserts this macro.
       </Dialog.Description>
@@ -483,7 +484,7 @@
               bind:checked={editIsActive}
               class="h-4 w-4"
             />
-            <Label for="edit-active" class="text-sm">Active</Label>
+            <Label for="edit-active" class="text-sm">{t('Active')}</Label>
             <input
               type="hidden"
               name="is_active"

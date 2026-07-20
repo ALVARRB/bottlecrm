@@ -1,5 +1,6 @@
 <script>
-  import { page } from '$app/stores';
+  import { t } from '$lib/i18n';
+import { page } from '$app/stores';
   import { goto, invalidateAll } from '$app/navigation';
   import { enhance } from '$app/forms';
   import { tick } from 'svelte';
@@ -518,7 +519,7 @@
         </div>
         <h3 class="text-lg font-medium text-[var(--text-primary)]">No products yet</h3>
         <p class="text-sm text-[var(--text-secondary)]">
-          Create your first product to use in invoices
+          {t('Create your first product to use in invoices')}
         </p>
       </div>
     {/snippet}
@@ -557,7 +558,7 @@
 >
   {#snippet footerActions()}
     <div class="flex w-full items-center justify-end gap-2">
-      <Button variant="outline" onclick={closeDrawer}>Cancel</Button>
+      <Button variant="outline" onclick={closeDrawer}>{t('Cancel')}</Button>
       <Button onclick={handleDrawerSave}>
         {drawerMode === 'create' ? 'Create Product' : 'Save Changes'}
       </Button>

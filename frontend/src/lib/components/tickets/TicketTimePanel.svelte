@@ -1,5 +1,6 @@
 <script>
-  import { invalidateAll } from '$app/navigation';
+  import { t } from '$lib/i18n';
+import { invalidateAll } from '$app/navigation';
   import { onDestroy, onMount } from 'svelte';
   import { toast } from 'svelte-sonner';
   import {
@@ -91,7 +92,7 @@
         toast.error(e?.error || 'Could not start timer');
         return;
       }
-      toast.success('Timer started.');
+      toast.success('Timer {t('started.')}');
       await load();
       await invalidateAll();
     } finally {

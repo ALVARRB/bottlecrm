@@ -1,5 +1,6 @@
 <script>
-  import { enhance, deserialize } from '$app/forms';
+  import { t } from '$lib/i18n';
+import { enhance, deserialize } from '$app/forms';
   import { invalidateAll, goto } from '$app/navigation';
   import { tick, onMount, untrack } from 'svelte';
   import { toast } from 'svelte-sonner';
@@ -500,7 +501,7 @@
     },
     {
       key: 'contacts',
-      label: 'Contacts',
+      label: t('Contacts'),
       type: 'multiselect',
       icon: UserPlus,
       options: []
@@ -1679,7 +1680,7 @@
             <User class="size-8 text-[var(--text-tertiary)]" />
           </div>
           <h3 class="text-lg font-medium text-[var(--text-primary)]">No leads found</h3>
-          <p class="mt-1 text-sm text-[var(--text-secondary)]">Create a new lead to get started</p>
+          <p class="mt-1 text-sm text-[var(--text-secondary)]">{t('Create a new lead to get started')}</p>
         </div>
       {:else}
         <!-- Desktop Table using CrmTable -->
@@ -1865,7 +1866,7 @@
 
   {#snippet footerActions()}
     {#if drawerMode === 'create'}
-      <Button variant="outline" onclick={closeDrawer}>Cancel</Button>
+      <Button variant="outline" onclick={closeDrawer}>{t('Cancel')}</Button>
       <Button onclick={handleCreateLead} disabled={isSaving}>
         {#if isSaving}
           <Loader2 class="mr-2 h-4 w-4 animate-spin" />
@@ -1875,7 +1876,7 @@
         {/if}
       </Button>
     {:else}
-      <Button variant="outline" onclick={closeDrawer} disabled={isSaving}>Cancel</Button>
+      <Button variant="outline" onclick={closeDrawer} disabled={isSaving}>{t('Cancel')}</Button>
       {#if drawerData?.status !== 'converted'}
         <Button variant="outline" onclick={handleDrawerConvert} disabled={isSaving}>
           <ArrowRightCircle class="mr-2 h-4 w-4" />

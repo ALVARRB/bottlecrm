@@ -1,5 +1,6 @@
 <script>
-  import { goto, invalidateAll } from '$app/navigation';
+  import { t } from '$lib/i18n';
+import { goto, invalidateAll } from '$app/navigation';
   import { enhance } from '$app/forms';
   import { tick } from 'svelte';
   import { toast } from 'svelte-sonner';
@@ -77,7 +78,7 @@
     { value: 'Viewed', label: 'Viewed' },
     { value: 'Paid', label: 'Paid' },
     { value: 'Partially_Paid', label: 'Partially Paid' },
-    { value: 'Overdue', label: 'Overdue' },
+    { value: 'Overdue', label: t('Overdue') },
     { value: 'Pending', label: 'Pending' },
     { value: 'Cancelled', label: 'Cancelled' }
   ];
@@ -360,7 +361,7 @@
     title={invoice.invoiceNumber || 'Invoice'}
     subtitle={invoice.clientName || 'No client name'}
     breadcrumb={[
-      { label: 'Invoices', href: '/invoices' },
+      { label: t('Invoices'), href: '/invoices' },
       { label: invoice.invoiceNumber || 'Invoice' }
     ]}
   >
@@ -393,7 +394,7 @@
     {/snippet}
     {#snippet actions()}
       {#if isEditing}
-        <Button variant="outline" onclick={cancelEdit} disabled={isSaving}>Cancel</Button>
+        <Button variant="outline" onclick={cancelEdit} disabled={isSaving}>{t('Cancel')}</Button>
         <Button onclick={saveChanges} disabled={isSaving}>
           <Save class="mr-2 size-4" />
           Save Changes
@@ -434,7 +435,7 @@
             </AlertDialog.Trigger>
             <AlertDialog.Content>
               <AlertDialog.Header>
-                <AlertDialog.Title>Cancel Invoice?</AlertDialog.Title>
+                <AlertDialog.Title>{t('Cancel Invoice?')}</AlertDialog.Title>
                 <AlertDialog.Description>
                   This will cancel invoice {invoice.invoiceNumber}. Cancelled invoices cannot be
                   sent or edited.
