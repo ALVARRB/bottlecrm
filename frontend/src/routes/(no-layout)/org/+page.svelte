@@ -113,7 +113,7 @@ import '../../../app.css';
             class="flex w-full items-center justify-center gap-2 rounded-xl border-2 border-dashed border-[var(--border-default)] bg-[var(--surface-sunken)] px-5 py-4 text-sm font-medium text-[var(--text-secondary)] transition-all hover:border-[var(--color-primary-default)] hover:bg-[var(--color-primary-light)] hover:text-[var(--color-primary-default)]"
           >
             <Plus class="h-4 w-4" />
-            {t('{t('Create new organization')}')}
+            {t('Create new organization')}
           </a>
         </div>
       {:else}

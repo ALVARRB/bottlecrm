@@ -159,7 +159,7 @@ import { invalidateAll } from '$app/navigation';
         type="button"
         disabled={!canSubmit}
         onclick={submit}
-        title={!description.trim() ? 't('t('Add a description first')')' : undefined}
+        title={!description.trim() ? t('Add a description first') : undefined}
       >
         {#if submitting}<Loader2 class="mr-1 h-3.5 w-3.5 animate-spin" />{/if}
         Save entry

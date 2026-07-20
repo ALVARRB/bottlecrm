@@ -92,7 +92,7 @@ import { invalidateAll } from '$app/navigation';
         toast.error(e?.error || 'Could not start timer');
         return;
       }
-      toast.success('Timer {t('started.')}');
+      toast.success(t('Timer started.'));
       await load();
       await invalidateAll();
     } finally {
@@ -111,7 +111,7 @@ import { invalidateAll } from '$app/navigation';
         toast.error(e?.error || 'Could not stop timer');
         return;
       }
-      toast.success('Timer stopped.');
+      toast.success(t('Timer stopped.'));
       await load();
       await invalidateAll();
     } finally {

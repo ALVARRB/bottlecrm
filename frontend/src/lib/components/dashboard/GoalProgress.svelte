@@ -43,7 +43,7 @@ import { Trophy, ArrowRight } from '@lucide/svelte';
         href={resolve('/goals')}
         class="text-xs font-medium text-[var(--color-primary-default)] hover:underline"
       >
-        t('t('Create a goal')')
+        t('Create a goal')
       </a>
     </div>
   {:else}

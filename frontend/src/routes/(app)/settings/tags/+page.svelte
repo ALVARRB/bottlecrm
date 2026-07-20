@@ -160,7 +160,7 @@ import { enhance } from '$app/forms';
 
 <PageHeader
   title="Tags"
-  subtitle="t('t('Create and manage tags to organize contacts, companies, deals, and tickets.')')"
+  subtitle={t('Create and manage tags to organize contacts, companies, deals, and tickets.')}
 >
   {#snippet actions()}
     <Button
