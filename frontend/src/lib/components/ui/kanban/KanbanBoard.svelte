@@ -433,8 +433,8 @@ import { untrack } from 'svelte';
               onclick={() => onAddItem(activeMobileColumn.id)}
               class="flex w-full items-center justify-center gap-2 rounded-md px-2 py-2 text-[13px] font-medium text-gray-500 hover:bg-gray-200/70 hover:text-gray-700 dark:text-gray-400 dark:hover:bg-white/[0.06] dark:hover:text-gray-200"
             >
-              {t('{t('Add a card')}')}
-            </button>
+              {t('Add a card')}
+                          </button>
           {/if}
         </div>
       {/if}

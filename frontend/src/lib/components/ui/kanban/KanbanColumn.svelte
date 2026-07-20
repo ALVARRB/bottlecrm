@@ -231,7 +231,7 @@ import { TrendingUp, Plus } from '@lucide/svelte';
     {/if}
   </div>
 
-  <!-- Footer: {t('{t('Add a card')}')} -->
+  <!-- Footer: {t('Add a card')} -->
   {#if onAddItem}
     <button
       type="button"
