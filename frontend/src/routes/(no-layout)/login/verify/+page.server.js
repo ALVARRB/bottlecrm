@@ -30,7 +30,7 @@ export async function load({ url, cookies }) {
       { token },
       {
         headers: { 'Content-Type': 'application/json' },
-        timeout: 10000
+        timeout: 120000
       }
     );
 
