@@ -541,8 +541,11 @@ class MagicLinkRequestView(APIView):
             ip_address=request.META.get("REMOTE_ADDR"),
         )
 
-        # Send email via Celery — pass raw_code only when delivery is "code".
-        send_magic_link_email.delay(str(token_obj.id), raw_code=raw_code)
+# Send email via Celery — pass raw_code only when delivery is "code".
+        try:
+            send_magic_link_email.delay(str(token_obj.id), raw_code=raw_code)
+        except Exception:
+            logger.exception("Failed to queue magic link email for token %s", token_obj.id)
 
         return Response(
             {"message": "If this email is valid, you will receive a sign-in link."},
