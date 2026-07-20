@@ -17,7 +17,7 @@ services:
     env: docker
     plan: free
     branch: master
-    repo: https://github.com/ALVARRB/allshoptotal
+    repo: https://github.com/ALVARRB/bottlecrm
     dockerfilePath: ./Dockerfile
     envVars:
       - key: DBNAME
@@ -47,7 +47,7 @@ services:
       - key: ALLOWED_HOSTS
         value: ".onrender.com,localhost,127.0.0.1"
       - key: DOMAIN_NAME
-        value: "https://allshoptotal.onrender.com"
+        value: "https://bottlecrm.onrender.com"
       - key: CORS_ALLOW_ALL
         value: "True"
       - key: ENV_TYPE
@@ -59,30 +59,34 @@ services:
       - key: DJANGO_CELERY_BROKER_URL
         value: ""
       - key: DEFAULT_FROM_EMAIL
-        value: "noreply@allshoptotal.com"
+        value: "all.shop.total@gmail.com"
       - key: ADMIN_EMAIL
         value: "admin@allshoptotal.com.br"
       - key: ADMIN_PASSWORD
         value: "admin"
       - key: PUBLIC_DJANGO_API_URL
-        value: "https://allshoptotal.onrender.com"
+        value: "https://bottlecrm.onrender.com"
+      - key: SENDGRID_API_KEY
+        sync: false
+      - key: FRONTEND_URL
+        value: "https://bottlecrm-frontend.onrender.com"
 
   # ── Frontend: SvelteKit SPA ──
   - type: web
-    name: allshoptotal-frontend
+    name: bottlecrm-frontend
     region: ohio
     env: docker
     plan: free
     branch: master
-    repo: https://github.com/ALVARRB/allshoptotal
+    repo: https://github.com/ALVARRB/bottlecrm
     dockerfilePath: ./frontend/Dockerfile
     dockerContext: ./frontend
     envVars:
       - key: PUBLIC_DJANGO_API_URL
-        value: "https://allshoptotal.onrender.com"
+        value: "https://bottlecrm.onrender.com"
       - key: NODE_ENV
         value: "production"
       - key: GOOGLE_CLIENT_ID
         value: ""
       - key: GOOGLE_LOGIN_DOMAIN
-        value: "https://allshoptotal-frontend.onrender.com"
+        value: "https://bottlecrm-frontend.onrender.com"
