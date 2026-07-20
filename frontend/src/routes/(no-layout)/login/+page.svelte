@@ -112,7 +112,7 @@ import '../../../app.css';
 
     <!-- Help Links -->
     <div class="help-section">
-      <p class="help-text">{t('New here? Just enter your email above to get {t('started.')}')}</p>
+      <p class="help-text">{t('New here? Just enter your email above to get started.')}</p>
     </div>
 
     <!-- Footer -->
