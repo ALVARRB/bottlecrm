@@ -36,10 +36,10 @@ import '../../../app.css';
 </script>
 
 <svelte:head>
-  <title>Sign in | AllShopTotal CRM</title>
-  <meta
-    name="description"
-    content="Sign in or sign up for AllShopTotal CRM to manage your contacts, deals, and grow your business."
+  <title>{t('Sign in')} | AllShopTotal CRM</title>
+    <meta
+      name="description"
+      content="{t('Sign in or sign up for AllShopTotal CRM to manage your contacts, deals, and grow your business.')}"
   />
 </svelte:head>
 

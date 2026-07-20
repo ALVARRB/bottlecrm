@@ -157,11 +157,11 @@ class CaseCreateSerializer(serializers.ModelSerializer):
                 .exclude(id=self.instance.id)
                 .exists()
             ):
-                raise serializers._ValidationError("Case already exists with this name"))
+                raise serializers.ValidationError(_("Case already exists with this name"))
 
         else:
             if Case.objects.filter(name__iexact=name, org=self.org).exists():
-                raise serializers._ValidationError("Case already exists with this name"))
+                raise serializers.ValidationError(_("Case already exists with this name"))
         return name
 
     def validate_parent(self, parent):
@@ -176,7 +176,7 @@ class CaseCreateSerializer(serializers.ModelSerializer):
                 "Parent case must belong to the same organization."
             )
         if self.instance and parent.id == self.instance.id:
-            raise serializers._ValidationError("A case cannot be its own parent."))
+            raise serializers.ValidationError(_("A case cannot be its own parent."))
         if parent.status == "Duplicate":
             raise serializers.ValidationError(
                 "Cannot link to a case that has been merged."
@@ -602,7 +602,7 @@ class RoutingRuleSerializer(serializers.ModelSerializer):
         if value in (None, ""):
             return []
         if not isinstance(value, list):
-            raise serializers._ValidationError("conditions must be a list of objects."))
+            raise serializers.ValidationError(_("conditions must be a list of objects."))
         for i, cond in enumerate(value):
             if not isinstance(cond, dict):
                 raise serializers.ValidationError(

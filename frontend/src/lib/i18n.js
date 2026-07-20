@@ -5,6 +5,9 @@
  */
 
 const translations = {
+  // === Login ===
+  'Sign in': 'Entrar',
+  'Sign in or sign up for AllShopTotal CRM to manage your contacts, deals, and grow your business.': 'Entre ou cadastre-se no AllShopTotal CRM para gerenciar seus contatos, negócios e expandir seu negócio.',
   // === Navegação / Sidebar ===
   'Home': 'Início',
   'Dashboard': 'Painel',

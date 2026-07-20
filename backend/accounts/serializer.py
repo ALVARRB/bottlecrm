@@ -1,4 +1,5 @@
 from drf_spectacular.utils import extend_schema_field
+from django.utils.translation import gettext_lazy as _
 from rest_framework import serializers
 
 from accounts.models import Account, AccountEmail, AccountEmailLog
@@ -190,7 +191,7 @@ class AccountCreateSerializer(serializers.ModelSerializer):
             return name
         if not Account.objects.filter(name__iexact=name, org=self.org).exists():
             return name
-        raise serializers._ValidationError("Account already exists with this name"))
+        raise serializers.ValidationError(_("Account already exists with this name"))
 
     class Meta:
         model = Account

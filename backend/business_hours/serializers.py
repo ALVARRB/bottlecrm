@@ -3,6 +3,7 @@
 from datetime import time
 from zoneinfo import available_timezones
 
+from django.utils.translation import gettext_lazy as _
 from rest_framework import serializers
 
 from business_hours.models import BusinessCalendar, BusinessHoliday
@@ -50,7 +51,7 @@ class BusinessCalendarSerializer(serializers.ModelSerializer):
 
     def validate_timezone(self, value):
         if value not in available_timezones():
-            raise serializers._ValidationError("Not a valid IANA timezone."))
+            raise serializers.ValidationError(_("Not a valid IANA timezone."))
         return value
 
     def validate(self, attrs):

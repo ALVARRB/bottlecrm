@@ -1,5 +1,6 @@
 import re
 
+from django.utils.translation import gettext_lazy as _
 from drf_spectacular.utils import extend_schema_field
 from rest_framework import serializers
 from rest_framework_simplejwt.tokens import RefreshToken
@@ -292,7 +293,7 @@ class CustomFieldDefinitionSerializer(serializers.ModelSerializer):
 
     def validate_key(self, value):
         if not value:
-            raise serializers._ValidationError("key is required"))
+            raise serializers.ValidationError(_("key is required"))
         if not re.fullmatch(r"[a-z][a-z0-9_]*", value):
             raise serializers.ValidationError(
                 "key must be a lowercase slug starting with a letter (a-z, 0-9, _)"
@@ -432,11 +433,11 @@ class CreateUserSerializer(serializers.ModelSerializer):
             if self.instance.email != email:
                 if not Profile.objects.filter(user__email=email, org=self.org).exists():
                     return email
-                raise serializers._ValidationError("Email already exists"))
+                raise serializers.ValidationError(_("Email already exists"))
             return email
         if not Profile.objects.filter(user__email=email.lower(), org=self.org).exists():
             return email
-        raise serializers._ValidationError("Given Email id already exists"))
+        raise serializers.ValidationError(_("Given Email id already exists"))
 
 
 class CreateProfileSerializer(serializers.ModelSerializer):
@@ -588,7 +589,7 @@ class DocumentCreateSerializer(serializers.ModelSerializer):
                 )
         else:
             if Document.objects.filter(title__iexact=title, org=self.org).exists():
-                raise serializers._ValidationError("Document with this Title already exists"))
+                raise serializers.ValidationError(_("Document with this Title already exists"))
         return title
 
     class Meta:
@@ -623,7 +624,7 @@ class APISettingsSerializer(serializers.ModelSerializer):
         if website and not (
             website.startswith("http://") or website.startswith("https://")
         ):
-            raise serializers._ValidationError("Please provide valid schema"))
+            raise serializers.ValidationError(_("Please provide valid schema"))
         if not len(find_urls(website)) > 0:
             raise serializers.ValidationError(
                 "Please provide a valid URL with schema and without trailing slash - Example: http://google.com"
@@ -865,10 +866,10 @@ class TeamCreateSerializer(serializers.ModelSerializer):
                 .exclude(id=self.instance.id)
                 .exists()
             ):
-                raise serializers._ValidationError("Team already exists with this name"))
+                raise serializers.ValidationError(_("Team already exists with this name"))
         else:
             if Teams.objects.filter(name__iexact=name, org=self.org).exists():
-                raise serializers._ValidationError("Team already exists with this name"))
+                raise serializers.ValidationError(_("Team already exists with this name"))
         return name
 
     class Meta:
@@ -917,23 +918,23 @@ class PersonalAccessTokenCreateSerializer(serializers.ModelSerializer):
     def validate_name(self, value):
         value = (value or "").strip()
         if not value:
-            raise serializers._ValidationError("Name is required."))
+            raise serializers.ValidationError(_("Name is required."))
         if len(value) > 255:
-            raise serializers._ValidationError("Name too long (max 255)."))
+            raise serializers.ValidationError(_("Name too long (max 255)."))
         return value
 
     def validate_scopes(self, value):
         if value in (None, ""):
             return []
         if not isinstance(value, list) or not all(isinstance(s, str) for s in value):
-            raise serializers._ValidationError("scopes must be a list of strings."))
+            raise serializers.ValidationError(_("scopes must be a list of strings."))
         if len(value) > 32:
-            raise serializers._ValidationError("Too many scopes (max 32)."))
+            raise serializers.ValidationError(_("Too many scopes (max 32)."))
         return value
 
     def validate_expires_at(self, value):
         from django.utils import timezone
 
         if value is not None and value <= timezone.now():
-            raise serializers._ValidationError("expires_at must be in the future."))
+            raise serializers.ValidationError(_("expires_at must be in the future."))
         return value
